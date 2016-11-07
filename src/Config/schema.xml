@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="PSFS\Auth" defaultIdMethod="native" namespace="PSFS\Auth\Models" tablePrefix="PSFSAuth_">
+    <vendor type="mysql">
+        <parameter name="Engine" value="InnoDB"/>
+        <parameter name="Charset" value="utf8"/>
+    </vendor>
+</database>

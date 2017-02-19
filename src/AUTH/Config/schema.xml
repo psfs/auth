@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="AUTH" defaultIdMethod="native" namespace="AUTH\Models" tablePrefix="AUTH_">
+    <vendor type="mysql">
+        <parameter name="Engine" value="InnoDB"/>
+        <parameter name="Charset" value="utf8"/>
+    </vendor>
+    <table name="PROVIDERS" phpName="LoginProvider" description="Table with the login providers">
+        <column name="ID_PROVIDER" type="INTEGER" primaryKey="true" autoIncrement="true" />
+        <column name="NAME" type="ENUM" valueSet="EMAIL,GOOGLE,FACEBOOK,TWITTER,LINKEDIN" required="true" />
+        <column name="DEV" phpName="Debug" type="BOOLEAN" defaultValue="true" />
+        <column name="CLIENT" type="VARCHAR" size="100" required="true" />
+        <column name="SECRET" type="BINARY" sqlType="VARBINARY(100)" size="100" required="true" />
+        <column name="CALLBACK_URL" type="VARCHAR" size="100" />
+        <column name="ACTIVE" type="BOOLEAN" defaultValue="true" />
+        <behavior name="query_cache" />
+        <behavior name="timestampable" />
+        <behavior name="aggregate_column">
+            <parameter name="name" value="ACCOUNTS" />
+            <parameter name="foreign_table" value="ACCOUNTS" />
+            <parameter name="expression" value="COUNT(ID_ACCOUNT)" />
+        </behavior>
+    </table>
+    <table name="ACCOUNTS" phpName="LoginAccount" description="Table with the login accounts">
+        <column name="ID_ACCOUNT" type="INTEGER" primaryKey="true" autoIncrement="true" />
+        <column name="ID_PROVIDER" phpName="IdSocial" type="INTEGER" required="true" />
+        <column name="IDENTIFIER" phpName="Id" type="VARCHAR" size="100" required="true" />
+        <column name="ACCESS_TOKEN" phpName="AccessToken" type="BINARY" sqlType="VARBINARY(255)" size="255" required="true" />
+        <column name="REFRESH_TOKEN" phpName="RefreshToken" type="BINARY" sqlType="VARBINARY(255)" size="255" required="true" />
+        <column name="EXPIRES" phpName="ExpireDate" type="TIMESTAMP" />
+        <behavior name="query_cache" />
+        <behavior name="timestampable" />
+        <foreign-key foreignTable="PROVIDERS" name="fk_account_provider" phpName="AccountProvider" defaultJoin="INNER JOIN">
+            <reference local="ID_PROVIDER" foreign="ID_PROVIDER" />
+        </foreign-key>
+        <unique name="unq_accounts_idx">
+            <unique-column name="ID_PROVIDER" />
+            <unique-column name="IDENTIFIER" />
+        </unique>
+    </table>
+</database>

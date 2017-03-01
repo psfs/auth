@@ -48,12 +48,4 @@
         <behavior name="query_cache" />
         <behavior name="timestampable" />
     </table>
-    <table name="LOGS" phpName="LoginLog" description="Table with auth accesses log">
-        <column name="CATEGORY" phpName="Category" type="ENUM" valueSet="INSERT,UPDATE,DELETE,DEBUG,ERROR,LOG" defaultValue="LOG" />
-        <column name="INFO" phpName="Info" type="LONGVARCHAR" />
-        <behavior name="timestampable" />
-        <index name="idx_log">
-            <index-column name="CATEGORY" />
-        </index>
-    </table>
 </database>

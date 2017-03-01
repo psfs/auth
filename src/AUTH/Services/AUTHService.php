@@ -2,11 +2,14 @@
 namespace AUTH\Services;
 
 use AUTH\Dto\AuthUserDto;
+use AUTH\Exception\AuthApiAccessRestrictedException;
 use AUTH\Exception\AuthProviderNotConfiguredException;
 use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\LoginProviderQuery;
 use PSFS\base\config\Config;
 use PSFS\base\Logger;
+use PSFS\base\Request;
+use PSFS\base\Security;
 use PSFS\base\Service;
 
 /**
@@ -92,6 +95,16 @@ abstract class AUTHService extends Service {
             if(null === $this->provider) {
                 throw new AuthProviderNotConfiguredException(_('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }
+        }
+    }
+
+    /**
+     * @throws AuthApiAccessRestrictedException
+     */
+    public static function checkAccess() {
+        $isAdmin = Security::getInstance()->canAccessRestrictedAdmin();
+        if(!$isAdmin) {
+            throw new AuthApiAccessRestrictedException(_('Only administrators can access auth models'), 403);
         }
     }
 }

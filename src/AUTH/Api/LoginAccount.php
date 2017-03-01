@@ -4,6 +4,7 @@ namespace AUTH\Api;
 use AUTH\Api\base\LoginAccountBaseApi;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\Map\LoginAccountTableMap;
+use AUTH\Services\AUTHService;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 
 /**
@@ -18,6 +19,7 @@ class LoginAccount extends LoginAccountBaseApi
 {
     public function init()
     {
+        AUTHService::checkAccess();
         parent::init();
         $this->extraColumns = [
             'CONCAT(' . LoginProvider::getListNameSql() . ', " ", ' . LoginAccountTableMap::COL_IDENTIFIER . ')' => self::API_LIST_NAME_FIELD

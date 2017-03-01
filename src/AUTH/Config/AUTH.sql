@@ -50,20 +50,5 @@ CREATE TABLE `AUTH_ACCOUNTS`
         REFERENCES `AUTH_PROVIDERS` (`ID_PROVIDER`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login accounts';
 
--- ---------------------------------------------------------------------
--- AUTH_LOGS
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `AUTH_LOGS`;
-
-CREATE TABLE `AUTH_LOGS`
-(
-    `CATEGORY` TINYINT DEFAULT 5,
-    `INFO` TEXT,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    INDEX `idx_log` (`CATEGORY`)
-) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with auth accesses log';
-
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

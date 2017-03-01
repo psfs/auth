@@ -14,11 +14,14 @@
     <div class="row">
         <div class="col-xs-12 col-sm-6">
             <div class="thumbnail">
-                <img src="{{ user.photo }}" alt="{{ user.name }}">
+                <img class="img-responsive img-thumbnail" src="{{ user.photo }}" alt="{{ user.name }}">
                 <div class="caption">
                     <h3>{{ user.name }}</h3>
-                    <p>{{ user.id }}</p>
-                    <p>{{ user.email }}</p>
+                    <p><i class="fa fa-user"></i>&nbsp;{{ user.id }}</p>
+                    <p><i class="fa fa-envelope-o"></i>&nbsp;{{ user.email }}</p>
+                    <p>
+                        <a class="btn btn-danger" href="{{ path('logout') }}">{{ "Logout"|trans }}</a>
+                    </p>
                 </div>
             </div>
         </div>

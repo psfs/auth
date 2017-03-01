@@ -5,11 +5,9 @@ namespace AUTH\Models\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use AUTH\Models\LoginAccount as ChildLoginAccount;
-use AUTH\Models\LoginAccountQuery as ChildLoginAccountQuery;
-use AUTH\Models\LoginProvider as ChildLoginProvider;
-use AUTH\Models\LoginProviderQuery as ChildLoginProviderQuery;
-use AUTH\Models\Map\LoginAccountTableMap;
+use AUTH\Models\LoginLog as ChildLoginLog;
+use AUTH\Models\LoginLogQuery as ChildLoginLogQuery;
+use AUTH\Models\Map\LoginLogTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -24,18 +22,18 @@ use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'AUTH_ACCOUNTS' table.
+ * Base class that represents a row from the 'AUTH_LOGS' table.
  *
- * Table with the login accounts
+ * Table with auth accesses log
  *
  * @package    propel.generator.AUTH.Models.Base
  */
-abstract class LoginAccount implements ActiveRecordInterface
+abstract class LoginLog implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\AUTH\\Models\\Map\\LoginAccountTableMap';
+    const TABLE_MAP = '\\AUTH\\Models\\Map\\LoginLogTableMap';
 
 
     /**
@@ -65,54 +63,19 @@ abstract class LoginAccount implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the id_account field.
+     * The value for the category field.
      *
+     * Note: this column has a database default value of: 5
      * @var        int
      */
-    protected $id_account;
+    protected $category;
 
     /**
-     * The value for the id_provider field.
-     *
-     * @var        int
-     */
-    protected $id_provider;
-
-    /**
-     * The value for the identifier field.
+     * The value for the info field.
      *
      * @var        string
      */
-    protected $identifier;
-
-    /**
-     * The value for the access_token field.
-     *
-     * @var        string
-     */
-    protected $access_token;
-
-    /**
-     * The value for the refresh_token field.
-     *
-     * @var        string
-     */
-    protected $refresh_token;
-
-    /**
-     * The value for the expires field.
-     *
-     * @var        DateTime
-     */
-    protected $expires;
-
-    /**
-     * The value for the role field.
-     *
-     * Note: this column has a database default value of: 0
-     * @var        int
-     */
-    protected $role;
+    protected $info;
 
     /**
      * The value for the created_at field.
@@ -129,23 +92,12 @@ abstract class LoginAccount implements ActiveRecordInterface
     protected $updated_at;
 
     /**
-     * @var        ChildLoginProvider
-     */
-    protected $aAccountProvider;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
-
-    // aggregate_column_relation_aggregate_column behavior
-    /**
-     * @var ChildLoginProvider
-     */
-    protected $oldAccountProviderAccounts;
 
     /**
      * Applies default values to this object.
@@ -155,11 +107,11 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function applyDefaultValues()
     {
-        $this->role = 0;
+        $this->category = 5;
     }
 
     /**
-     * Initializes internal state of AUTH\Models\Base\LoginAccount object.
+     * Initializes internal state of AUTH\Models\Base\LoginLog object.
      * @see applyDefaults()
      */
     public function __construct()
@@ -256,9 +208,9 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>LoginAccount</code> instance.  If
-     * <code>obj</code> is an instance of <code>LoginAccount</code>, delegates to
-     * <code>equals(LoginAccount)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>LoginLog</code> instance.  If
+     * <code>obj</code> is an instance of <code>LoginLog</code>, delegates to
+     * <code>equals(LoginLog)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -324,7 +276,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|LoginAccount The current object, for fluid interface
+     * @return $this|LoginLog The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -386,92 +338,32 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id_account] column value.
-     *
-     * @return int
-     */
-    public function getIdAccount()
-    {
-        return $this->id_account;
-    }
-
-    /**
-     * Get the [id_provider] column value.
-     *
-     * @return int
-     */
-    public function getIdSocial()
-    {
-        return $this->id_provider;
-    }
-
-    /**
-     * Get the [identifier] column value.
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * Get the [access_token] column value.
-     *
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        return $this->access_token;
-    }
-
-    /**
-     * Get the [refresh_token] column value.
-     *
-     * @return string
-     */
-    public function getRefreshToken()
-    {
-        return $this->refresh_token;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [expires] column value.
-     *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getExpireDate($format = NULL)
-    {
-        if ($format === null) {
-            return $this->expires;
-        } else {
-            return $this->expires instanceof \DateTimeInterface ? $this->expires->format($format) : null;
-        }
-    }
-
-    /**
-     * Get the [role] column value.
+     * Get the [category] column value.
      *
      * @return string
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function getAccountRole()
+    public function getCategory()
     {
-        if (null === $this->role) {
+        if (null === $this->category) {
             return null;
         }
-        $valueSet = LoginAccountTableMap::getValueSet(LoginAccountTableMap::COL_ROLE);
-        if (!isset($valueSet[$this->role])) {
-            throw new PropelException('Unknown stored enum key: ' . $this->role);
+        $valueSet = LoginLogTableMap::getValueSet(LoginLogTableMap::COL_CATEGORY);
+        if (!isset($valueSet[$this->category])) {
+            throw new PropelException('Unknown stored enum key: ' . $this->category);
         }
 
-        return $valueSet[$this->role];
+        return $valueSet[$this->category];
+    }
+
+    /**
+     * Get the [info] column value.
+     *
+     * @return string
+     */
+    public function getInfo()
+    {
+        return $this->info;
     }
 
     /**
@@ -515,160 +407,56 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [id_account] column.
-     *
-     * @param int $v new value
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     */
-    public function setIdAccount($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id_account !== $v) {
-            $this->id_account = $v;
-            $this->modifiedColumns[LoginAccountTableMap::COL_ID_ACCOUNT] = true;
-        }
-
-        return $this;
-    } // setIdAccount()
-
-    /**
-     * Set the value of [id_provider] column.
-     *
-     * @param int $v new value
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     */
-    public function setIdSocial($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id_provider !== $v) {
-            $this->id_provider = $v;
-            $this->modifiedColumns[LoginAccountTableMap::COL_ID_PROVIDER] = true;
-        }
-
-        if ($this->aAccountProvider !== null && $this->aAccountProvider->getIdProvider() !== $v) {
-            $this->aAccountProvider = null;
-        }
-
-        return $this;
-    } // setIdSocial()
-
-    /**
-     * Set the value of [identifier] column.
-     *
-     * @param string $v new value
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->identifier !== $v) {
-            $this->identifier = $v;
-            $this->modifiedColumns[LoginAccountTableMap::COL_IDENTIFIER] = true;
-        }
-
-        return $this;
-    } // setId()
-
-    /**
-     * Set the value of [access_token] column.
-     *
-     * @param string $v new value
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     */
-    public function setAccessToken($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->access_token !== $v) {
-            $this->access_token = $v;
-            $this->modifiedColumns[LoginAccountTableMap::COL_ACCESS_TOKEN] = true;
-        }
-
-        return $this;
-    } // setAccessToken()
-
-    /**
-     * Set the value of [refresh_token] column.
-     *
-     * @param string $v new value
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     */
-    public function setRefreshToken($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->refresh_token !== $v) {
-            $this->refresh_token = $v;
-            $this->modifiedColumns[LoginAccountTableMap::COL_REFRESH_TOKEN] = true;
-        }
-
-        return $this;
-    } // setRefreshToken()
-
-    /**
-     * Sets the value of [expires] column to a normalized version of the date/time value specified.
-     *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     */
-    public function setExpireDate($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->expires !== null || $dt !== null) {
-            if ($this->expires === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->expires->format("Y-m-d H:i:s.u")) {
-                $this->expires = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[LoginAccountTableMap::COL_EXPIRES] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setExpireDate()
-
-    /**
-     * Set the value of [role] column.
+     * Set the value of [category] column.
      *
      * @param  string $v new value
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     * @return $this|\AUTH\Models\LoginLog The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAccountRole($v)
+    public function setCategory($v)
     {
         if ($v !== null) {
-            $valueSet = LoginAccountTableMap::getValueSet(LoginAccountTableMap::COL_ROLE);
+            $valueSet = LoginLogTableMap::getValueSet(LoginLogTableMap::COL_CATEGORY);
             if (!in_array($v, $valueSet)) {
                 throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $v));
             }
             $v = array_search($v, $valueSet);
         }
 
-        if ($this->role !== $v) {
-            $this->role = $v;
-            $this->modifiedColumns[LoginAccountTableMap::COL_ROLE] = true;
+        if ($this->category !== $v) {
+            $this->category = $v;
+            $this->modifiedColumns[LoginLogTableMap::COL_CATEGORY] = true;
         }
 
         return $this;
-    } // setAccountRole()
+    } // setCategory()
+
+    /**
+     * Set the value of [info] column.
+     *
+     * @param string $v new value
+     * @return $this|\AUTH\Models\LoginLog The current object (for fluent API support)
+     */
+    public function setInfo($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->info !== $v) {
+            $this->info = $v;
+            $this->modifiedColumns[LoginLogTableMap::COL_INFO] = true;
+        }
+
+        return $this;
+    } // setInfo()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     * @return $this|\AUTH\Models\LoginLog The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -676,7 +464,7 @@ abstract class LoginAccount implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[LoginAccountTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[LoginLogTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -688,7 +476,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     * @return $this|\AUTH\Models\LoginLog The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -696,7 +484,7 @@ abstract class LoginAccount implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[LoginAccountTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[LoginLogTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -713,7 +501,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->role !== 0) {
+            if ($this->category !== 5) {
                 return false;
             }
 
@@ -743,37 +531,19 @@ abstract class LoginAccount implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : LoginAccountTableMap::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id_account = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : LoginLogTableMap::translateFieldName('Category', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->category = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : LoginAccountTableMap::translateFieldName('IdSocial', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id_provider = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : LoginLogTableMap::translateFieldName('Info', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->info = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LoginAccountTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->identifier = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LoginAccountTableMap::translateFieldName('AccessToken', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->access_token = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : LoginAccountTableMap::translateFieldName('RefreshToken', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->refresh_token = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LoginAccountTableMap::translateFieldName('ExpireDate', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->expires = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginAccountTableMap::translateFieldName('AccountRole', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->role = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LoginLogTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LoginLogTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -786,10 +556,10 @@ abstract class LoginAccount implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = LoginAccountTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = LoginLogTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginAccount'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginLog'), 0, $e);
         }
     }
 
@@ -808,9 +578,6 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aAccountProvider !== null && $this->id_provider !== $this->aAccountProvider->getIdProvider()) {
-            $this->aAccountProvider = null;
-        }
     } // ensureConsistency
 
     /**
@@ -834,13 +601,13 @@ abstract class LoginAccount implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(LoginAccountTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(LoginLogTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildLoginAccountQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildLoginLogQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -850,7 +617,6 @@ abstract class LoginAccount implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aAccountProvider = null;
         } // if (deep)
     }
 
@@ -860,8 +626,8 @@ abstract class LoginAccount implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see LoginAccount::setDeleted()
-     * @see LoginAccount::isDeleted()
+     * @see LoginLog::setDeleted()
+     * @see LoginLog::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -870,11 +636,11 @@ abstract class LoginAccount implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(LoginLogTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildLoginAccountQuery::create()
+            $deleteQuery = ChildLoginLogQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -909,7 +675,7 @@ abstract class LoginAccount implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(LoginLogTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -919,16 +685,16 @@ abstract class LoginAccount implements ActiveRecordInterface
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
 
-                if (!$this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
+                if (!$this->isColumnModified(LoginLogTableMap::COL_CREATED_AT)) {
                     $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
-                if (!$this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
+                if (!$this->isColumnModified(LoginLogTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
+                if ($this->isModified() && !$this->isColumnModified(LoginLogTableMap::COL_UPDATED_AT)) {
                     $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
                 }
             }
@@ -940,9 +706,7 @@ abstract class LoginAccount implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                // aggregate_column_relation_aggregate_column behavior
-                $this->updateRelatedAccountProviderAccounts($con);
-                LoginAccountTableMap::addInstanceToPool($this);
+                LoginLogTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -967,18 +731,6 @@ abstract class LoginAccount implements ActiveRecordInterface
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
-
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aAccountProvider !== null) {
-                if ($this->aAccountProvider->isModified() || $this->aAccountProvider->isNew()) {
-                    $affectedRows += $this->aAccountProvider->save($con);
-                }
-                $this->setAccountProvider($this->aAccountProvider);
-            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -1011,42 +763,23 @@ abstract class LoginAccount implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[LoginAccountTableMap::COL_ID_ACCOUNT] = true;
-        if (null !== $this->id_account) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . LoginAccountTableMap::COL_ID_ACCOUNT . ')');
-        }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ID_ACCOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'ID_ACCOUNT';
+        if ($this->isColumnModified(LoginLogTableMap::COL_CATEGORY)) {
+            $modifiedColumns[':p' . $index++]  = 'CATEGORY';
         }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ID_PROVIDER)) {
-            $modifiedColumns[':p' . $index++]  = 'ID_PROVIDER';
+        if ($this->isColumnModified(LoginLogTableMap::COL_INFO)) {
+            $modifiedColumns[':p' . $index++]  = 'INFO';
         }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_IDENTIFIER)) {
-            $modifiedColumns[':p' . $index++]  = 'IDENTIFIER';
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ACCESS_TOKEN)) {
-            $modifiedColumns[':p' . $index++]  = 'ACCESS_TOKEN';
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_REFRESH_TOKEN)) {
-            $modifiedColumns[':p' . $index++]  = 'REFRESH_TOKEN';
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_EXPIRES)) {
-            $modifiedColumns[':p' . $index++]  = 'EXPIRES';
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ROLE)) {
-            $modifiedColumns[':p' . $index++]  = 'ROLE';
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(LoginLogTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(LoginLogTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO AUTH_ACCOUNTS (%s) VALUES (%s)',
+            'INSERT INTO AUTH_LOGS (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1055,26 +788,11 @@ abstract class LoginAccount implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'ID_ACCOUNT':
-                        $stmt->bindValue($identifier, $this->id_account, PDO::PARAM_INT);
+                    case 'CATEGORY':
+                        $stmt->bindValue($identifier, $this->category, PDO::PARAM_INT);
                         break;
-                    case 'ID_PROVIDER':
-                        $stmt->bindValue($identifier, $this->id_provider, PDO::PARAM_INT);
-                        break;
-                    case 'IDENTIFIER':
-                        $stmt->bindValue($identifier, $this->identifier, PDO::PARAM_STR);
-                        break;
-                    case 'ACCESS_TOKEN':
-                        $stmt->bindValue($identifier, $this->access_token, PDO::PARAM_STR);
-                        break;
-                    case 'REFRESH_TOKEN':
-                        $stmt->bindValue($identifier, $this->refresh_token, PDO::PARAM_STR);
-                        break;
-                    case 'EXPIRES':
-                        $stmt->bindValue($identifier, $this->expires ? $this->expires->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'ROLE':
-                        $stmt->bindValue($identifier, $this->role, PDO::PARAM_INT);
+                    case 'INFO':
+                        $stmt->bindValue($identifier, $this->info, PDO::PARAM_STR);
                         break;
                     case 'created_at':
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1089,13 +807,6 @@ abstract class LoginAccount implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', 0, $e);
-        }
-        $this->setIdAccount($pk);
 
         $this->setNew(false);
     }
@@ -1128,7 +839,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = LoginAccountTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = LoginLogTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1145,30 +856,15 @@ abstract class LoginAccount implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getIdAccount();
+                return $this->getCategory();
                 break;
             case 1:
-                return $this->getIdSocial();
+                return $this->getInfo();
                 break;
             case 2:
-                return $this->getId();
-                break;
-            case 3:
-                return $this->getAccessToken();
-                break;
-            case 4:
-                return $this->getRefreshToken();
-                break;
-            case 5:
-                return $this->getExpireDate();
-                break;
-            case 6:
-                return $this->getAccountRole();
-                break;
-            case 7:
                 return $this->getCreatedAt();
                 break;
-            case 8:
+            case 3:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1188,39 +884,29 @@ abstract class LoginAccount implements ActiveRecordInterface
      *                    Defaults to TableMap::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
 
-        if (isset($alreadyDumpedObjects['LoginAccount'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['LoginLog'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['LoginAccount'][$this->hashCode()] = true;
-        $keys = LoginAccountTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['LoginLog'][$this->hashCode()] = true;
+        $keys = LoginLogTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdAccount(),
-            $keys[1] => $this->getIdSocial(),
-            $keys[2] => $this->getId(),
-            $keys[3] => $this->getAccessToken(),
-            $keys[4] => $this->getRefreshToken(),
-            $keys[5] => $this->getExpireDate(),
-            $keys[6] => $this->getAccountRole(),
-            $keys[7] => $this->getCreatedAt(),
-            $keys[8] => $this->getUpdatedAt(),
+            $keys[0] => $this->getCategory(),
+            $keys[1] => $this->getInfo(),
+            $keys[2] => $this->getCreatedAt(),
+            $keys[3] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[5]] instanceof \DateTime) {
-            $result[$keys[5]] = $result[$keys[5]]->format('c');
+        if ($result[$keys[2]] instanceof \DateTime) {
+            $result[$keys[2]] = $result[$keys[2]]->format('c');
         }
 
-        if ($result[$keys[7]] instanceof \DateTime) {
-            $result[$keys[7]] = $result[$keys[7]]->format('c');
-        }
-
-        if ($result[$keys[8]] instanceof \DateTime) {
-            $result[$keys[8]] = $result[$keys[8]]->format('c');
+        if ($result[$keys[3]] instanceof \DateTime) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1228,23 +914,6 @@ abstract class LoginAccount implements ActiveRecordInterface
             $result[$key] = $virtualColumn;
         }
 
-        if ($includeForeignObjects) {
-            if (null !== $this->aAccountProvider) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'loginProvider';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'AUTH_PROVIDERS';
-                        break;
-                    default:
-                        $key = 'AccountProvider';
-                }
-
-                $result[$key] = $this->aAccountProvider->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-        }
 
         return $result;
     }
@@ -1258,11 +927,11 @@ abstract class LoginAccount implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\AUTH\Models\LoginAccount
+     * @return $this|\AUTH\Models\LoginLog
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = LoginAccountTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = LoginLogTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1273,40 +942,25 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\AUTH\Models\LoginAccount
+     * @return $this|\AUTH\Models\LoginLog
      */
     public function setByPosition($pos, $value)
     {
         switch ($pos) {
             case 0:
-                $this->setIdAccount($value);
-                break;
-            case 1:
-                $this->setIdSocial($value);
-                break;
-            case 2:
-                $this->setId($value);
-                break;
-            case 3:
-                $this->setAccessToken($value);
-                break;
-            case 4:
-                $this->setRefreshToken($value);
-                break;
-            case 5:
-                $this->setExpireDate($value);
-                break;
-            case 6:
-                $valueSet = LoginAccountTableMap::getValueSet(LoginAccountTableMap::COL_ROLE);
+                $valueSet = LoginLogTableMap::getValueSet(LoginLogTableMap::COL_CATEGORY);
                 if (isset($valueSet[$value])) {
                     $value = $valueSet[$value];
                 }
-                $this->setAccountRole($value);
+                $this->setCategory($value);
                 break;
-            case 7:
+            case 1:
+                $this->setInfo($value);
+                break;
+            case 2:
                 $this->setCreatedAt($value);
                 break;
-            case 8:
+            case 3:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1333,34 +987,19 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = LoginAccountTableMap::getFieldNames($keyType);
+        $keys = LoginLogTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setIdAccount($arr[$keys[0]]);
+            $this->setCategory($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setIdSocial($arr[$keys[1]]);
+            $this->setInfo($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setId($arr[$keys[2]]);
+            $this->setCreatedAt($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setAccessToken($arr[$keys[3]]);
-        }
-        if (array_key_exists($keys[4], $arr)) {
-            $this->setRefreshToken($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setExpireDate($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setAccountRole($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setCreatedAt($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setUpdatedAt($arr[$keys[8]]);
+            $this->setUpdatedAt($arr[$keys[3]]);
         }
     }
 
@@ -1381,7 +1020,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\AUTH\Models\LoginAccount The current object, for fluid interface
+     * @return $this|\AUTH\Models\LoginLog The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1401,34 +1040,19 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(LoginAccountTableMap::DATABASE_NAME);
+        $criteria = new Criteria(LoginLogTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ID_ACCOUNT)) {
-            $criteria->add(LoginAccountTableMap::COL_ID_ACCOUNT, $this->id_account);
+        if ($this->isColumnModified(LoginLogTableMap::COL_CATEGORY)) {
+            $criteria->add(LoginLogTableMap::COL_CATEGORY, $this->category);
         }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ID_PROVIDER)) {
-            $criteria->add(LoginAccountTableMap::COL_ID_PROVIDER, $this->id_provider);
+        if ($this->isColumnModified(LoginLogTableMap::COL_INFO)) {
+            $criteria->add(LoginLogTableMap::COL_INFO, $this->info);
         }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_IDENTIFIER)) {
-            $criteria->add(LoginAccountTableMap::COL_IDENTIFIER, $this->identifier);
+        if ($this->isColumnModified(LoginLogTableMap::COL_CREATED_AT)) {
+            $criteria->add(LoginLogTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ACCESS_TOKEN)) {
-            $criteria->add(LoginAccountTableMap::COL_ACCESS_TOKEN, $this->access_token);
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_REFRESH_TOKEN)) {
-            $criteria->add(LoginAccountTableMap::COL_REFRESH_TOKEN, $this->refresh_token);
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_EXPIRES)) {
-            $criteria->add(LoginAccountTableMap::COL_EXPIRES, $this->expires);
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_ROLE)) {
-            $criteria->add(LoginAccountTableMap::COL_ROLE, $this->role);
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
-            $criteria->add(LoginAccountTableMap::COL_CREATED_AT, $this->created_at);
-        }
-        if ($this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
-            $criteria->add(LoginAccountTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(LoginLogTableMap::COL_UPDATED_AT)) {
+            $criteria->add(LoginLogTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1446,8 +1070,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildLoginAccountQuery::create();
-        $criteria->add(LoginAccountTableMap::COL_ID_ACCOUNT, $this->id_account);
+        throw new LogicException('The LoginLog object has no primary key');
 
         return $criteria;
     }
@@ -1460,7 +1083,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getIdAccount();
+        $validPk = false;
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -1475,23 +1098,27 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
-     * Returns the primary key for this object (row).
-     * @return int
+     * Returns NULL since this table doesn't have a primary key.
+     * This method exists only for BC and is deprecated!
+     * @return null
      */
     public function getPrimaryKey()
     {
-        return $this->getIdAccount();
+        return null;
     }
 
     /**
-     * Generic method to set the primary key (id_account column).
+     * Dummy primary key setter.
      *
-     * @param       int $key Primary key.
-     * @return void
+     * This function only exists to preserve backwards compatibility.  It is no longer
+     * needed or required by the Persistent interface.  It will be removed in next BC-breaking
+     * release of Propel.
+     *
+     * @deprecated
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($pk)
     {
-        $this->setIdAccount($key);
+        // do nothing, because this object doesn't have any primary keys
     }
 
     /**
@@ -1500,7 +1127,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getIdAccount();
+        return ;
     }
 
     /**
@@ -1509,24 +1136,19 @@ abstract class LoginAccount implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \AUTH\Models\LoginAccount (or compatible) type.
+     * @param      object $copyObj An object of \AUTH\Models\LoginLog (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIdSocial($this->getIdSocial());
-        $copyObj->setId($this->getId());
-        $copyObj->setAccessToken($this->getAccessToken());
-        $copyObj->setRefreshToken($this->getRefreshToken());
-        $copyObj->setExpireDate($this->getExpireDate());
-        $copyObj->setAccountRole($this->getAccountRole());
+        $copyObj->setCategory($this->getCategory());
+        $copyObj->setInfo($this->getInfo());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdAccount(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1539,7 +1161,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \AUTH\Models\LoginAccount Clone of current object.
+     * @return \AUTH\Models\LoginLog Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1553,77 +1175,14 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildLoginProvider object.
-     *
-     * @param  ChildLoginProvider $v
-     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setAccountProvider(ChildLoginProvider $v = null)
-    {
-        // aggregate_column_relation behavior
-        if (null !== $this->aAccountProvider && $v !== $this->aAccountProvider) {
-            $this->oldAccountProviderAccounts = $this->aAccountProvider;
-        }
-        if ($v === null) {
-            $this->setIdSocial(NULL);
-        } else {
-            $this->setIdSocial($v->getIdProvider());
-        }
-
-        $this->aAccountProvider = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildLoginProvider object, it will not be re-added.
-        if ($v !== null) {
-            $v->addLoginAccount($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildLoginProvider object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildLoginProvider The associated ChildLoginProvider object.
-     * @throws PropelException
-     */
-    public function getAccountProvider(ConnectionInterface $con = null)
-    {
-        if ($this->aAccountProvider === null && ($this->id_provider !== null)) {
-            $this->aAccountProvider = ChildLoginProviderQuery::create()->findPk($this->id_provider, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAccountProvider->addLoginAccounts($this);
-             */
-        }
-
-        return $this->aAccountProvider;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aAccountProvider) {
-            $this->aAccountProvider->removeLoginAccount($this);
-        }
-        $this->id_account = null;
-        $this->id_provider = null;
-        $this->identifier = null;
-        $this->access_token = null;
-        $this->refresh_token = null;
-        $this->expires = null;
-        $this->role = null;
+        $this->category = null;
+        $this->info = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;
@@ -1647,7 +1206,6 @@ abstract class LoginAccount implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aAccountProvider = null;
     }
 
     /**
@@ -1657,7 +1215,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(LoginAccountTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(LoginLogTableMap::DEFAULT_STRING_FORMAT);
     }
 
     // timestampable behavior
@@ -1665,31 +1223,13 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Mark the current object so that the update date doesn't get updated during next save
      *
-     * @return     $this|ChildLoginAccount The current object (for fluent API support)
+     * @return     $this|ChildLoginLog The current object (for fluent API support)
      */
     public function keepUpdateDateUnchanged()
     {
-        $this->modifiedColumns[LoginAccountTableMap::COL_UPDATED_AT] = true;
+        $this->modifiedColumns[LoginLogTableMap::COL_UPDATED_AT] = true;
 
         return $this;
-    }
-
-    // aggregate_column_relation_aggregate_column behavior
-
-    /**
-     * Update the aggregate column in the related AccountProvider object
-     *
-     * @param ConnectionInterface $con A connection object
-     */
-    protected function updateRelatedAccountProviderAccounts(ConnectionInterface $con)
-    {
-        if ($accountProvider = $this->getAccountProvider()) {
-            $accountProvider->updateAccounts($con);
-        }
-        if ($this->oldAccountProviderAccounts) {
-            $this->oldAccountProviderAccounts->updateAccounts($con);
-            $this->oldAccountProviderAccounts = null;
-        }
     }
 
     /**

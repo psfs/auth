@@ -14,9 +14,7 @@ use AUTH\Models\Map\LoginProviderTableMap;
 */
 class LoginProvider extends LoginProviderBaseApi
 {
-    public function init()
-    {
-        parent::init();
+    public static function getListNameSql() {
         $sql = 'CONCAT(';
         $closeSql = '';
         foreach(LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_NAME) as $index => $value) {
@@ -25,8 +23,15 @@ class LoginProvider extends LoginProviderBaseApi
         }
         $sql .= '"Error"';
         $closeSql .= ', " [", IF(' . LoginProviderTableMap::COL_DEV . ' = 0, "Prod", "Dev"), "]")';
+        return $sql . $closeSql;
+    }
+
+    public function init()
+    {
+        parent::init();
+
         $this->extraColumns = [
-            $sql . $closeSql => self::API_LIST_NAME_FIELD
+            self::getListNameSql() => self::API_LIST_NAME_FIELD
         ];
     }
 }

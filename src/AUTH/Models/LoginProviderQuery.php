@@ -16,5 +16,15 @@ use AUTH\Models\Base\LoginProviderQuery as BaseLoginProviderQuery;
  */
 class LoginProviderQuery extends BaseLoginProviderQuery
 {
-
+    /**
+     * @param $providerName
+     * @param bool $devMode
+     * @return LoginProvider
+     */
+    public static function getProvider($providerName, $devMode = true) {
+        return self::create()
+            ->filterByName($providerName)
+            ->filterByDebug($devMode)
+            ->findOne();
+    }
 }

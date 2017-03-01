@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "psfs/core": "dev-master"
+        "psfs/core": "dev-master",
+        "google/apiclient": "^2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.6"

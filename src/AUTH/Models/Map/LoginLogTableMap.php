@@ -2,13 +2,14 @@
 
 namespace AUTH\Models\Map;
 
-use AUTH\Models\LoginAccount;
-use AUTH\Models\LoginAccountQuery;
+use AUTH\Models\LoginLog;
+use AUTH\Models\LoginLogQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\DataFetcher\DataFetcherInterface;
+use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
@@ -16,7 +17,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'AUTH_ACCOUNTS' table.
+ * This class defines the structure of the 'AUTH_LOGS' table.
  *
  *
  *
@@ -26,7 +27,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class LoginAccountTableMap extends TableMap
+class LoginLogTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +35,7 @@ class LoginAccountTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'AUTH.Models.Map.LoginAccountTableMap';
+    const CLASS_NAME = 'AUTH.Models.Map.LoginLogTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +45,22 @@ class LoginAccountTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'AUTH_ACCOUNTS';
+    const TABLE_NAME = 'AUTH_LOGS';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\AUTH\\Models\\LoginAccount';
+    const OM_CLASS = '\\AUTH\\Models\\LoginLog';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'AUTH.Models.LoginAccount';
+    const CLASS_DEFAULT = 'AUTH.Models.LoginLog';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,62 +70,40 @@ class LoginAccountTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
-     * the column name for the ID_ACCOUNT field
+     * the column name for the CATEGORY field
      */
-    const COL_ID_ACCOUNT = 'AUTH_ACCOUNTS.ID_ACCOUNT';
+    const COL_CATEGORY = 'AUTH_LOGS.CATEGORY';
 
     /**
-     * the column name for the ID_PROVIDER field
+     * the column name for the INFO field
      */
-    const COL_ID_PROVIDER = 'AUTH_ACCOUNTS.ID_PROVIDER';
-
-    /**
-     * the column name for the IDENTIFIER field
-     */
-    const COL_IDENTIFIER = 'AUTH_ACCOUNTS.IDENTIFIER';
-
-    /**
-     * the column name for the ACCESS_TOKEN field
-     */
-    const COL_ACCESS_TOKEN = 'AUTH_ACCOUNTS.ACCESS_TOKEN';
-
-    /**
-     * the column name for the REFRESH_TOKEN field
-     */
-    const COL_REFRESH_TOKEN = 'AUTH_ACCOUNTS.REFRESH_TOKEN';
-
-    /**
-     * the column name for the EXPIRES field
-     */
-    const COL_EXPIRES = 'AUTH_ACCOUNTS.EXPIRES';
-
-    /**
-     * the column name for the ROLE field
-     */
-    const COL_ROLE = 'AUTH_ACCOUNTS.ROLE';
+    const COL_INFO = 'AUTH_LOGS.INFO';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'AUTH_ACCOUNTS.created_at';
+    const COL_CREATED_AT = 'AUTH_LOGS.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'AUTH_ACCOUNTS.updated_at';
+    const COL_UPDATED_AT = 'AUTH_LOGS.updated_at';
 
     /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
 
-    /** The enumerated values for the ROLE field */
-    const COL_ROLE_USER = 'USER';
-    const COL_ROLE_MANAGER = 'MANAGER';
-    const COL_ROLE_ADMIN = 'ADMIN';
+    /** The enumerated values for the CATEGORY field */
+    const COL_CATEGORY_INSERT = 'INSERT';
+    const COL_CATEGORY_UPDATE = 'UPDATE';
+    const COL_CATEGORY_DELETE = 'DELETE';
+    const COL_CATEGORY_DEBUG = 'DEBUG';
+    const COL_CATEGORY_ERROR = 'ERROR';
+    const COL_CATEGORY_LOG = 'LOG';
 
     /**
      * holds an array of fieldnames
@@ -133,11 +112,11 @@ class LoginAccountTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('IdAccount', 'IdSocial', 'Id', 'AccessToken', 'RefreshToken', 'ExpireDate', 'AccountRole', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('idAccount', 'idSocial', 'id', 'accessToken', 'refreshToken', 'expireDate', 'accountRole', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT, LoginAccountTableMap::COL_ID_PROVIDER, LoginAccountTableMap::COL_IDENTIFIER, LoginAccountTableMap::COL_ACCESS_TOKEN, LoginAccountTableMap::COL_REFRESH_TOKEN, LoginAccountTableMap::COL_EXPIRES, LoginAccountTableMap::COL_ROLE, LoginAccountTableMap::COL_CREATED_AT, LoginAccountTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('ID_ACCOUNT', 'ID_PROVIDER', 'IDENTIFIER', 'ACCESS_TOKEN', 'REFRESH_TOKEN', 'EXPIRES', 'ROLE', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Category', 'Info', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('category', 'info', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(LoginLogTableMap::COL_CATEGORY, LoginLogTableMap::COL_INFO, LoginLogTableMap::COL_CREATED_AT, LoginLogTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('CATEGORY', 'INFO', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -147,19 +126,22 @@ class LoginAccountTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('IdAccount' => 0, 'IdSocial' => 1, 'Id' => 2, 'AccessToken' => 3, 'RefreshToken' => 4, 'ExpireDate' => 5, 'AccountRole' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
-        self::TYPE_CAMELNAME     => array('idAccount' => 0, 'idSocial' => 1, 'id' => 2, 'accessToken' => 3, 'refreshToken' => 4, 'expireDate' => 5, 'accountRole' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
-        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT => 0, LoginAccountTableMap::COL_ID_PROVIDER => 1, LoginAccountTableMap::COL_IDENTIFIER => 2, LoginAccountTableMap::COL_ACCESS_TOKEN => 3, LoginAccountTableMap::COL_REFRESH_TOKEN => 4, LoginAccountTableMap::COL_EXPIRES => 5, LoginAccountTableMap::COL_ROLE => 6, LoginAccountTableMap::COL_CREATED_AT => 7, LoginAccountTableMap::COL_UPDATED_AT => 8, ),
-        self::TYPE_FIELDNAME     => array('ID_ACCOUNT' => 0, 'ID_PROVIDER' => 1, 'IDENTIFIER' => 2, 'ACCESS_TOKEN' => 3, 'REFRESH_TOKEN' => 4, 'EXPIRES' => 5, 'ROLE' => 6, 'created_at' => 7, 'updated_at' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Category' => 0, 'Info' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
+        self::TYPE_CAMELNAME     => array('category' => 0, 'info' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
+        self::TYPE_COLNAME       => array(LoginLogTableMap::COL_CATEGORY => 0, LoginLogTableMap::COL_INFO => 1, LoginLogTableMap::COL_CREATED_AT => 2, LoginLogTableMap::COL_UPDATED_AT => 3, ),
+        self::TYPE_FIELDNAME     => array('CATEGORY' => 0, 'INFO' => 1, 'created_at' => 2, 'updated_at' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /** The enumerated values for this table */
     protected static $enumValueSets = array(
-                LoginAccountTableMap::COL_ROLE => array(
-                            self::COL_ROLE_USER,
-            self::COL_ROLE_MANAGER,
-            self::COL_ROLE_ADMIN,
+                LoginLogTableMap::COL_CATEGORY => array(
+                            self::COL_CATEGORY_INSERT,
+            self::COL_CATEGORY_UPDATE,
+            self::COL_CATEGORY_DELETE,
+            self::COL_CATEGORY_DEBUG,
+            self::COL_CATEGORY_ERROR,
+            self::COL_CATEGORY_LOG,
         ),
     );
 
@@ -194,25 +176,23 @@ class LoginAccountTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('AUTH_ACCOUNTS');
-        $this->setPhpName('LoginAccount');
+        $this->setName('AUTH_LOGS');
+        $this->setPhpName('LoginLog');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\AUTH\\Models\\LoginAccount');
+        $this->setClassName('\\AUTH\\Models\\LoginLog');
         $this->setPackage('AUTH.Models');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('ID_ACCOUNT', 'IdAccount', 'INTEGER', true, null, null);
-        $this->addForeignKey('ID_PROVIDER', 'IdSocial', 'INTEGER', 'AUTH_PROVIDERS', 'ID_PROVIDER', true, null, null);
-        $this->addColumn('IDENTIFIER', 'Id', 'VARCHAR', true, 100, null);
-        $this->addColumn('ACCESS_TOKEN', 'AccessToken', 'BINARY', true, 500, null);
-        $this->addColumn('REFRESH_TOKEN', 'RefreshToken', 'BINARY', false, 255, null);
-        $this->addColumn('EXPIRES', 'ExpireDate', 'TIMESTAMP', false, null, null);
-        $this->addColumn('ROLE', 'AccountRole', 'ENUM', false, null, 'USER');
-        $this->getColumn('ROLE')->setValueSet(array (
-  0 => 'USER',
-  1 => 'MANAGER',
-  2 => 'ADMIN',
+        $this->addColumn('CATEGORY', 'Category', 'ENUM', false, null, 'LOG');
+        $this->getColumn('CATEGORY')->setValueSet(array (
+  0 => 'INSERT',
+  1 => 'UPDATE',
+  2 => 'DELETE',
+  3 => 'DEBUG',
+  4 => 'ERROR',
+  5 => 'LOG',
 ));
+        $this->addColumn('INFO', 'Info', 'LONGVARCHAR', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -222,13 +202,6 @@ class LoginAccountTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('AccountProvider', '\\AUTH\\Models\\LoginProvider', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':ID_PROVIDER',
-    1 => ':ID_PROVIDER',
-  ),
-), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -240,9 +213,7 @@ class LoginAccountTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'query_cache' => array('backend' => 'apc', 'lifetime' => '3600', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
-            'aggregate_column_relation_aggregate_column' => array('foreign_table' => 'AUTH_PROVIDERS', 'update_method' => 'updateAccounts', 'aggregate_name' => 'Accounts', ),
         );
     } // getBehaviors()
 
@@ -261,12 +232,7 @@ class LoginAccountTableMap extends TableMap
      */
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)] === null) {
-            return null;
-        }
-
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)];
+        return null;
     }
 
     /**
@@ -283,11 +249,7 @@ class LoginAccountTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 0 + $offset
-                : self::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)
-        ];
+        return '';
     }
 
     /**
@@ -303,7 +265,7 @@ class LoginAccountTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? LoginAccountTableMap::CLASS_DEFAULT : LoginAccountTableMap::OM_CLASS;
+        return $withPrefix ? LoginLogTableMap::CLASS_DEFAULT : LoginLogTableMap::OM_CLASS;
     }
 
     /**
@@ -317,22 +279,22 @@ class LoginAccountTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (LoginAccount object, last column rank)
+     * @return array           (LoginLog object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = LoginAccountTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = LoginAccountTableMap::getInstanceFromPool($key))) {
+        $key = LoginLogTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = LoginLogTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + LoginAccountTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + LoginLogTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = LoginAccountTableMap::OM_CLASS;
-            /** @var LoginAccount $obj */
+            $cls = LoginLogTableMap::OM_CLASS;
+            /** @var LoginLog $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            LoginAccountTableMap::addInstanceToPool($obj, $key);
+            LoginLogTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -355,18 +317,18 @@ class LoginAccountTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = LoginAccountTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = LoginAccountTableMap::getInstanceFromPool($key))) {
+            $key = LoginLogTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = LoginLogTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var LoginAccount $obj */
+                /** @var LoginLog $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                LoginAccountTableMap::addInstanceToPool($obj, $key);
+                LoginLogTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -387,23 +349,13 @@ class LoginAccountTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_ID_ACCOUNT);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_ID_PROVIDER);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_IDENTIFIER);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_ACCESS_TOKEN);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_REFRESH_TOKEN);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_EXPIRES);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_ROLE);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(LoginAccountTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(LoginLogTableMap::COL_CATEGORY);
+            $criteria->addSelectColumn(LoginLogTableMap::COL_INFO);
+            $criteria->addSelectColumn(LoginLogTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(LoginLogTableMap::COL_UPDATED_AT);
         } else {
-            $criteria->addSelectColumn($alias . '.ID_ACCOUNT');
-            $criteria->addSelectColumn($alias . '.ID_PROVIDER');
-            $criteria->addSelectColumn($alias . '.IDENTIFIER');
-            $criteria->addSelectColumn($alias . '.ACCESS_TOKEN');
-            $criteria->addSelectColumn($alias . '.REFRESH_TOKEN');
-            $criteria->addSelectColumn($alias . '.EXPIRES');
-            $criteria->addSelectColumn($alias . '.ROLE');
+            $criteria->addSelectColumn($alias . '.CATEGORY');
+            $criteria->addSelectColumn($alias . '.INFO');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
         }
@@ -418,7 +370,7 @@ class LoginAccountTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(LoginAccountTableMap::DATABASE_NAME)->getTable(LoginAccountTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(LoginLogTableMap::DATABASE_NAME)->getTable(LoginLogTableMap::TABLE_NAME);
     }
 
     /**
@@ -426,16 +378,16 @@ class LoginAccountTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(LoginAccountTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(LoginAccountTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new LoginAccountTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(LoginLogTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(LoginLogTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new LoginLogTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a LoginAccount or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a LoginLog or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or LoginAccount object or primary key or array of primary keys
+     * @param mixed               $values Criteria or LoginLog object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -446,27 +398,26 @@ class LoginAccountTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(LoginLogTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \AUTH\Models\LoginAccount) { // it's a model object
-            // create criteria based on pk values
-            $criteria = $values->buildPkeyCriteria();
+        } elseif ($values instanceof \AUTH\Models\LoginLog) { // it's a model object
+            // create criteria based on pk value
+            $criteria = $values->buildCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(LoginAccountTableMap::DATABASE_NAME);
-            $criteria->add(LoginAccountTableMap::COL_ID_ACCOUNT, (array) $values, Criteria::IN);
+            throw new LogicException('The LoginLog object has no primary key');
         }
 
-        $query = LoginAccountQuery::create()->mergeWith($criteria);
+        $query = LoginLogQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            LoginAccountTableMap::clearInstancePool();
+            LoginLogTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                LoginAccountTableMap::removeInstanceFromPool($singleval);
+                LoginLogTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -474,20 +425,20 @@ class LoginAccountTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the AUTH_ACCOUNTS table.
+     * Deletes all rows from the AUTH_LOGS table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return LoginAccountQuery::create()->doDeleteAll($con);
+        return LoginLogQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a LoginAccount or Criteria object.
+     * Performs an INSERT on the database, given a LoginLog or Criteria object.
      *
-     * @param mixed               $criteria Criteria or LoginAccount object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or LoginLog object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -496,22 +447,18 @@ class LoginAccountTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(LoginLogTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from LoginAccount object
-        }
-
-        if ($criteria->containsKey(LoginAccountTableMap::COL_ID_ACCOUNT) && $criteria->keyContainsValue(LoginAccountTableMap::COL_ID_ACCOUNT) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.LoginAccountTableMap::COL_ID_ACCOUNT.')');
+            $criteria = $criteria->buildCriteria(); // build Criteria from LoginLog object
         }
 
 
         // Set the correct dbName
-        $query = LoginAccountQuery::create()->mergeWith($criteria);
+        $query = LoginLogQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -520,7 +467,7 @@ class LoginAccountTableMap extends TableMap
         });
     }
 
-} // LoginAccountTableMap
+} // LoginLogTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-LoginAccountTableMap::buildTableMap();
+LoginLogTableMap::buildTableMap();

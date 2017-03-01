@@ -21,7 +21,8 @@ CREATE TABLE `AUTH_PROVIDERS`
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `ACCOUNTS` INTEGER,
-    PRIMARY KEY (`ID_PROVIDER`)
+    PRIMARY KEY (`ID_PROVIDER`),
+    INDEX `idx_providers` (`NAME`, `ACTIVE`, `DEV`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login providers';
 
 -- ---------------------------------------------------------------------
@@ -35,17 +36,34 @@ CREATE TABLE `AUTH_ACCOUNTS`
     `ID_ACCOUNT` INTEGER NOT NULL AUTO_INCREMENT,
     `ID_PROVIDER` INTEGER NOT NULL,
     `IDENTIFIER` VARCHAR(100) NOT NULL,
-    `ACCESS_TOKEN` VARBINARY(255) NOT NULL,
-    `REFRESH_TOKEN` VARBINARY(255) NOT NULL,
+    `ACCESS_TOKEN` VARBINARY(500) NOT NULL,
+    `REFRESH_TOKEN` VARBINARY(255),
     `EXPIRES` DATETIME,
+    `ROLE` TINYINT DEFAULT 0,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`ID_ACCOUNT`),
     UNIQUE INDEX `unq_accounts_idx` (`ID_PROVIDER`, `IDENTIFIER`),
+    INDEX `idx_accounts` (`IDENTIFIER`, `EXPIRES`, `ROLE`),
     CONSTRAINT `fk_account_provider`
         FOREIGN KEY (`ID_PROVIDER`)
         REFERENCES `AUTH_PROVIDERS` (`ID_PROVIDER`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login accounts';
+
+-- ---------------------------------------------------------------------
+-- AUTH_LOGS
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `AUTH_LOGS`;
+
+CREATE TABLE `AUTH_LOGS`
+(
+    `CATEGORY` TINYINT DEFAULT 5,
+    `INFO` TEXT,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    INDEX `idx_log` (`CATEGORY`)
+) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with auth accesses log';
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

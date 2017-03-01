@@ -26,6 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery orderByAccessToken($order = Criteria::ASC) Order by the ACCESS_TOKEN column
  * @method     ChildLoginAccountQuery orderByRefreshToken($order = Criteria::ASC) Order by the REFRESH_TOKEN column
  * @method     ChildLoginAccountQuery orderByExpireDate($order = Criteria::ASC) Order by the EXPIRES column
+ * @method     ChildLoginAccountQuery orderByAccountRole($order = Criteria::ASC) Order by the ROLE column
  * @method     ChildLoginAccountQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildLoginAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -35,6 +36,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery groupByAccessToken() Group by the ACCESS_TOKEN column
  * @method     ChildLoginAccountQuery groupByRefreshToken() Group by the REFRESH_TOKEN column
  * @method     ChildLoginAccountQuery groupByExpireDate() Group by the EXPIRES column
+ * @method     ChildLoginAccountQuery groupByAccountRole() Group by the ROLE column
  * @method     ChildLoginAccountQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildLoginAccountQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -67,6 +69,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount findOneByAccessToken(string $ACCESS_TOKEN) Return the first ChildLoginAccount filtered by the ACCESS_TOKEN column
  * @method     ChildLoginAccount findOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column
  * @method     ChildLoginAccount findOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column
+ * @method     ChildLoginAccount findOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column
  * @method     ChildLoginAccount findOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column
  * @method     ChildLoginAccount findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column *
 
@@ -79,6 +82,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount requireOneByAccessToken(string $ACCESS_TOKEN) Return the first ChildLoginAccount filtered by the ACCESS_TOKEN column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccount requireOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -89,6 +93,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount[]|ObjectCollection findByAccessToken(string $ACCESS_TOKEN) Return ChildLoginAccount objects filtered by the ACCESS_TOKEN column
  * @method     ChildLoginAccount[]|ObjectCollection findByRefreshToken(string $REFRESH_TOKEN) Return ChildLoginAccount objects filtered by the REFRESH_TOKEN column
  * @method     ChildLoginAccount[]|ObjectCollection findByExpireDate(string $EXPIRES) Return ChildLoginAccount objects filtered by the EXPIRES column
+ * @method     ChildLoginAccount[]|ObjectCollection findByAccountRole(int $ROLE) Return ChildLoginAccount objects filtered by the ROLE column
  * @method     ChildLoginAccount[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginAccount objects filtered by the created_at column
  * @method     ChildLoginAccount[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginAccount objects filtered by the updated_at column
  * @method     ChildLoginAccount[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -192,7 +197,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
+        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -460,6 +465,39 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(LoginAccountTableMap::COL_EXPIRES, $expireDate, $comparison);
+    }
+
+    /**
+     * Filter the query on the ROLE column
+     *
+     * @param     mixed $accountRole The value to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByAccountRole($accountRole = null, $comparison = null)
+    {
+        $valueSet = LoginAccountTableMap::getValueSet(LoginAccountTableMap::COL_ROLE);
+        if (is_scalar($accountRole)) {
+            if (!in_array($accountRole, $valueSet)) {
+                throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $accountRole));
+            }
+            $accountRole = array_search($accountRole, $valueSet);
+        } elseif (is_array($accountRole)) {
+            $convertedValues = array();
+            foreach ($accountRole as $value) {
+                if (!in_array($value, $valueSet)) {
+                    throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $value));
+                }
+                $convertedValues []= array_search($value, $valueSet);
+            }
+            $accountRole = $convertedValues;
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginAccountTableMap::COL_ROLE, $accountRole, $comparison);
     }
 
     /**

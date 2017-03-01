@@ -16,5 +16,15 @@ use AUTH\Models\Base\LoginAccountQuery as BaseLoginAccountQuery;
  */
 class LoginAccountQuery extends BaseLoginAccountQuery
 {
-
+    /**
+     * @param $identifier
+     * @param LoginProvider $provider
+     * @return LoginAccount
+     */
+    public static function getAccountByIdentifier($identifier, LoginProvider $provider) {
+        return self::create()
+            ->filterById($identifier)
+            ->filterByIdSocial($provider->getPrimaryKey())
+            ->findOneOrCreate();
+    }
 }

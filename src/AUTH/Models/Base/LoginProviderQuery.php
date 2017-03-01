@@ -25,7 +25,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProviderQuery orderByDebug($order = Criteria::ASC) Order by the DEV column
  * @method     ChildLoginProviderQuery orderByClient($order = Criteria::ASC) Order by the CLIENT column
  * @method     ChildLoginProviderQuery orderBySecret($order = Criteria::ASC) Order by the SECRET column
- * @method     ChildLoginProviderQuery orderByCallbackUrl($order = Criteria::ASC) Order by the CALLBACK_URL column
  * @method     ChildLoginProviderQuery orderByActive($order = Criteria::ASC) Order by the ACTIVE column
  * @method     ChildLoginProviderQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildLoginProviderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -36,7 +35,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProviderQuery groupByDebug() Group by the DEV column
  * @method     ChildLoginProviderQuery groupByClient() Group by the CLIENT column
  * @method     ChildLoginProviderQuery groupBySecret() Group by the SECRET column
- * @method     ChildLoginProviderQuery groupByCallbackUrl() Group by the CALLBACK_URL column
  * @method     ChildLoginProviderQuery groupByActive() Group by the ACTIVE column
  * @method     ChildLoginProviderQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildLoginProviderQuery groupByUpdatedAt() Group by the updated_at column
@@ -70,7 +68,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider findOneByDebug(boolean $DEV) Return the first ChildLoginProvider filtered by the DEV column
  * @method     ChildLoginProvider findOneByClient(string $CLIENT) Return the first ChildLoginProvider filtered by the CLIENT column
  * @method     ChildLoginProvider findOneBySecret(string $SECRET) Return the first ChildLoginProvider filtered by the SECRET column
- * @method     ChildLoginProvider findOneByCallbackUrl(string $CALLBACK_URL) Return the first ChildLoginProvider filtered by the CALLBACK_URL column
  * @method     ChildLoginProvider findOneByActive(boolean $ACTIVE) Return the first ChildLoginProvider filtered by the ACTIVE column
  * @method     ChildLoginProvider findOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column
  * @method     ChildLoginProvider findOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column
@@ -84,7 +81,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider requireOneByDebug(boolean $DEV) Return the first ChildLoginProvider filtered by the DEV column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByClient(string $CLIENT) Return the first ChildLoginProvider filtered by the CLIENT column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneBySecret(string $SECRET) Return the first ChildLoginProvider filtered by the SECRET column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLoginProvider requireOneByCallbackUrl(string $CALLBACK_URL) Return the first ChildLoginProvider filtered by the CALLBACK_URL column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByActive(boolean $ACTIVE) Return the first ChildLoginProvider filtered by the ACTIVE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -96,7 +92,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider[]|ObjectCollection findByDebug(boolean $DEV) Return ChildLoginProvider objects filtered by the DEV column
  * @method     ChildLoginProvider[]|ObjectCollection findByClient(string $CLIENT) Return ChildLoginProvider objects filtered by the CLIENT column
  * @method     ChildLoginProvider[]|ObjectCollection findBySecret(string $SECRET) Return ChildLoginProvider objects filtered by the SECRET column
- * @method     ChildLoginProvider[]|ObjectCollection findByCallbackUrl(string $CALLBACK_URL) Return ChildLoginProvider objects filtered by the CALLBACK_URL column
  * @method     ChildLoginProvider[]|ObjectCollection findByActive(boolean $ACTIVE) Return ChildLoginProvider objects filtered by the ACTIVE column
  * @method     ChildLoginProvider[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginProvider objects filtered by the created_at column
  * @method     ChildLoginProvider[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginProvider objects filtered by the updated_at column
@@ -202,7 +197,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID_PROVIDER, NAME, DEV, CLIENT, SECRET, CALLBACK_URL, ACTIVE, created_at, updated_at, ACCOUNTS FROM AUTH_PROVIDERS WHERE ID_PROVIDER = :p0';
+        $sql = 'SELECT ID_PROVIDER, NAME, DEV, CLIENT, SECRET, ACTIVE, created_at, updated_at, ACCOUNTS FROM AUTH_PROVIDERS WHERE ID_PROVIDER = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -430,31 +425,6 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     {
 
         return $this->addUsingAlias(LoginProviderTableMap::COL_SECRET, $secret, $comparison);
-    }
-
-    /**
-     * Filter the query on the CALLBACK_URL column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCallbackUrl('fooValue');   // WHERE CALLBACK_URL = 'fooValue'
-     * $query->filterByCallbackUrl('%fooValue%', Criteria::LIKE); // WHERE CALLBACK_URL LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $callbackUrl The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
-     */
-    public function filterByCallbackUrl($callbackUrl = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($callbackUrl)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(LoginProviderTableMap::COL_CALLBACK_URL, $callbackUrl, $comparison);
     }
 
     /**

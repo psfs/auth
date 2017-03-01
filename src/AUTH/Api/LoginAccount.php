@@ -4,7 +4,7 @@ namespace AUTH\Api;
 use AUTH\Api\base\LoginAccountBaseApi;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\Map\LoginAccountTableMap;
-use AUTH\Services\AUTHService;
+use AUTH\Services\base\AUTHService;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 
 /**

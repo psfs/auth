@@ -59,7 +59,7 @@ class LoginProviderTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class LoginProviderTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the ID_PROVIDER field
@@ -95,11 +95,6 @@ class LoginProviderTableMap extends TableMap
      * the column name for the SECRET field
      */
     const COL_SECRET = 'AUTH_PROVIDERS.SECRET';
-
-    /**
-     * the column name for the CALLBACK_URL field
-     */
-    const COL_CALLBACK_URL = 'AUTH_PROVIDERS.CALLBACK_URL';
 
     /**
      * the column name for the ACTIVE field
@@ -140,11 +135,11 @@ class LoginProviderTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('IdProvider', 'Name', 'Debug', 'Client', 'Secret', 'CallbackUrl', 'Active', 'CreatedAt', 'UpdatedAt', 'Accounts', ),
-        self::TYPE_CAMELNAME     => array('idProvider', 'name', 'debug', 'client', 'secret', 'callbackUrl', 'active', 'createdAt', 'updatedAt', 'accounts', ),
-        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER, LoginProviderTableMap::COL_NAME, LoginProviderTableMap::COL_DEV, LoginProviderTableMap::COL_CLIENT, LoginProviderTableMap::COL_SECRET, LoginProviderTableMap::COL_CALLBACK_URL, LoginProviderTableMap::COL_ACTIVE, LoginProviderTableMap::COL_CREATED_AT, LoginProviderTableMap::COL_UPDATED_AT, LoginProviderTableMap::COL_ACCOUNTS, ),
-        self::TYPE_FIELDNAME     => array('ID_PROVIDER', 'NAME', 'DEV', 'CLIENT', 'SECRET', 'CALLBACK_URL', 'ACTIVE', 'created_at', 'updated_at', 'ACCOUNTS', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('IdProvider', 'Name', 'Debug', 'Client', 'Secret', 'Active', 'CreatedAt', 'UpdatedAt', 'Accounts', ),
+        self::TYPE_CAMELNAME     => array('idProvider', 'name', 'debug', 'client', 'secret', 'active', 'createdAt', 'updatedAt', 'accounts', ),
+        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER, LoginProviderTableMap::COL_NAME, LoginProviderTableMap::COL_DEV, LoginProviderTableMap::COL_CLIENT, LoginProviderTableMap::COL_SECRET, LoginProviderTableMap::COL_ACTIVE, LoginProviderTableMap::COL_CREATED_AT, LoginProviderTableMap::COL_UPDATED_AT, LoginProviderTableMap::COL_ACCOUNTS, ),
+        self::TYPE_FIELDNAME     => array('ID_PROVIDER', 'NAME', 'DEV', 'CLIENT', 'SECRET', 'ACTIVE', 'created_at', 'updated_at', 'ACCOUNTS', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -154,11 +149,11 @@ class LoginProviderTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('IdProvider' => 0, 'Name' => 1, 'Debug' => 2, 'Client' => 3, 'Secret' => 4, 'CallbackUrl' => 5, 'Active' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, 'Accounts' => 9, ),
-        self::TYPE_CAMELNAME     => array('idProvider' => 0, 'name' => 1, 'debug' => 2, 'client' => 3, 'secret' => 4, 'callbackUrl' => 5, 'active' => 6, 'createdAt' => 7, 'updatedAt' => 8, 'accounts' => 9, ),
-        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER => 0, LoginProviderTableMap::COL_NAME => 1, LoginProviderTableMap::COL_DEV => 2, LoginProviderTableMap::COL_CLIENT => 3, LoginProviderTableMap::COL_SECRET => 4, LoginProviderTableMap::COL_CALLBACK_URL => 5, LoginProviderTableMap::COL_ACTIVE => 6, LoginProviderTableMap::COL_CREATED_AT => 7, LoginProviderTableMap::COL_UPDATED_AT => 8, LoginProviderTableMap::COL_ACCOUNTS => 9, ),
-        self::TYPE_FIELDNAME     => array('ID_PROVIDER' => 0, 'NAME' => 1, 'DEV' => 2, 'CLIENT' => 3, 'SECRET' => 4, 'CALLBACK_URL' => 5, 'ACTIVE' => 6, 'created_at' => 7, 'updated_at' => 8, 'ACCOUNTS' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('IdProvider' => 0, 'Name' => 1, 'Debug' => 2, 'Client' => 3, 'Secret' => 4, 'Active' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, 'Accounts' => 8, ),
+        self::TYPE_CAMELNAME     => array('idProvider' => 0, 'name' => 1, 'debug' => 2, 'client' => 3, 'secret' => 4, 'active' => 5, 'createdAt' => 6, 'updatedAt' => 7, 'accounts' => 8, ),
+        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER => 0, LoginProviderTableMap::COL_NAME => 1, LoginProviderTableMap::COL_DEV => 2, LoginProviderTableMap::COL_CLIENT => 3, LoginProviderTableMap::COL_SECRET => 4, LoginProviderTableMap::COL_ACTIVE => 5, LoginProviderTableMap::COL_CREATED_AT => 6, LoginProviderTableMap::COL_UPDATED_AT => 7, LoginProviderTableMap::COL_ACCOUNTS => 8, ),
+        self::TYPE_FIELDNAME     => array('ID_PROVIDER' => 0, 'NAME' => 1, 'DEV' => 2, 'CLIENT' => 3, 'SECRET' => 4, 'ACTIVE' => 5, 'created_at' => 6, 'updated_at' => 7, 'ACCOUNTS' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /** The enumerated values for this table */
@@ -222,7 +217,6 @@ class LoginProviderTableMap extends TableMap
         $this->addColumn('DEV', 'Debug', 'BOOLEAN', false, 1, true);
         $this->addColumn('CLIENT', 'Client', 'VARCHAR', true, 100, null);
         $this->addColumn('SECRET', 'Secret', 'BINARY', true, 100, null);
-        $this->addColumn('CALLBACK_URL', 'CallbackUrl', 'VARCHAR', false, 100, null);
         $this->addColumn('ACTIVE', 'Active', 'BOOLEAN', false, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -404,7 +398,6 @@ class LoginProviderTableMap extends TableMap
             $criteria->addSelectColumn(LoginProviderTableMap::COL_DEV);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_CLIENT);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_SECRET);
-            $criteria->addSelectColumn(LoginProviderTableMap::COL_CALLBACK_URL);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_ACTIVE);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_UPDATED_AT);
@@ -415,7 +408,6 @@ class LoginProviderTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.DEV');
             $criteria->addSelectColumn($alias . '.CLIENT');
             $criteria->addSelectColumn($alias . '.SECRET');
-            $criteria->addSelectColumn($alias . '.CALLBACK_URL');
             $criteria->addSelectColumn($alias . '.ACTIVE');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');

@@ -30,9 +30,7 @@ class GoogleAuthController extends AUTHController {
      * @route /auth/google/callback
      */
     public function loginCallback() {
-        $user = $this->srv->authenticate($this->getRequest()->getQueryParams());
-        Security::getInstance()->updateUser($user);
-        return $this->redirect(Config::getParam('login.action'));
+        return $this->authenticate($this->getRequest()->getQueryParams(), GoogleService::FLOW_REGISTER);
     }
 
     /**
@@ -48,8 +46,6 @@ class GoogleAuthController extends AUTHController {
      * @route /register/google/callback
      */
     public function registerCallback() {
-        $user = $this->srv->authenticate($this->getRequest()->getQueryParams(), GoogleService::FLOW_REGISTER);
-        Security::getInstance()->updateUser($user);
-        return $this->redirect(Config::getParam('login.action'));
+        return $this->authenticate($this->getRequest()->getQueryParams(), GoogleService::FLOW_REGISTER);
     }
 }

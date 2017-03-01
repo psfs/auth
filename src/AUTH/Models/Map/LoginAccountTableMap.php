@@ -204,7 +204,7 @@ class LoginAccountTableMap extends TableMap
         $this->addPrimaryKey('ID_ACCOUNT', 'IdAccount', 'INTEGER', true, null, null);
         $this->addForeignKey('ID_PROVIDER', 'IdSocial', 'INTEGER', 'AUTH_PROVIDERS', 'ID_PROVIDER', true, null, null);
         $this->addColumn('IDENTIFIER', 'Id', 'VARCHAR', true, 100, null);
-        $this->addColumn('ACCESS_TOKEN', 'AccessToken', 'BINARY', true, 500, null);
+        $this->addColumn('ACCESS_TOKEN', 'AccessToken', 'VARCHAR', true, 255, null);
         $this->addColumn('REFRESH_TOKEN', 'RefreshToken', 'BINARY', false, 255, null);
         $this->addColumn('EXPIRES', 'ExpireDate', 'TIMESTAMP', false, null, null);
         $this->addColumn('ROLE', 'AccountRole', 'ENUM', false, null, 'USER');

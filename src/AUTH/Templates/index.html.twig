@@ -30,7 +30,16 @@
         </div>
     </div>
     {% else %}
-    <p class="alert-danger">{{ "No existe ningún usuario en sesión"|trans }}</p>
+    <div class="row">
+        {% for provider in providers %}
+        {% set auth_path = 'auth-' ~ provider.Name %}
+        <a class="btn btn-primary col-xs-12 col-sm-2{% if loop.index > 1 %} col-sm-offset-1{% endif %}" href="{{ path(auth_path|lower) }}">{{ provider.Name }}</a>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="row">
+        <p class="well alert-danger col-xs-12">{{ "No existe ningún usuario en sesión"|trans }}</p>
+    </div>
     {% endif %}
 {% endblock body_content %}
 {% block scripts %}

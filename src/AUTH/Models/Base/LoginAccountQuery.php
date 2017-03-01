@@ -399,13 +399,24 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Filter the query on the ACCESS_TOKEN column
      *
-     * @param     mixed $accessToken The value to use as filter
+     * Example usage:
+     * <code>
+     * $query->filterByAccessToken('fooValue');   // WHERE ACCESS_TOKEN = 'fooValue'
+     * $query->filterByAccessToken('%fooValue%', Criteria::LIKE); // WHERE ACCESS_TOKEN LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $accessToken The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildLoginAccountQuery The current query, for fluid interface
      */
     public function filterByAccessToken($accessToken = null, $comparison = null)
     {
+        if (null === $comparison) {
+            if (is_array($accessToken)) {
+                $comparison = Criteria::IN;
+            }
+        }
 
         return $this->addUsingAlias(LoginAccountTableMap::COL_ACCESS_TOKEN, $accessToken, $comparison);
     }

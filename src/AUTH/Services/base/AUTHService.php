@@ -1,5 +1,5 @@
 <?php
-namespace AUTH\Services;
+namespace AUTH\Services\base;
 
 use AUTH\Dto\AuthUserDto;
 use AUTH\Exception\AuthApiAccessRestrictedException;
@@ -8,7 +8,6 @@ use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\LoginProviderQuery;
 use PSFS\base\config\Config;
 use PSFS\base\Logger;
-use PSFS\base\Request;
 use PSFS\base\Security;
 use PSFS\base\Service;
 

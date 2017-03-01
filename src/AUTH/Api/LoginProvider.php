@@ -3,7 +3,7 @@ namespace AUTH\Api;
 
 use AUTH\Api\base\LoginProviderBaseApi;
 use AUTH\Models\Map\LoginProviderTableMap;
-use AUTH\Services\AUTHService;
+use AUTH\Services\base\AUTHService;
 
 /**
 * Class AUTH

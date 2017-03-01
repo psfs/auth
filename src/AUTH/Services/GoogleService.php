@@ -4,6 +4,7 @@ namespace AUTH\Services;
 use AUTH\Dto\AuthUserDto;
 use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
+use AUTH\Services\base\AUTHService;
 use PSFS\base\config\Config;
 use PSFS\base\Router;
 

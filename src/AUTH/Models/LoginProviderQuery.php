@@ -27,4 +27,15 @@ class LoginProviderQuery extends BaseLoginProviderQuery
             ->filterByDebug($devMode)
             ->findOne();
     }
+
+    /**
+     * @param bool $debug
+     * @return LoginProvider[]|\Propel\Runtime\Collection\ObjectCollection
+     */
+    public static function getActiveProviders($debug = false) {
+        return self::create()
+            ->filterByDebug($debug)
+            ->filterByActive(true)
+            ->find();
+    }
 }

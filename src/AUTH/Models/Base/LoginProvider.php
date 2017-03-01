@@ -103,13 +103,6 @@ abstract class LoginProvider implements ActiveRecordInterface
     protected $secret;
 
     /**
-     * The value for the callback_url field.
-     *
-     * @var        string
-     */
-    protected $callback_url;
-
-    /**
      * The value for the active field.
      *
      * Note: this column has a database default value of: true
@@ -467,16 +460,6 @@ abstract class LoginProvider implements ActiveRecordInterface
     }
 
     /**
-     * Get the [callback_url] column value.
-     *
-     * @return string
-     */
-    public function getCallbackUrl()
-    {
-        return $this->callback_url;
-    }
-
-    /**
      * Get the [active] column value.
      *
      * @return boolean
@@ -660,26 +643,6 @@ abstract class LoginProvider implements ActiveRecordInterface
     } // setSecret()
 
     /**
-     * Set the value of [callback_url] column.
-     *
-     * @param string $v new value
-     * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
-     */
-    public function setCallbackUrl($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->callback_url !== $v) {
-            $this->callback_url = $v;
-            $this->modifiedColumns[LoginProviderTableMap::COL_CALLBACK_URL] = true;
-        }
-
-        return $this;
-    } // setCallbackUrl()
-
-    /**
      * Sets the value of the [active] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -826,25 +789,22 @@ abstract class LoginProvider implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : LoginProviderTableMap::translateFieldName('Secret', TableMap::TYPE_PHPNAME, $indexType)];
             $this->secret = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LoginProviderTableMap::translateFieldName('CallbackUrl', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->callback_url = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginProviderTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LoginProviderTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
             $this->active = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginProviderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginProviderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginProviderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginProviderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginProviderTableMap::translateFieldName('Accounts', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginProviderTableMap::translateFieldName('Accounts', TableMap::TYPE_PHPNAME, $indexType)];
             $this->accounts = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -854,7 +814,7 @@ abstract class LoginProvider implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 10; // 10 = LoginProviderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = LoginProviderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginProvider'), 0, $e);
@@ -1101,9 +1061,6 @@ abstract class LoginProvider implements ActiveRecordInterface
         if ($this->isColumnModified(LoginProviderTableMap::COL_SECRET)) {
             $modifiedColumns[':p' . $index++]  = 'SECRET';
         }
-        if ($this->isColumnModified(LoginProviderTableMap::COL_CALLBACK_URL)) {
-            $modifiedColumns[':p' . $index++]  = 'CALLBACK_URL';
-        }
         if ($this->isColumnModified(LoginProviderTableMap::COL_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = 'ACTIVE';
         }
@@ -1141,9 +1098,6 @@ abstract class LoginProvider implements ActiveRecordInterface
                         break;
                     case 'SECRET':
                         $stmt->bindValue($identifier, $this->secret, PDO::PARAM_STR);
-                        break;
-                    case 'CALLBACK_URL':
-                        $stmt->bindValue($identifier, $this->callback_url, PDO::PARAM_STR);
                         break;
                     case 'ACTIVE':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
@@ -1235,18 +1189,15 @@ abstract class LoginProvider implements ActiveRecordInterface
                 return $this->getSecret();
                 break;
             case 5:
-                return $this->getCallbackUrl();
-                break;
-            case 6:
                 return $this->getActive();
                 break;
-            case 7:
+            case 6:
                 return $this->getCreatedAt();
                 break;
-            case 8:
+            case 7:
                 return $this->getUpdatedAt();
                 break;
-            case 9:
+            case 8:
                 return $this->getAccounts();
                 break;
             default:
@@ -1284,18 +1235,17 @@ abstract class LoginProvider implements ActiveRecordInterface
             $keys[2] => $this->getDebug(),
             $keys[3] => $this->getClient(),
             $keys[4] => $this->getSecret(),
-            $keys[5] => $this->getCallbackUrl(),
-            $keys[6] => $this->getActive(),
-            $keys[7] => $this->getCreatedAt(),
-            $keys[8] => $this->getUpdatedAt(),
-            $keys[9] => $this->getAccounts(),
+            $keys[5] => $this->getActive(),
+            $keys[6] => $this->getCreatedAt(),
+            $keys[7] => $this->getUpdatedAt(),
+            $keys[8] => $this->getAccounts(),
         );
-        if ($result[$keys[7]] instanceof \DateTime) {
-            $result[$keys[7]] = $result[$keys[7]]->format('c');
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
-        if ($result[$keys[8]] instanceof \DateTime) {
-            $result[$keys[8]] = $result[$keys[8]]->format('c');
+        if ($result[$keys[7]] instanceof \DateTime) {
+            $result[$keys[7]] = $result[$keys[7]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1373,18 +1323,15 @@ abstract class LoginProvider implements ActiveRecordInterface
                 $this->setSecret($value);
                 break;
             case 5:
-                $this->setCallbackUrl($value);
-                break;
-            case 6:
                 $this->setActive($value);
                 break;
-            case 7:
+            case 6:
                 $this->setCreatedAt($value);
                 break;
-            case 8:
+            case 7:
                 $this->setUpdatedAt($value);
                 break;
-            case 9:
+            case 8:
                 $this->setAccounts($value);
                 break;
         } // switch()
@@ -1429,19 +1376,16 @@ abstract class LoginProvider implements ActiveRecordInterface
             $this->setSecret($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setCallbackUrl($arr[$keys[5]]);
+            $this->setActive($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setActive($arr[$keys[6]]);
+            $this->setCreatedAt($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setCreatedAt($arr[$keys[7]]);
+            $this->setUpdatedAt($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setUpdatedAt($arr[$keys[8]]);
-        }
-        if (array_key_exists($keys[9], $arr)) {
-            $this->setAccounts($arr[$keys[9]]);
+            $this->setAccounts($arr[$keys[8]]);
         }
     }
 
@@ -1498,9 +1442,6 @@ abstract class LoginProvider implements ActiveRecordInterface
         }
         if ($this->isColumnModified(LoginProviderTableMap::COL_SECRET)) {
             $criteria->add(LoginProviderTableMap::COL_SECRET, $this->secret);
-        }
-        if ($this->isColumnModified(LoginProviderTableMap::COL_CALLBACK_URL)) {
-            $criteria->add(LoginProviderTableMap::COL_CALLBACK_URL, $this->callback_url);
         }
         if ($this->isColumnModified(LoginProviderTableMap::COL_ACTIVE)) {
             $criteria->add(LoginProviderTableMap::COL_ACTIVE, $this->active);
@@ -1604,7 +1545,6 @@ abstract class LoginProvider implements ActiveRecordInterface
         $copyObj->setDebug($this->getDebug());
         $copyObj->setClient($this->getClient());
         $copyObj->setSecret($this->getSecret());
-        $copyObj->setCallbackUrl($this->getCallbackUrl());
         $copyObj->setActive($this->getActive());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1904,7 +1844,6 @@ abstract class LoginProvider implements ActiveRecordInterface
         $this->dev = null;
         $this->client = null;
         $this->secret = null;
-        $this->callback_url = null;
         $this->active = null;
         $this->created_at = null;
         $this->updated_at = null;

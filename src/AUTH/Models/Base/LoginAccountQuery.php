@@ -27,6 +27,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery orderByRefreshToken($order = Criteria::ASC) Order by the REFRESH_TOKEN column
  * @method     ChildLoginAccountQuery orderByExpireDate($order = Criteria::ASC) Order by the EXPIRES column
  * @method     ChildLoginAccountQuery orderByAccountRole($order = Criteria::ASC) Order by the ROLE column
+ * @method     ChildLoginAccountQuery orderByActive($order = Criteria::ASC) Order by the ACTIVE column
  * @method     ChildLoginAccountQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildLoginAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -37,6 +38,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery groupByRefreshToken() Group by the REFRESH_TOKEN column
  * @method     ChildLoginAccountQuery groupByExpireDate() Group by the EXPIRES column
  * @method     ChildLoginAccountQuery groupByAccountRole() Group by the ROLE column
+ * @method     ChildLoginAccountQuery groupByActive() Group by the ACTIVE column
  * @method     ChildLoginAccountQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildLoginAccountQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -58,7 +60,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery rightJoinWithAccountProvider() Adds a RIGHT JOIN clause and with to the query using the AccountProvider relation
  * @method     ChildLoginAccountQuery innerJoinWithAccountProvider() Adds a INNER JOIN clause and with to the query using the AccountProvider relation
  *
- * @method     \AUTH\Models\LoginProviderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildLoginAccountQuery leftJoinLoginSession($relationAlias = null) Adds a LEFT JOIN clause to the query using the LoginSession relation
+ * @method     ChildLoginAccountQuery rightJoinLoginSession($relationAlias = null) Adds a RIGHT JOIN clause to the query using the LoginSession relation
+ * @method     ChildLoginAccountQuery innerJoinLoginSession($relationAlias = null) Adds a INNER JOIN clause to the query using the LoginSession relation
+ *
+ * @method     ChildLoginAccountQuery joinWithLoginSession($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the LoginSession relation
+ *
+ * @method     ChildLoginAccountQuery leftJoinWithLoginSession() Adds a LEFT JOIN clause and with to the query using the LoginSession relation
+ * @method     ChildLoginAccountQuery rightJoinWithLoginSession() Adds a RIGHT JOIN clause and with to the query using the LoginSession relation
+ * @method     ChildLoginAccountQuery innerJoinWithLoginSession() Adds a INNER JOIN clause and with to the query using the LoginSession relation
+ *
+ * @method     \AUTH\Models\LoginProviderQuery|\AUTH\Models\LoginSessionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLoginAccount findOne(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query
  * @method     ChildLoginAccount findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query, or a new ChildLoginAccount object populated from the query conditions when no match is found
@@ -70,6 +82,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount findOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column
  * @method     ChildLoginAccount findOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column
  * @method     ChildLoginAccount findOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column
+ * @method     ChildLoginAccount findOneByActive(boolean $ACTIVE) Return the first ChildLoginAccount filtered by the ACTIVE column
  * @method     ChildLoginAccount findOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column
  * @method     ChildLoginAccount findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column *
 
@@ -83,6 +96,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount requireOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccount requireOneByActive(boolean $ACTIVE) Return the first ChildLoginAccount filtered by the ACTIVE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -94,6 +108,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount[]|ObjectCollection findByRefreshToken(string $REFRESH_TOKEN) Return ChildLoginAccount objects filtered by the REFRESH_TOKEN column
  * @method     ChildLoginAccount[]|ObjectCollection findByExpireDate(string $EXPIRES) Return ChildLoginAccount objects filtered by the EXPIRES column
  * @method     ChildLoginAccount[]|ObjectCollection findByAccountRole(int $ROLE) Return ChildLoginAccount objects filtered by the ROLE column
+ * @method     ChildLoginAccount[]|ObjectCollection findByActive(boolean $ACTIVE) Return ChildLoginAccount objects filtered by the ACTIVE column
  * @method     ChildLoginAccount[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginAccount objects filtered by the created_at column
  * @method     ChildLoginAccount[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginAccount objects filtered by the updated_at column
  * @method     ChildLoginAccount[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -197,7 +212,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
+        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, ACTIVE, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -512,6 +527,33 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Filter the query on the ACTIVE column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByActive(true); // WHERE ACTIVE = true
+     * $query->filterByActive('yes'); // WHERE ACTIVE = true
+     * </code>
+     *
+     * @param     boolean|string $active The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByActive($active = null, $comparison = null)
+    {
+        if (is_string($active)) {
+            $active = in_array(strtolower($active), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(LoginAccountTableMap::COL_ACTIVE, $active, $comparison);
+    }
+
+    /**
      * Filter the query on the created_at column
      *
      * Example usage:
@@ -672,6 +714,79 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         return $this
             ->joinAccountProvider($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'AccountProvider', '\AUTH\Models\LoginProviderQuery');
+    }
+
+    /**
+     * Filter the query by a related \AUTH\Models\LoginSession object
+     *
+     * @param \AUTH\Models\LoginSession|ObjectCollection $loginSession the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByLoginSession($loginSession, $comparison = null)
+    {
+        if ($loginSession instanceof \AUTH\Models\LoginSession) {
+            return $this
+                ->addUsingAlias(LoginAccountTableMap::COL_ID_ACCOUNT, $loginSession->getIdAccount(), $comparison);
+        } elseif ($loginSession instanceof ObjectCollection) {
+            return $this
+                ->useLoginSessionQuery()
+                ->filterByPrimaryKeys($loginSession->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByLoginSession() only accepts arguments of type \AUTH\Models\LoginSession or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the LoginSession relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function joinLoginSession($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('LoginSession');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'LoginSession');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the LoginSession relation LoginSession object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AUTH\Models\LoginSessionQuery A secondary query class using the current class as primary query
+     */
+    public function useLoginSessionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinLoginSession($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'LoginSession', '\AUTH\Models\LoginSessionQuery');
     }
 
     /**

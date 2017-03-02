@@ -83,6 +83,7 @@ class FacebookService extends AUTHService {
         list($profile, $picture) = $responses->getResponses();
         /** @var FacebookResponse $profile */
         $profile = $profile->getDecodedBody();
+        /** @var FacebookResponse $picture */
         $headers = $picture->getHeaders();
         $user = new AuthUserDto();
         $user->id = $profile['id'];

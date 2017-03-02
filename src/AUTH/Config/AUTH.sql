@@ -39,15 +39,40 @@ CREATE TABLE `AUTH_ACCOUNTS`
     `REFRESH_TOKEN` VARBINARY(255),
     `EXPIRES` DATETIME,
     `ROLE` TINYINT DEFAULT 0,
+    `ACTIVE` TINYINT(1) DEFAULT 1,
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`ID_ACCOUNT`),
     UNIQUE INDEX `unq_accounts_idx` (`ID_PROVIDER`, `IDENTIFIER`),
-    INDEX `idx_accounts` (`IDENTIFIER`, `EXPIRES`, `ROLE`),
+    INDEX `idx_accounts` (`IDENTIFIER`, `EXPIRES`, `ROLE`, `ACTIVE`),
     CONSTRAINT `fk_account_provider`
         FOREIGN KEY (`ID_PROVIDER`)
         REFERENCES `AUTH_PROVIDERS` (`ID_PROVIDER`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login accounts';
+
+-- ---------------------------------------------------------------------
+-- AUTH_SESSIONS
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `AUTH_SESSIONS`;
+
+CREATE TABLE `AUTH_SESSIONS`
+(
+    `ID_ACCOUNT` INTEGER NOT NULL,
+    `DEVICE` VARCHAR(255) NOT NULL,
+    `IP` VARCHAR(50) NOT NULL,
+    `TOKEN` VARBINARY(40) NOT NULL,
+    `ACTIVE` TINYINT(1) DEFAULT 1,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`),
+    INDEX `idx_sessions_account` (`IP`, `TOKEN`, `ACTIVE`),
+    INDEX `fi_account_session` (`ID_ACCOUNT`),
+    CONSTRAINT `fl_account_session`
+        FOREIGN KEY (`ID_ACCOUNT`)
+        REFERENCES `AUTH_ACCOUNTS` (`ID_ACCOUNT`)
+) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login session token';
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

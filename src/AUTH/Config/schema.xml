@@ -32,10 +32,12 @@
         <column name="REFRESH_TOKEN" phpName="RefreshToken" type="BINARY" sqlType="VARBINARY(255)" size="255" />
         <column name="EXPIRES" phpName="ExpireDate" type="TIMESTAMP" />
         <column name="ROLE" phpName="AccountRole" type="ENUM" valueSet="USER,MANAGER,ADMIN" defaultValue="USER" />
+        <column name="ACTIVE" phpName="Active" type="BOOLEAN" defaultValue="true" />
         <index name="idx_accounts">
             <index-column name="IDENTIFIER" />
             <index-column name="EXPIRES" />
             <index-column name="ROLE" />
+            <index-column name="ACTIVE" />
         </index>
         <foreign-key foreignTable="PROVIDERS" name="fk_account_provider" phpName="AccountProvider" defaultJoin="INNER JOIN">
             <reference local="ID_PROVIDER" foreign="ID_PROVIDER" />
@@ -46,5 +48,22 @@
         </unique>
         <behavior name="query_cache" />
         <behavior name="timestampable" />
+    </table>
+    <table name="SESSIONS" phpName="LoginSession" description="Table with the login session token">
+        <behavior name="auto_add_pk" />
+        <column name="ID_ACCOUNT" phpName="IdAccount" type="INTEGER" required="true" />
+        <column name="DEVICE" phpName="Device" type="VARCHAR" size="255" required="true" />
+        <column name="IP" phpName="IP" type="VARCHAR" size="50" required="true" />
+        <column name="TOKEN" phpName="Token" type="BINARY" sqlType="VARBINARY(40)" required="true" />
+        <column name="ACTIVE" phpName="Active" type="BOOLEAN" defaultValue="true" />
+        <behavior name="timestampable" />
+        <index name="idx_sessions_account">
+            <index-column name="IP" />
+            <index-column name="TOKEN" />
+            <index-column name="ACTIVE" />
+        </index>
+        <foreign-key foreignTable="ACCOUNTS" name="fl_account_session" phpName="AccountSession">
+            <reference local="ID_ACCOUNT" foreign="ID_ACCOUNT" />
+        </foreign-key>
     </table>
 </database>

@@ -24,6 +24,7 @@ class LoginAccountQuery extends BaseLoginAccountQuery
     public static function getAccountByIdentifier($identifier, LoginProvider $provider) {
         return self::create()
             ->filterById($identifier)
+            ->filterByActive(true)
             ->filterByIdSocial($provider->getPrimaryKey())
             ->findOneOrCreate();
     }

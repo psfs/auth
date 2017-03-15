@@ -31,4 +31,5 @@ class LoginAccount extends LoginAccountBaseApi
         /** @var LoginAccountQuery $query */
         $query->useAccountProviderQuery()->endUse();
     }
+
 }

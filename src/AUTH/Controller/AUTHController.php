@@ -7,6 +7,7 @@ use PSFS\base\config\Config;
 use PSFS\base\Logger;
 use PSFS\base\Router;
 use PSFS\base\Security;
+use PSFS\base\types\helpers\AdminHelper;
 
 /**
 * Class AUTHController
@@ -39,7 +40,7 @@ class AUTHController extends AUTHBaseController {
 
     public function getMenu()
     {
-        return Router::getInstance()->getAdminRoutes();
+        return AdminHelper::getAdminRoutes(Router::getInstance()->getRoutes());
     }
 
     /**
@@ -50,7 +51,7 @@ class AUTHController extends AUTHBaseController {
     protected function authenticate(array $query, $flow) {
         try {
             $user = $this->srv->authenticate($query, $flow);
-            Security::getInstance()->updateUser($user);
+            Security::getInstance()->updateUser(serialize($user));
             $route = Config::getParam('login.action');
         } catch (\Exception $e) {
             Logger::log($e->getMessage(), LOG_ERR);

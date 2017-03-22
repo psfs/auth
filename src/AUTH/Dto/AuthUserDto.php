@@ -18,6 +18,14 @@ class AuthUserDto extends Dto {
     /**
      * @var string
      */
+    public $first_name;
+    /**
+     * @var string
+     */
+    public $last_name;
+    /**
+     * @var string
+     */
     public $photo;
     /**
      * @var string

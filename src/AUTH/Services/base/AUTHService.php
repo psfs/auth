@@ -8,6 +8,7 @@ use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\LoginProviderQuery;
 use PSFS\base\config\Config;
 use PSFS\base\Logger;
+use PSFS\base\Router;
 use PSFS\base\Security;
 use PSFS\base\Service;
 
@@ -35,6 +36,10 @@ abstract class AUTHService extends Service {
      * @var array
      */
     protected $scopes = [];
+    /**
+     * @var string
+     */
+    protected $base;
 
     /**
      * @return string
@@ -95,6 +100,7 @@ abstract class AUTHService extends Service {
                 throw new AuthProviderNotConfiguredException(_('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }
         }
+        $this->base = Config::getParam('login.base', Router::getInstance()->getRoute('', true));
     }
 
     /**

@@ -35,7 +35,7 @@ class GoogleService extends AUTHService {
 
     public function getAuthUrl($flow = self::FLOW_LOGIN)
     {
-        $client = $this->getClient(Router::getInstance()->getRoute('auth-google-callback', true), $flow);
+        $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false), $flow);
         return $client->createAuthUrl();
     }
 
@@ -44,20 +44,22 @@ class GoogleService extends AUTHService {
         if(!array_key_exists('code', $query)) {
             throw new InvalidCallbackParametersException();
         }
-        $client = $this->getClient(Router::getInstance()->getRoute('auth-google-callback', true), $flow);
+        $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false), $flow);
         $token = $client->fetchAccessTokenWithAuthCode($query['code']);
         return $this->getUser($token);
     }
 
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {
-        $client = $this->getClient(Router::getInstance()->getRoute('auth-google-callback', true), $flow);
+        $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false), $flow);
         $client->setAccessToken($auth);
         $googlePlus = new \Google_Service_Plus($client);
         $profile = $googlePlus->people->get('me');
         $user = new AuthUserDto();
         $user->id = $profile->getId();
         $user->name = $profile->getDisplayName();
+        $user->first_name = $profile->getName()->getGivenName();
+        $user->last_name = $profile->getName()->getFamilyName();
         $user->photo = array_shift(explode('?', $profile->getImage()->getUrl()));
         $user->access_token = $auth['access_token'];
         $user->expires = new \DateTime();

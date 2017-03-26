@@ -34,17 +34,26 @@ class FacebookService extends AUTHService {
         ];
     }
 
+    /**
+     * @param int $flow
+     * @return string
+     */
+    private function getRedirectUri($flow = self::FLOW_LOGIN) {
+
+        $redirectUri = $this->base;
+        if(self::FLOW_LOGIN === $flow) {
+            $redirectUri .= Router::getInstance()->getRoute('auth-facebook-callback');
+        } else {
+            $redirectUri .= Router::getInstance()->getRoute('register-facebook-callback');
+        }
+        return $redirectUri;
+    }
+
     public function getAuthUrl($flow = self::FLOW_LOGIN)
     {
         $client = $this->getClient(null, $flow);
         $helper = $client->getRedirectLoginHelper();
-        if(self::FLOW_LOGIN === $flow) {
-            $redirectUri = Router::getInstance()->getRoute('auth-facebook-callback', true);
-        } else {
-            $redirectUri = Router::getInstance()->getRoute('register-facebook-callback', true);
-        }
-
-        return $helper->getLoginUrl($redirectUri, $this->getScopes());
+        return $helper->getLoginUrl($this->getRedirectUri($flow), $this->getScopes());
     }
 
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
@@ -59,7 +68,7 @@ class FacebookService extends AUTHService {
         $helper = $facebookClient->getRedirectLoginHelper();
         $sessionHandler = new FacebookSessionPersistentDataHandler();
         $sessionHandler->set('state', $query['state']);
-        $accessToken = $helper->getAccessToken();
+        $accessToken = $helper->getAccessToken($this->getRedirectUri($flow));
         if (isset($accessToken) && !$accessToken->isLongLived()) {
             // The OAuth 2.0 client handler helps us manage access tokens
             $oAuth2Client = $facebookClient->getOAuth2Client();
@@ -77,7 +86,7 @@ class FacebookService extends AUTHService {
     {
         $client = $this->getClient(null, $flow);
         $responses = $client->sendBatchRequest([
-            $client->request('get', '/me?fields=id,name,birthday,picture,email,gender', [], $auth['access_token']),
+            $client->request('get', '/me?fields=id,name,first_name,last_name,birthday,picture,email,gender', [], $auth['access_token']),
             $client->request('GET', '/me/picture', ['type' => 'large'], $auth['access_token']),
         ], $auth['access_token']);
         list($profile, $picture) = $responses->getResponses();
@@ -88,6 +97,8 @@ class FacebookService extends AUTHService {
         $user = new AuthUserDto();
         $user->id = $profile['id'];
         $user->name = $profile['name'];
+        $user->first_name = $profile['first_name'];
+        $user->last_name = $profile['last_name'];
         $user->photo = $headers['Location'];
         $user->email = $profile['email'];
         $user->access_token = $auth['access_token'];

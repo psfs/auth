@@ -39,7 +39,7 @@ abstract class AUTHService extends Service {
     /**
      * @var string
      */
-    protected $base;
+    public $base;
 
     /**
      * @return string

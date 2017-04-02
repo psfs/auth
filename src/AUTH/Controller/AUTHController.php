@@ -58,6 +58,6 @@ class AUTHController extends AUTHBaseController {
             $route = Config::getParam('login.cancel');
             Security::getInstance()->setFlash('callback_message', $e->getMessage());
         }
-        return $this->redirect($route);
+        return $this->getRequest()->redirect($this->srv->base . $this->getRoute($route));
     }
 }

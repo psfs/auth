@@ -49,6 +49,10 @@ class FacebookService extends AUTHService {
         return $redirectUri;
     }
 
+    /**
+     * @param int $flow
+     * @return string
+     */
     public function getAuthUrl($flow = self::FLOW_LOGIN)
     {
         $client = $this->getClient(null, $flow);
@@ -56,6 +60,13 @@ class FacebookService extends AUTHService {
         return $helper->getLoginUrl($this->getRedirectUri($flow), $this->getScopes());
     }
 
+    /**
+     * @param array $query
+     * @param int $flow
+     * @return AuthUserDto|null
+     * @throws InvalidCallbackParametersException
+     * @throws ProviderOauthFlowException
+     */
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
     {
         if(array_key_exists('error', $query)) {
@@ -82,6 +93,11 @@ class FacebookService extends AUTHService {
         ], $flow);
     }
 
+    /**
+     * @param array $auth
+     * @param int $flow
+     * @return AuthUserDto
+     */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {
         $client = $this->getClient(null, $flow);

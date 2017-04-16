@@ -1,28 +1,60 @@
 <?php
 namespace AUTH\Controller;
 
-use PSFS\base\config\Config;
-use PSFS\base\Request;
+use AUTH\Services\EmailService;
+use PSFS\base\dto\JsonResponse;
+use PSFS\base\Logger;
 use PSFS\base\Security;
 
 class EmailAuthController extends AUTHController {
 
     /**
-     * @GET
-     * @route /auth/email
+     * @Injectable
+     * @var \AUTH\Services\EmailService
      */
-    public function requestLogin() {
-        Request::getInstance()->redirect($this->srv->getAuthUrl());
+    protected $srv;
+
+    /**
+     * @param array $query
+     * @param int $flow
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function authenticate(array $query, $flow)
+    {
+        try {
+            $user = $this->srv->authenticate($query, $flow);
+        } catch (\Exception $e) {
+            Logger::log($e->getMessage(), LOG_ERR);
+            throw $e;
+        }
+        return $user;
     }
 
     /**
-     * @GET
-     * @route /auth/email/callback
+     * @POST
+     * @route /register/email
      */
-    public function loginCallback() {
-        $user = $this->srv->authenticate($this->getRequest()->getQueryParams());
-        Security::getInstance()->updateUser($user);
-        return $this->redirect(Config::getParam('login.action'));
+    public function register() {
+        return $this->login(EmailService::FLOW_REGISTER);
+    }
+
+    /**
+     * @POST
+     * @param integer $flow
+     * @route /auth/email
+     * @return string JSON
+     */
+    public function login($flow = EmailService::FLOW_LOGIN) {
+        $success = true;
+        try {
+            $user = $this->authenticate($this->getRequest()->getData(), $flow);
+            Security::getInstance()->updateUser(serialize($user));
+        } catch(\Exception $e) {
+            $success = false;
+            $user = $e->getMessage();
+        }
+        return $this->json(new JsonResponse($user, $success), $success ? 200 : 400);
     }
 
 }

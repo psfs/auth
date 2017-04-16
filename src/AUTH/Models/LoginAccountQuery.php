@@ -19,13 +19,44 @@ class LoginAccountQuery extends BaseLoginAccountQuery
     /**
      * @param $identifier
      * @param LoginProvider $provider
-     * @return LoginAccount
+     * @return $this|LoginAccountQuery
      */
-    public static function getAccountByIdentifier($identifier, LoginProvider $provider) {
+    private function filterByIdentifierAndProvider($identifier, LoginProvider $provider) {
         return self::create()
             ->filterById($identifier)
             ->filterByActive(true)
-            ->filterByIdSocial($provider->getPrimaryKey())
+            ->filterByIdSocial($provider->getPrimaryKey());
+    }
+
+    /**
+     * @param $identifier
+     * @param LoginProvider $provider
+     * @return LoginAccount
+     */
+    public static function getAccountByIdentifier($identifier, LoginProvider $provider) {
+        return self::filterByIdentifierAndProvider($identifier, $provider)
             ->findOneOrCreate();
+    }
+
+    /**
+     * @param $identifier
+     * @param LoginProvider $provider
+     * @return bool
+     */
+    public static function existsIdentifierForProvider($identifier, LoginProvider $provider) {
+        return self::filterByIdentifierAndProvider($identifier, $provider)
+            ->count() > 0;
+    }
+
+    /**
+     * @param $identifier
+     * @param $password
+     * @param LoginProvider $provider
+     * @return bool
+     */
+    public static function existsIdentifierWithPassword($identifier, $password, LoginProvider $provider) {
+        return self::filterByIdentifierAndProvider($identifier, $provider)
+            ->filterByAccessToken($password)
+            ->count() == 1;
     }
 }

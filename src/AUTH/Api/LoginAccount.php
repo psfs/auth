@@ -4,6 +4,7 @@ namespace AUTH\Api;
 use AUTH\Api\base\LoginAccountBaseApi;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\Map\LoginAccountTableMap;
+use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\AUTHService;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use PSFS\base\dto\JsonResponse;
@@ -44,8 +45,12 @@ class LoginAccount extends LoginAccountBaseApi
      * @return \PSFS\base\dto\JsonResponse(data=boolean)
      */
     public function requestResetPassword($IdAccount) {
+        /** @var \AUTH\Models\LoginAccount $account */
         $account = self::_get($IdAccount);
-        $requested = AUTHService::getInstance()->resetAccount($account);
+        $requested = false;
+        if(null !== $account && $account->getAccountProvider()->getName() === LoginProviderTableMap::COL_NAME_EMAIL) {
+            $requested = AUTHService::getInstance()->resetAccount($account);
+        }
         return $this->json(new JsonResponse($requested, $requested), $requested ? 200 : 400);
     }
 

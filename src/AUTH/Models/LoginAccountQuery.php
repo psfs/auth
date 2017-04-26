@@ -81,4 +81,16 @@ class LoginAccountQuery extends BaseLoginAccountQuery
             ->findOne();
     }
 
+    /**
+     * @param $token
+     * @return LoginAccount
+     */
+    public static function getAccountBySession($token) {
+        return self::create()
+            ->useLoginSessionQuery()
+                ->filterByToken($token)
+                ->filterByActive(true)
+            ->endUse()
+            ->findOne();
+    }
 }

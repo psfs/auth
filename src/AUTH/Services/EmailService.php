@@ -99,11 +99,12 @@ class EmailService extends AUTHService
     }
 
     /**
+     * @param string $identifier
      * @param string $password
      * @return string
      */
-    public static function encryptPassword($password) {
-        $iv = self::strtohex(microtime(true));
+    public static function encryptPassword($identifier, $password) {
+        $iv = self::strtohex($identifier);
         $key = self::strtohex(Config::getParam('auth.email.phrase', 'psfs'));
         $method = Config::getParam('auth.email.method', 'aes-128-cbc');
         return bin2hex(openssl_encrypt($password, $method, $key, OPENSSL_RAW_DATA, $iv));
@@ -117,7 +118,7 @@ class EmailService extends AUTHService
     {
         $email = strtolower($auth['email']);
         $identifier = sha1($email);
-        $access_token = self::encryptPassword($auth['password']);
+        $access_token = self::encryptPassword($identifier, $auth['password']);
         $userExists = LoginAccountQuery::existsIdentifierForProvider($identifier, $this->provider, true);
         if(self::FLOW_REGISTER === $flow && $userExists) {
             throw new EmailAlreadyExistsException(_('Email en uso'), 400);

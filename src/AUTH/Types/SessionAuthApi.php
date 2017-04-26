@@ -1,6 +1,7 @@
 <?php
 namespace AUTH\Types;
 
+use AUTH\Models\LoginAccount;
 use AUTH\Models\LoginSessionQuery;
 use PSFS\base\dto\JsonResponse;
 use PSFS\base\Request;
@@ -15,13 +16,34 @@ abstract class SessionAuthApi extends Api
     /**
      * @var bool
      */
-    protected $isPublic = false;
+    protected $public = false;
+
+    /**
+     * @return bool
+     */
+    public function isPublic()
+    {
+        return $this->public;
+    }
+
+    /**
+     * @param bool $public
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+    }
 
     /**
      * @Injectable
      * @var \PSFS\base\Security
      */
     protected $security;
+
+    /**
+     * @var LoginAccount
+     */
+    protected $account;
 
     public function init()
     {
@@ -36,9 +58,9 @@ abstract class SessionAuthApi extends Api
     {
         $headers = null;
         if (null !== Request::getInstance()->getHeader('Authorization')) {
-            $headers = trim($_SERVER["Authorization"]);
+            $headers = trim(Request::getInstance()->getHeader('Authorization'));
         } else if (null !== Request::getInstance()->getHeader('HTTP_AUTHORIZATION')) { //Nginx or fast CGI
-            $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+            $headers = trim(Request::getInstance()->getHeader("HTTP_AUTHORIZATION"));
         } elseif (function_exists('apache_request_headers')) {
             $requestHeaders = apache_request_headers();
             // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)
@@ -70,13 +92,16 @@ abstract class SessionAuthApi extends Api
      */
     private function checkAuth()
     {
-        if (!$this->security->canAccessRestrictedAdmin() && !$this->isPublic) {
+        if (!$this->security->canAccessRestrictedAdmin() && !$this->public) {
             $token = $this->getBearerToken();
             if (empty($token)) {
                 return $this->json(new JsonResponse(_('Not authorized, missing Api Token in the request'), false), 412);
             }
-            if (!LoginSessionQuery::checkToken($token)) {
+            $session = LoginSessionQuery::checkToken($token);
+            if (!$session) {
                 return $this->json(new JsonResponse(_('Not authorized, token not valid'), false), 401);
+            } else {
+                $this->account = $session->getAccountSession();
             }
         }
     }

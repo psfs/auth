@@ -139,7 +139,7 @@ class AUTHService extends Service {
                     if(null !== $account) {
                         $now = new \DateTime();
                         if(null !== $account->getRefreshRequest() && $now < $account->getRefreshRequest()) {
-                            $password = EmailService::encryptPassword($data['password']);
+                            $password = EmailService::encryptPassword($account->getId(), $data['password']);
                             $account->setAccessToken($password)
                                 ->setRefreshToken($password)
                                 ->setRefreshRequest(null)

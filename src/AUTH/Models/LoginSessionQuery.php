@@ -3,6 +3,7 @@
 namespace AUTH\Models;
 
 use AUTH\Models\Base\LoginSessionQuery as BaseLoginSessionQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'AUTH_SESSIONS' table.
@@ -31,5 +32,17 @@ class LoginSessionQuery extends BaseLoginSessionQuery
                 ->endUse()
             ->endUse()
             ->findOne();
+    }
+
+    /**
+     * @param LoginAccount $account
+     * @return LoginSession
+     */
+    public static function getLastSession(LoginAccount $account) {
+        return self::create()
+            ->filterByIdAccount($account->getPrimaryKey())
+            ->filterByActive(true)
+            ->orderByUpdatedAt(Criteria::DESC)
+            ->findOneOrCreate();
     }
 }

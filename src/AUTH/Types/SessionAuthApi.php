@@ -73,7 +73,7 @@ abstract class SessionAuthApi extends Api
         if (!$this->security->canAccessRestrictedAdmin() && !$this->isPublic) {
             $token = $this->getBearerToken();
             if (empty($token)) {
-                return $this->json(new JsonResponse(_('Not authorized, missing Api Token in the request'), false), 401);
+                return $this->json(new JsonResponse(_('Not authorized, missing Api Token in the request'), false), 412);
             }
             if (!LoginSessionQuery::checkToken($token)) {
                 return $this->json(new JsonResponse(_('Not authorized, token not valid'), false), 401);

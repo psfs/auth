@@ -127,6 +127,28 @@ abstract class LoginAccount implements ActiveRecordInterface
     protected $active;
 
     /**
+     * The value for the verified field.
+     *
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $verified;
+
+    /**
+     * The value for the refresh_requested field.
+     *
+     * @var        DateTime
+     */
+    protected $refresh_requested;
+
+    /**
+     * The value for the reset_token field.
+     *
+     * @var        string
+     */
+    protected $reset_token;
+
+    /**
      * The value for the created_at field.
      *
      * @var        DateTime
@@ -181,6 +203,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     {
         $this->role = 0;
         $this->active = true;
+        $this->verified = false;
     }
 
     /**
@@ -520,6 +543,56 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
+     * Get the [verified] column value.
+     *
+     * @return boolean
+     */
+    public function getVerified()
+    {
+        return $this->verified;
+    }
+
+    /**
+     * Get the [verified] column value.
+     *
+     * @return boolean
+     */
+    public function isVerified()
+    {
+        return $this->getVerified();
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [refresh_requested] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getRefreshRequest($format = NULL)
+    {
+        if ($format === null) {
+            return $this->refresh_requested;
+        } else {
+            return $this->refresh_requested instanceof \DateTimeInterface ? $this->refresh_requested->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [reset_token] column value.
+     *
+     * @return string
+     */
+    public function getResetToken()
+    {
+        return $this->reset_token;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
@@ -737,6 +810,74 @@ abstract class LoginAccount implements ActiveRecordInterface
     } // setActive()
 
     /**
+     * Sets the value of the [verified] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     */
+    public function setVerified($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->verified !== $v) {
+            $this->verified = $v;
+            $this->modifiedColumns[LoginAccountTableMap::COL_VERIFIED] = true;
+        }
+
+        return $this;
+    } // setVerified()
+
+    /**
+     * Sets the value of [refresh_requested] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     */
+    public function setRefreshRequest($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->refresh_requested !== null || $dt !== null) {
+            if ($this->refresh_requested === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->refresh_requested->format("Y-m-d H:i:s.u")) {
+                $this->refresh_requested = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[LoginAccountTableMap::COL_REFRESH_REQUESTED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setRefreshRequest()
+
+    /**
+     * Set the value of [reset_token] column.
+     *
+     * @param string $v new value
+     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     */
+    public function setResetToken($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->reset_token !== $v) {
+            $this->reset_token = $v;
+            $this->modifiedColumns[LoginAccountTableMap::COL_RESET_TOKEN] = true;
+        }
+
+        return $this;
+    } // setResetToken()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -794,6 +935,10 @@ abstract class LoginAccount implements ActiveRecordInterface
                 return false;
             }
 
+            if ($this->verified !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -847,13 +992,25 @@ abstract class LoginAccount implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginAccountTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
             $this->active = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginAccountTableMap::translateFieldName('Verified', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->verified = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginAccountTableMap::translateFieldName('RefreshRequest', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->refresh_requested = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LoginAccountTableMap::translateFieldName('ResetToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->reset_token = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : LoginAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : LoginAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -866,7 +1023,7 @@ abstract class LoginAccount implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 10; // 10 = LoginAccountTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = LoginAccountTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginAccount'), 0, $e);
@@ -1140,6 +1297,15 @@ abstract class LoginAccount implements ActiveRecordInterface
         if ($this->isColumnModified(LoginAccountTableMap::COL_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = 'ACTIVE';
         }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_VERIFIED)) {
+            $modifiedColumns[':p' . $index++]  = 'VERIFIED';
+        }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_REFRESH_REQUESTED)) {
+            $modifiedColumns[':p' . $index++]  = 'REFRESH_REQUESTED';
+        }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_RESET_TOKEN)) {
+            $modifiedColumns[':p' . $index++]  = 'RESET_TOKEN';
+        }
         if ($this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
@@ -1180,6 +1346,15 @@ abstract class LoginAccount implements ActiveRecordInterface
                         break;
                     case 'ACTIVE':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
+                        break;
+                    case 'VERIFIED':
+                        $stmt->bindValue($identifier, (int) $this->verified, PDO::PARAM_INT);
+                        break;
+                    case 'REFRESH_REQUESTED':
+                        $stmt->bindValue($identifier, $this->refresh_requested ? $this->refresh_requested->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'RESET_TOKEN':
+                        $stmt->bindValue($identifier, $this->reset_token, PDO::PARAM_STR);
                         break;
                     case 'created_at':
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1274,9 +1449,18 @@ abstract class LoginAccount implements ActiveRecordInterface
                 return $this->getActive();
                 break;
             case 8:
-                return $this->getCreatedAt();
+                return $this->getVerified();
                 break;
             case 9:
+                return $this->getRefreshRequest();
+                break;
+            case 10:
+                return $this->getResetToken();
+                break;
+            case 11:
+                return $this->getCreatedAt();
+                break;
+            case 12:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1317,19 +1501,26 @@ abstract class LoginAccount implements ActiveRecordInterface
             $keys[5] => $this->getExpireDate(),
             $keys[6] => $this->getAccountRole(),
             $keys[7] => $this->getActive(),
-            $keys[8] => $this->getCreatedAt(),
-            $keys[9] => $this->getUpdatedAt(),
+            $keys[8] => $this->getVerified(),
+            $keys[9] => $this->getRefreshRequest(),
+            $keys[10] => $this->getResetToken(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         );
         if ($result[$keys[5]] instanceof \DateTime) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
 
-        if ($result[$keys[8]] instanceof \DateTime) {
-            $result[$keys[8]] = $result[$keys[8]]->format('c');
-        }
-
         if ($result[$keys[9]] instanceof \DateTime) {
             $result[$keys[9]] = $result[$keys[9]]->format('c');
+        }
+
+        if ($result[$keys[11]] instanceof \DateTime) {
+            $result[$keys[11]] = $result[$keys[11]]->format('c');
+        }
+
+        if ($result[$keys[12]] instanceof \DateTime) {
+            $result[$keys[12]] = $result[$keys[12]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1431,9 +1622,18 @@ abstract class LoginAccount implements ActiveRecordInterface
                 $this->setActive($value);
                 break;
             case 8:
-                $this->setCreatedAt($value);
+                $this->setVerified($value);
                 break;
             case 9:
+                $this->setRefreshRequest($value);
+                break;
+            case 10:
+                $this->setResetToken($value);
+                break;
+            case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1487,10 +1687,19 @@ abstract class LoginAccount implements ActiveRecordInterface
             $this->setActive($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setCreatedAt($arr[$keys[8]]);
+            $this->setVerified($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setUpdatedAt($arr[$keys[9]]);
+            $this->setRefreshRequest($arr[$keys[9]]);
+        }
+        if (array_key_exists($keys[10], $arr)) {
+            $this->setResetToken($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setCreatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setUpdatedAt($arr[$keys[12]]);
         }
     }
 
@@ -1556,6 +1765,15 @@ abstract class LoginAccount implements ActiveRecordInterface
         }
         if ($this->isColumnModified(LoginAccountTableMap::COL_ACTIVE)) {
             $criteria->add(LoginAccountTableMap::COL_ACTIVE, $this->active);
+        }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_VERIFIED)) {
+            $criteria->add(LoginAccountTableMap::COL_VERIFIED, $this->verified);
+        }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_REFRESH_REQUESTED)) {
+            $criteria->add(LoginAccountTableMap::COL_REFRESH_REQUESTED, $this->refresh_requested);
+        }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_RESET_TOKEN)) {
+            $criteria->add(LoginAccountTableMap::COL_RESET_TOKEN, $this->reset_token);
         }
         if ($this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
             $criteria->add(LoginAccountTableMap::COL_CREATED_AT, $this->created_at);
@@ -1656,6 +1874,9 @@ abstract class LoginAccount implements ActiveRecordInterface
         $copyObj->setExpireDate($this->getExpireDate());
         $copyObj->setAccountRole($this->getAccountRole());
         $copyObj->setActive($this->getActive());
+        $copyObj->setVerified($this->getVerified());
+        $copyObj->setRefreshRequest($this->getRefreshRequest());
+        $copyObj->setResetToken($this->getResetToken());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
 
@@ -2014,6 +2235,9 @@ abstract class LoginAccount implements ActiveRecordInterface
         $this->expires = null;
         $this->role = null;
         $this->active = null;
+        $this->verified = null;
+        $this->refresh_requested = null;
+        $this->reset_token = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->alreadyInSave = false;

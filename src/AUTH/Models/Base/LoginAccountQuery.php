@@ -28,6 +28,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery orderByExpireDate($order = Criteria::ASC) Order by the EXPIRES column
  * @method     ChildLoginAccountQuery orderByAccountRole($order = Criteria::ASC) Order by the ROLE column
  * @method     ChildLoginAccountQuery orderByActive($order = Criteria::ASC) Order by the ACTIVE column
+ * @method     ChildLoginAccountQuery orderByVerified($order = Criteria::ASC) Order by the VERIFIED column
+ * @method     ChildLoginAccountQuery orderByRefreshRequest($order = Criteria::ASC) Order by the REFRESH_REQUESTED column
+ * @method     ChildLoginAccountQuery orderByResetToken($order = Criteria::ASC) Order by the RESET_TOKEN column
  * @method     ChildLoginAccountQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildLoginAccountQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -39,6 +42,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery groupByExpireDate() Group by the EXPIRES column
  * @method     ChildLoginAccountQuery groupByAccountRole() Group by the ROLE column
  * @method     ChildLoginAccountQuery groupByActive() Group by the ACTIVE column
+ * @method     ChildLoginAccountQuery groupByVerified() Group by the VERIFIED column
+ * @method     ChildLoginAccountQuery groupByRefreshRequest() Group by the REFRESH_REQUESTED column
+ * @method     ChildLoginAccountQuery groupByResetToken() Group by the RESET_TOKEN column
  * @method     ChildLoginAccountQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildLoginAccountQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -83,6 +89,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount findOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column
  * @method     ChildLoginAccount findOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column
  * @method     ChildLoginAccount findOneByActive(boolean $ACTIVE) Return the first ChildLoginAccount filtered by the ACTIVE column
+ * @method     ChildLoginAccount findOneByVerified(boolean $VERIFIED) Return the first ChildLoginAccount filtered by the VERIFIED column
+ * @method     ChildLoginAccount findOneByRefreshRequest(string $REFRESH_REQUESTED) Return the first ChildLoginAccount filtered by the REFRESH_REQUESTED column
+ * @method     ChildLoginAccount findOneByResetToken(string $RESET_TOKEN) Return the first ChildLoginAccount filtered by the RESET_TOKEN column
  * @method     ChildLoginAccount findOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column
  * @method     ChildLoginAccount findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column *
 
@@ -97,6 +106,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount requireOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByActive(boolean $ACTIVE) Return the first ChildLoginAccount filtered by the ACTIVE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccount requireOneByVerified(boolean $VERIFIED) Return the first ChildLoginAccount filtered by the VERIFIED column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccount requireOneByRefreshRequest(string $REFRESH_REQUESTED) Return the first ChildLoginAccount filtered by the REFRESH_REQUESTED column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccount requireOneByResetToken(string $RESET_TOKEN) Return the first ChildLoginAccount filtered by the RESET_TOKEN column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -109,6 +121,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount[]|ObjectCollection findByExpireDate(string $EXPIRES) Return ChildLoginAccount objects filtered by the EXPIRES column
  * @method     ChildLoginAccount[]|ObjectCollection findByAccountRole(int $ROLE) Return ChildLoginAccount objects filtered by the ROLE column
  * @method     ChildLoginAccount[]|ObjectCollection findByActive(boolean $ACTIVE) Return ChildLoginAccount objects filtered by the ACTIVE column
+ * @method     ChildLoginAccount[]|ObjectCollection findByVerified(boolean $VERIFIED) Return ChildLoginAccount objects filtered by the VERIFIED column
+ * @method     ChildLoginAccount[]|ObjectCollection findByRefreshRequest(string $REFRESH_REQUESTED) Return ChildLoginAccount objects filtered by the REFRESH_REQUESTED column
+ * @method     ChildLoginAccount[]|ObjectCollection findByResetToken(string $RESET_TOKEN) Return ChildLoginAccount objects filtered by the RESET_TOKEN column
  * @method     ChildLoginAccount[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginAccount objects filtered by the created_at column
  * @method     ChildLoginAccount[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginAccount objects filtered by the updated_at column
  * @method     ChildLoginAccount[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -212,7 +227,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, ACTIVE, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
+        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, ACTIVE, VERIFIED, REFRESH_REQUESTED, RESET_TOKEN, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -551,6 +566,101 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(LoginAccountTableMap::COL_ACTIVE, $active, $comparison);
+    }
+
+    /**
+     * Filter the query on the VERIFIED column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByVerified(true); // WHERE VERIFIED = true
+     * $query->filterByVerified('yes'); // WHERE VERIFIED = true
+     * </code>
+     *
+     * @param     boolean|string $verified The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByVerified($verified = null, $comparison = null)
+    {
+        if (is_string($verified)) {
+            $verified = in_array(strtolower($verified), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(LoginAccountTableMap::COL_VERIFIED, $verified, $comparison);
+    }
+
+    /**
+     * Filter the query on the REFRESH_REQUESTED column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRefreshRequest('2011-03-14'); // WHERE REFRESH_REQUESTED = '2011-03-14'
+     * $query->filterByRefreshRequest('now'); // WHERE REFRESH_REQUESTED = '2011-03-14'
+     * $query->filterByRefreshRequest(array('max' => 'yesterday')); // WHERE REFRESH_REQUESTED > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $refreshRequest The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByRefreshRequest($refreshRequest = null, $comparison = null)
+    {
+        if (is_array($refreshRequest)) {
+            $useMinMax = false;
+            if (isset($refreshRequest['min'])) {
+                $this->addUsingAlias(LoginAccountTableMap::COL_REFRESH_REQUESTED, $refreshRequest['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($refreshRequest['max'])) {
+                $this->addUsingAlias(LoginAccountTableMap::COL_REFRESH_REQUESTED, $refreshRequest['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginAccountTableMap::COL_REFRESH_REQUESTED, $refreshRequest, $comparison);
+    }
+
+    /**
+     * Filter the query on the RESET_TOKEN column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByResetToken('fooValue');   // WHERE RESET_TOKEN = 'fooValue'
+     * $query->filterByResetToken('%fooValue%', Criteria::LIKE); // WHERE RESET_TOKEN LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $resetToken The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByResetToken($resetToken = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($resetToken)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginAccountTableMap::COL_RESET_TOKEN, $resetToken, $comparison);
     }
 
     /**

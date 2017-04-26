@@ -18,7 +18,7 @@ class TestAuthController extends AUTHController {
      */
     public function testLogin() {
         return $this->render('index.html.twig', [
-            'user' => Security::getInstance()->getUser(),
+            'user' => unserialize(Security::getInstance()->getUser()),
             'providers' => LoginProviderQuery::getActiveProviders(Config::getParam('debug')),
         ]);
     }

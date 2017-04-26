@@ -33,6 +33,9 @@
         <column name="EXPIRES" phpName="ExpireDate" type="TIMESTAMP" />
         <column name="ROLE" phpName="AccountRole" type="ENUM" valueSet="USER,MANAGER,ADMIN" defaultValue="USER" />
         <column name="ACTIVE" phpName="Active" type="BOOLEAN" defaultValue="true" />
+        <column name="VERIFIED" phpName="Verified" type="BOOLEAN" defaultValue="false" />
+        <column name="REFRESH_REQUESTED" phpName="RefreshRequest" type="TIMESTAMP" />
+        <column name="RESET_TOKEN" phpName="ResetToken" type="VARCHAR" size="100" />
         <index name="idx_accounts">
             <index-column name="IDENTIFIER" />
             <index-column name="EXPIRES" />
@@ -52,9 +55,9 @@
     <table name="SESSIONS" phpName="LoginSession" description="Table with the login session token">
         <behavior name="auto_add_pk" />
         <column name="ID_ACCOUNT" phpName="IdAccount" type="INTEGER" required="true" />
-        <column name="DEVICE" phpName="Device" type="VARCHAR" size="255" required="true" />
+        <column name="DEVICE" phpName="Device" type="VARCHAR" size="500" required="true" />
         <column name="IP" phpName="IP" type="VARCHAR" size="50" required="true" />
-        <column name="TOKEN" phpName="Token" type="BINARY" sqlType="VARBINARY(40)" required="true" />
+        <column name="TOKEN" phpName="Token" type="BINARY" sqlType="VARBINARY(100)" required="true" />
         <column name="ACTIVE" phpName="Active" type="BOOLEAN" defaultValue="true" />
         <behavior name="timestampable" />
         <index name="idx_sessions_account">

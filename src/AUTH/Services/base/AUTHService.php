@@ -100,7 +100,7 @@ abstract class AUTHService extends Service {
                 throw new AuthProviderNotConfiguredException(_('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }
         }
-        $this->base = Config::getParam('login.base', Router::getInstance()->getRoute('', true));
+        $this->base = preg_replace('/\/$/', '', Config::getParam('login.base', Router::getInstance()->getRoute('', true)));
     }
 
     /**

@@ -3,6 +3,9 @@
 namespace AUTH\Models;
 
 use AUTH\Models\Base\LoginAccountQuery as BaseLoginAccountQuery;
+use AUTH\Models\Map\LoginProviderTableMap;
+use Propel\Runtime\ActiveQuery\Criteria;
+use PSFS\base\config\Config;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'AUTH_ACCOUNTS' table.
@@ -41,10 +44,12 @@ class LoginAccountQuery extends BaseLoginAccountQuery
     /**
      * @param $identifier
      * @param LoginProvider $provider
+     * @param boolean $verified
      * @return bool
      */
-    public static function existsIdentifierForProvider($identifier, LoginProvider $provider) {
+    public static function existsIdentifierForProvider($identifier, LoginProvider $provider, $verified = true) {
         return self::filterByIdentifierAndProvider($identifier, $provider)
+            ->filterByVerified($verified)
             ->count() > 0;
     }
 
@@ -59,4 +64,21 @@ class LoginAccountQuery extends BaseLoginAccountQuery
             ->filterByAccessToken($password)
             ->count() == 1;
     }
+
+    /**
+     * @param string $reset_token
+     * @return LoginAccount
+     */
+    public static function getAccountForReset($reset_token) {
+        return self::create()
+            ->useAccountProviderQuery()
+                ->filterByActive(true)
+                ->filterByName(LoginProviderTableMap::COL_NAME_EMAIL)
+                ->filterByDebug(Config::getParam('debug'))
+            ->endUse()
+            ->filterByResetToken($reset_token)
+            ->filterByRefreshRequest(null, Criteria::ISNOTNULL)
+            ->findOne();
+    }
+
 }

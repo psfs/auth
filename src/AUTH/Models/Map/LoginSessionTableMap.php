@@ -162,7 +162,7 @@ class LoginSessionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addForeignKey('ID_ACCOUNT', 'IdAccount', 'INTEGER', 'AUTH_ACCOUNTS', 'ID_ACCOUNT', true, null, null);
-        $this->addColumn('DEVICE', 'Device', 'VARCHAR', true, 255, null);
+        $this->addColumn('DEVICE', 'Device', 'VARCHAR', true, 500, null);
         $this->addColumn('IP', 'IP', 'VARCHAR', true, 50, null);
         $this->addColumn('TOKEN', 'Token', 'BINARY', true, null, null);
         $this->addColumn('ACTIVE', 'Active', 'BOOLEAN', false, 1, true);

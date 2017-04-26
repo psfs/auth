@@ -4,6 +4,8 @@ namespace AUTH\Dto;
 use AUTH\Models\LoginAccount;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\LoginProvider;
+use AUTH\Models\LoginSessionQuery;
+use AUTH\Services\AUTHService;
 use PSFS\base\dto\Dto;
 
 class AuthUserDto extends Dto {
@@ -51,11 +53,16 @@ class AuthUserDto extends Dto {
      * @var LoginAccount
      */
     public $account;
+    /**
+     * @var string
+     */
+    public $session_token;
 
     /**
      * @param \Auth\Models\LoginProvider $provider
+     * @param boolean $verified
      */
-    public function hydrate(LoginProvider $provider) {
+    public function hydrate(LoginProvider $provider, $verified = true) {
         if(null !== $this->id) {
             $this->account = LoginAccountQuery::getAccountByIdentifier($this->id, $provider);
             if($this->account->isNew()) {
@@ -67,7 +74,15 @@ class AuthUserDto extends Dto {
             if(!empty($this->refresh_token)) {
                 $this->account->setRefreshToken($this->refresh_token);
             }
+            $this->account->setVerified($verified);
             $this->account->save();
+            $session = LoginSessionQuery::getLastSession($this->account);
+            $session->setIdAccount($this->account->getPrimaryKey());
+            $session->setDevice($_SERVER['HTTP_USER_AGENT']);
+            $session->setIP(AUTHService::get_ip_address());
+            $session->setToken(hash_hmac('sha256', $this->id, $provider->getSecret()));
+            $session->save();
+            $this->session_token = $session->getToken();
         }
     }
 }

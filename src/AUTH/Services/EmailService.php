@@ -17,12 +17,6 @@ use PSFS\base\Logger;
 
 class EmailService extends AUTHService
 {
-    const EMAIL_ERROR_RESET_TOKEN_NOT_FOUND = 460;
-    const EMAIL_ERROR_RESET_PASS_NOT_FOUND = 461;
-    const EMAIL_ERROR_RESET_PASS_NOT_VALID = 462;
-    const EMAIL_ERROR_RESET_INVALID_TOKEN = 463;
-    const EMAIL_ERROR_RESET_FORBIDDEN = 464;
-    const EMAIL_ERROR_RESET_GENERAL_ERROR = 465;
 
     /**
      * @inheritDoc
@@ -142,49 +136,5 @@ class EmailService extends AUTHService
         $user->raw = $auth;
         $user->hydrate($this->provider, self::FLOW_LOGIN === $flow);
         return $user;
-    }
-
-    /**
-     * @param array $data
-     * @return bool
-     * @throws EmailResetFailedException
-     * @throws \Exception
-     */
-    public function resetPassword(array $data) {
-        if(array_key_exists('token', $data)) {
-            if(array_key_exists('password', $data)) {
-                try {
-                    self::checkPassword($data['password']);
-                    $account = LoginAccountQuery::getAccountForReset($data['token']);
-                    if(null !== $account) {
-                        $now = new \DateTime();
-                        if(null !== $account->getRefreshRequest() && $now < $account->getRefreshRequest()) {
-                            $password = self::encryptPassword($data['password']);
-                            $account->setAccessToken($password)
-                                ->setRefreshToken($password)
-                                ->setRefreshRequest(null)
-                                ->setResetToken(null);
-                            $reseted = false !== $account->save();
-                        } else {
-                            throw new EmailResetFailedException(_('Ha expirado el plazo para resetear la contraseña'), self::EMAIL_ERROR_RESET_FORBIDDEN);
-                        }
-                    } else {
-                        throw new EmailResetFailedException(_('No se ha encontrado el usuario para resetear la contraseña'), self::EMAIL_ERROR_RESET_INVALID_TOKEN);
-                    }
-                } catch(\Exception $e) {
-                    Logger::log($e->getMessage(), LOG_ERR, $data);
-                    if($e instanceof EmailWrongPasswordException) {
-                        throw new EmailResetFailedException($e->getMessage(), self::EMAIL_ERROR_RESET_PASS_NOT_VALID);
-                    } else {
-                        throw $e;
-                    }
-                }
-            } else {
-                throw new EmailResetFailedException(_('Es necesario una nueva password'), self::EMAIL_ERROR_RESET_PASS_NOT_FOUND);
-            }
-        } else {
-            throw new EmailResetFailedException(_('Es necesario el token del usuario'), self::EMAIL_ERROR_RESET_TOKEN_NOT_FOUND);
-        }
-        return $reseted;
     }
 }

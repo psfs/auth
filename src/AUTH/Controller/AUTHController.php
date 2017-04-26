@@ -2,8 +2,9 @@
 namespace AUTH\Controller;
 use AUTH\Controller\base\AUTHBaseController;
 use AUTH\Exception\AuthRedirectNotDefinedException;
-use AUTH\Services\base\AUTHService;
+use AUTH\Services\AUTHService;
 use PSFS\base\config\Config;
+use PSFS\base\dto\JsonResponse;
 use PSFS\base\Logger;
 use PSFS\base\Router;
 use PSFS\base\Security;
@@ -20,7 +21,7 @@ use PSFS\base\types\helpers\AdminHelper;
 class AUTHController extends AUTHBaseController {
 
     /**
-     * @var AUTHService
+     * @var \AUTH\Services\base\AUTHService
      */
     protected $srv;
 
@@ -59,5 +60,22 @@ class AUTHController extends AUTHBaseController {
             Security::getInstance()->setFlash('callback_message', $e->getMessage());
         }
         return $this->getRequest()->redirect($this->srv->base . $this->getRoute($route));
+    }
+
+    /**
+     * @POST
+     * @route /auth/password/reset
+     * @return string JSON
+     */
+    public function resetPassword() {
+        $data = $this->getRequest()->getData();
+        $code = 200;
+        try {
+            $reset = AUTHService::getInstance()->resetPassword($data);
+        } catch(\Exception $e) {
+            $reset = false;
+            $code = $e->getCode();
+        }
+        return $this->json(new JsonResponse($reset, $reset), $code);
     }
 }

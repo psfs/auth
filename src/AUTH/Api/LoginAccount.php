@@ -22,7 +22,6 @@ class LoginAccount extends LoginAccountBaseApi
     public $public = true;
     public function init()
     {
-        \AUTH\Services\base\AUTHService::checkAccess();
         parent::init();
         $this->extraColumns = [
             'CONCAT(' . LoginProvider::getListNameSql() . ', " ", ' . LoginAccountTableMap::COL_IDENTIFIER . ')' => self::API_LIST_NAME_FIELD,

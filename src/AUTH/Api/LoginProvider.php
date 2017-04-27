@@ -3,7 +3,6 @@ namespace AUTH\Api;
 
 use AUTH\Api\base\LoginProviderBaseApi;
 use AUTH\Models\Map\LoginProviderTableMap;
-use AUTH\Services\base\AUTHService;
 
 /**
 * Class AUTH
@@ -29,7 +28,6 @@ class LoginProvider extends LoginProviderBaseApi
 
     public function init()
     {
-        AUTHService::checkAccess();
         parent::init();
         $this->extraColumns = [
             self::getListNameSql() => self::API_LIST_NAME_FIELD

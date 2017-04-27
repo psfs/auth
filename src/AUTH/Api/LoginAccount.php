@@ -19,6 +19,7 @@ use PSFS\base\dto\JsonResponse;
 */
 class LoginAccount extends LoginAccountBaseApi
 {
+    public $public = true;
     public function init()
     {
         \AUTH\Services\base\AUTHService::checkAccess();

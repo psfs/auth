@@ -3,6 +3,7 @@ namespace AUTH\Types;
 
 use AUTH\Models\LoginAccount;
 use AUTH\Models\LoginSessionQuery;
+use PSFS\base\config\Config;
 use PSFS\base\dto\JsonResponse;
 use PSFS\base\Request;
 use PSFS\base\types\Api;
@@ -54,7 +55,7 @@ abstract class SessionAuthApi extends Api
     /**
      * Get hearder Authorization
      * */
-    private function getAuthorizationHeader()
+    private static function getAuthorizationHeader()
     {
         $headers = null;
         if (null !== Request::getInstance()->getHeader('Authorization')) {
@@ -75,9 +76,9 @@ abstract class SessionAuthApi extends Api
     /**
      * get access token from header
      * */
-    private function getBearerToken()
+    public static function getBearerToken()
     {
-        $headers = $this->getAuthorizationHeader();
+        $headers = self::getAuthorizationHeader();
         // HEADER: Get the access token from the header
         if (!empty($headers)) {
             if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
@@ -92,16 +93,18 @@ abstract class SessionAuthApi extends Api
      */
     private function checkAuth()
     {
-        if (!$this->security->canAccessRestrictedAdmin() && !$this->public) {
-            $token = $this->getBearerToken();
-            if (empty($token)) {
-                return $this->json(new JsonResponse(_('Not authorized, missing Api Token in the request'), false), 412);
-            }
-            $session = LoginSessionQuery::checkToken($token);
-            if (!$session) {
-                return $this->json(new JsonResponse(_('Not authorized, token not valid'), false), 401);
-            } else {
-                $this->account = $session->getAccountSession();
+        if (!$this->security->isAdmin() || !$this->public) {
+            if(Config::getParam('psfs.auth.enable')) {
+                $token = self::getBearerToken();
+                if (empty($token)) {
+                    return $this->json(new JsonResponse(_('Not authorized, missing Api Token in the request'), false), 412);
+                }
+                $session = LoginSessionQuery::checkToken($token);
+                if (!$session) {
+                    return $this->json(new JsonResponse(_('Not authorized, token not valid'), false), 401);
+                } else {
+                    $this->account = $session->getAccountSession();
+                }
             }
         }
     }

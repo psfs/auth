@@ -74,7 +74,7 @@ class LoginAccountQuery extends BaseLoginAccountQuery
             ->useAccountProviderQuery()
                 ->filterByActive(true)
                 ->filterByName(LoginProviderTableMap::COL_NAME_EMAIL)
-                ->filterByDebug(Config::getParam('debug'))
+                //->filterByDebug(Config::getParam('debug'))
             ->endUse()
             ->filterByResetToken($reset_token)
             ->filterByRefreshRequest(null, Criteria::ISNOTNULL)

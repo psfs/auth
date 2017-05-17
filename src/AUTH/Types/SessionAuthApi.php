@@ -93,8 +93,8 @@ abstract class SessionAuthApi extends Api
      */
     private function checkAuth()
     {
-        if (!$this->security->isAdmin() || !$this->public) {
-            if(Config::getParam('psfs.auth.enable')) {
+        if (!$this->security->isAdmin()) {
+            if(!$this->public && Config::getParam('psfs.auth.enable')) {
                 $token = self::getBearerToken();
                 if (empty($token)) {
                     return $this->json(new JsonResponse(_('Not authorized, missing Api Token in the request'), false), 412);

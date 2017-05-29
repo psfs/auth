@@ -48,10 +48,11 @@ class TwitterService extends AUTHService {
         Security::getInstance()->setSessionKey('TWITTER_FLOW', $flow);
         Security::getInstance()->setSessionKey('TWITTER_FLOW_AUTH', $auth);
         $slug = ($flow === self::FLOW_LOGIN) ? 'auth-twitter-callback' : 'register-twitter-callback';
-        return $client->url('oauth/' . $flow, [
+        $oauthUrl = ($flow === self::FLOW_LOGIN) ? 'authenticate' : 'authorize';
+        return $client->url('oauth/' . $oauthUrl, [
             'oauth_token' => $auth['oauth_token'],
             'include_email' => true,
-            //'oauth_callback' => Router::getInstance()->getRoute($slug, true),
+            'oauth_callback' => Router::getInstance()->getRoute($slug, true),
         ]);
     }
 
@@ -63,7 +64,11 @@ class TwitterService extends AUTHService {
      */
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
     {
-        // TODO: Implement authenticate() method.
+        $client = $this->getClient(null, $flow);
+        $auth = Security::getInstance()->getSessionKey('TWITTER_FLOW_AUTH');
+        $client->setOauthToken($auth['oauth_token'], $auth['oauth_token_secret']);
+        $credentials = $client->oauth("oauth/access_token", ["oauth_verifier" => $query['oauth_verifier'], 'include_email' => true]);
+        return $this->getUser($credentials, $flow);
     }
 
     /**
@@ -73,6 +78,22 @@ class TwitterService extends AUTHService {
      */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {
-        // TODO: Implement getUser() method.
+        $profile = new AuthUserDto();
+        $profile->id = $auth['user_id'];
+        $profile->access_token = $auth['oauth_token'];
+        $profile->refresh_token = $auth['oauth_token_secret'];
+
+        $client = $this->getClient(null, $flow);
+        $client->setOauthToken($profile->access_token, $profile->refresh_token);
+        $user = $client->get("account/verify_credentials", ['include_email' => true , 'skip_status' => true]);
+
+        $profile->name = $user->name;
+        $profile->photo = $user->profile_image_url_https;
+        $profile->email = (property_exists($user, 'email')) ? $user->email : $user->screen_name . '@twitter.com';
+        Security::getInstance()->setSessionKey('TWITTER_FLOW', null);
+        Security::getInstance()->setSessionKey('TWITTER_FLOW_AUTH', null);
+        $profile->raw = $user;
+        $profile->hydrate($this->provider);
+        return $profile;
     }
 }

@@ -90,6 +90,13 @@ abstract class LoginAccount implements ActiveRecordInterface
     protected $identifier;
 
     /**
+     * The value for the email field.
+     *
+     * @var        string
+     */
+    protected $email;
+
+    /**
      * The value for the access_token field.
      *
      * @var        string
@@ -464,6 +471,16 @@ abstract class LoginAccount implements ActiveRecordInterface
     }
 
     /**
+     * Get the [email] column value.
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
      * Get the [access_token] column value.
      *
      * @return string
@@ -695,6 +712,26 @@ abstract class LoginAccount implements ActiveRecordInterface
 
         return $this;
     } // setId()
+
+    /**
+     * Set the value of [email] column.
+     *
+     * @param string $v new value
+     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     */
+    public function setEmail($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->email !== $v) {
+            $this->email = $v;
+            $this->modifiedColumns[LoginAccountTableMap::COL_EMAIL] = true;
+        }
+
+        return $this;
+    } // setEmail()
 
     /**
      * Set the value of [access_token] column.
@@ -974,43 +1011,46 @@ abstract class LoginAccount implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LoginAccountTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->identifier = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LoginAccountTableMap::translateFieldName('AccessToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LoginAccountTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->email = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : LoginAccountTableMap::translateFieldName('AccessToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->access_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : LoginAccountTableMap::translateFieldName('RefreshToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LoginAccountTableMap::translateFieldName('RefreshToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->refresh_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LoginAccountTableMap::translateFieldName('ExpireDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginAccountTableMap::translateFieldName('ExpireDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->expires = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginAccountTableMap::translateFieldName('AccountRole', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginAccountTableMap::translateFieldName('AccountRole', TableMap::TYPE_PHPNAME, $indexType)];
             $this->role = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginAccountTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginAccountTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
             $this->active = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginAccountTableMap::translateFieldName('Verified', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginAccountTableMap::translateFieldName('Verified', TableMap::TYPE_PHPNAME, $indexType)];
             $this->verified = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginAccountTableMap::translateFieldName('RefreshRequest', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LoginAccountTableMap::translateFieldName('RefreshRequest', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->refresh_requested = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LoginAccountTableMap::translateFieldName('ResetToken', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : LoginAccountTableMap::translateFieldName('ResetToken', TableMap::TYPE_PHPNAME, $indexType)];
             $this->reset_token = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : LoginAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : LoginAccountTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : LoginAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : LoginAccountTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -1023,7 +1063,7 @@ abstract class LoginAccount implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 13; // 13 = LoginAccountTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = LoginAccountTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginAccount'), 0, $e);
@@ -1282,6 +1322,9 @@ abstract class LoginAccount implements ActiveRecordInterface
         if ($this->isColumnModified(LoginAccountTableMap::COL_IDENTIFIER)) {
             $modifiedColumns[':p' . $index++]  = 'IDENTIFIER';
         }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_EMAIL)) {
+            $modifiedColumns[':p' . $index++]  = 'EMAIL';
+        }
         if ($this->isColumnModified(LoginAccountTableMap::COL_ACCESS_TOKEN)) {
             $modifiedColumns[':p' . $index++]  = 'ACCESS_TOKEN';
         }
@@ -1331,6 +1374,9 @@ abstract class LoginAccount implements ActiveRecordInterface
                         break;
                     case 'IDENTIFIER':
                         $stmt->bindValue($identifier, $this->identifier, PDO::PARAM_STR);
+                        break;
+                    case 'EMAIL':
+                        $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
                     case 'ACCESS_TOKEN':
                         $stmt->bindValue($identifier, $this->access_token, PDO::PARAM_STR);
@@ -1434,33 +1480,36 @@ abstract class LoginAccount implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 3:
-                return $this->getAccessToken();
+                return $this->getEmail();
                 break;
             case 4:
-                return $this->getRefreshToken();
+                return $this->getAccessToken();
                 break;
             case 5:
-                return $this->getExpireDate();
+                return $this->getRefreshToken();
                 break;
             case 6:
-                return $this->getAccountRole();
+                return $this->getExpireDate();
                 break;
             case 7:
-                return $this->getActive();
+                return $this->getAccountRole();
                 break;
             case 8:
-                return $this->getVerified();
+                return $this->getActive();
                 break;
             case 9:
-                return $this->getRefreshRequest();
+                return $this->getVerified();
                 break;
             case 10:
-                return $this->getResetToken();
+                return $this->getRefreshRequest();
                 break;
             case 11:
-                return $this->getCreatedAt();
+                return $this->getResetToken();
                 break;
             case 12:
+                return $this->getCreatedAt();
+                break;
+            case 13:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1496,31 +1545,32 @@ abstract class LoginAccount implements ActiveRecordInterface
             $keys[0] => $this->getIdAccount(),
             $keys[1] => $this->getIdSocial(),
             $keys[2] => $this->getId(),
-            $keys[3] => $this->getAccessToken(),
-            $keys[4] => $this->getRefreshToken(),
-            $keys[5] => $this->getExpireDate(),
-            $keys[6] => $this->getAccountRole(),
-            $keys[7] => $this->getActive(),
-            $keys[8] => $this->getVerified(),
-            $keys[9] => $this->getRefreshRequest(),
-            $keys[10] => $this->getResetToken(),
-            $keys[11] => $this->getCreatedAt(),
-            $keys[12] => $this->getUpdatedAt(),
+            $keys[3] => $this->getEmail(),
+            $keys[4] => $this->getAccessToken(),
+            $keys[5] => $this->getRefreshToken(),
+            $keys[6] => $this->getExpireDate(),
+            $keys[7] => $this->getAccountRole(),
+            $keys[8] => $this->getActive(),
+            $keys[9] => $this->getVerified(),
+            $keys[10] => $this->getRefreshRequest(),
+            $keys[11] => $this->getResetToken(),
+            $keys[12] => $this->getCreatedAt(),
+            $keys[13] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[5]] instanceof \DateTime) {
-            $result[$keys[5]] = $result[$keys[5]]->format('c');
+        if ($result[$keys[6]] instanceof \DateTimeInterface) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
-        if ($result[$keys[9]] instanceof \DateTime) {
-            $result[$keys[9]] = $result[$keys[9]]->format('c');
+        if ($result[$keys[10]] instanceof \DateTimeInterface) {
+            $result[$keys[10]] = $result[$keys[10]]->format('c');
         }
 
-        if ($result[$keys[11]] instanceof \DateTime) {
-            $result[$keys[11]] = $result[$keys[11]]->format('c');
-        }
-
-        if ($result[$keys[12]] instanceof \DateTime) {
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
             $result[$keys[12]] = $result[$keys[12]]->format('c');
+        }
+
+        if ($result[$keys[13]] instanceof \DateTimeInterface) {
+            $result[$keys[13]] = $result[$keys[13]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1603,37 +1653,40 @@ abstract class LoginAccount implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 3:
-                $this->setAccessToken($value);
+                $this->setEmail($value);
                 break;
             case 4:
-                $this->setRefreshToken($value);
+                $this->setAccessToken($value);
                 break;
             case 5:
-                $this->setExpireDate($value);
+                $this->setRefreshToken($value);
                 break;
             case 6:
+                $this->setExpireDate($value);
+                break;
+            case 7:
                 $valueSet = LoginAccountTableMap::getValueSet(LoginAccountTableMap::COL_ROLE);
                 if (isset($valueSet[$value])) {
                     $value = $valueSet[$value];
                 }
                 $this->setAccountRole($value);
                 break;
-            case 7:
+            case 8:
                 $this->setActive($value);
                 break;
-            case 8:
+            case 9:
                 $this->setVerified($value);
                 break;
-            case 9:
+            case 10:
                 $this->setRefreshRequest($value);
                 break;
-            case 10:
+            case 11:
                 $this->setResetToken($value);
                 break;
-            case 11:
+            case 12:
                 $this->setCreatedAt($value);
                 break;
-            case 12:
+            case 13:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1672,34 +1725,37 @@ abstract class LoginAccount implements ActiveRecordInterface
             $this->setId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setAccessToken($arr[$keys[3]]);
+            $this->setEmail($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setRefreshToken($arr[$keys[4]]);
+            $this->setAccessToken($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setExpireDate($arr[$keys[5]]);
+            $this->setRefreshToken($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAccountRole($arr[$keys[6]]);
+            $this->setExpireDate($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setActive($arr[$keys[7]]);
+            $this->setAccountRole($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setVerified($arr[$keys[8]]);
+            $this->setActive($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setRefreshRequest($arr[$keys[9]]);
+            $this->setVerified($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setResetToken($arr[$keys[10]]);
+            $this->setRefreshRequest($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setCreatedAt($arr[$keys[11]]);
+            $this->setResetToken($arr[$keys[11]]);
         }
         if (array_key_exists($keys[12], $arr)) {
-            $this->setUpdatedAt($arr[$keys[12]]);
+            $this->setCreatedAt($arr[$keys[12]]);
+        }
+        if (array_key_exists($keys[13], $arr)) {
+            $this->setUpdatedAt($arr[$keys[13]]);
         }
     }
 
@@ -1750,6 +1806,9 @@ abstract class LoginAccount implements ActiveRecordInterface
         }
         if ($this->isColumnModified(LoginAccountTableMap::COL_IDENTIFIER)) {
             $criteria->add(LoginAccountTableMap::COL_IDENTIFIER, $this->identifier);
+        }
+        if ($this->isColumnModified(LoginAccountTableMap::COL_EMAIL)) {
+            $criteria->add(LoginAccountTableMap::COL_EMAIL, $this->email);
         }
         if ($this->isColumnModified(LoginAccountTableMap::COL_ACCESS_TOKEN)) {
             $criteria->add(LoginAccountTableMap::COL_ACCESS_TOKEN, $this->access_token);
@@ -1869,6 +1928,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     {
         $copyObj->setIdSocial($this->getIdSocial());
         $copyObj->setId($this->getId());
+        $copyObj->setEmail($this->getEmail());
         $copyObj->setAccessToken($this->getAccessToken());
         $copyObj->setRefreshToken($this->getRefreshToken());
         $copyObj->setExpireDate($this->getExpireDate());
@@ -1988,7 +2048,8 @@ abstract class LoginAccount implements ActiveRecordInterface
     public function initRelation($relationName)
     {
         if ('LoginSession' == $relationName) {
-            return $this->initLoginSessions();
+            $this->initLoginSessions();
+            return;
         }
     }
 
@@ -2230,6 +2291,7 @@ abstract class LoginAccount implements ActiveRecordInterface
         $this->id_account = null;
         $this->id_provider = null;
         $this->identifier = null;
+        $this->email = null;
         $this->access_token = null;
         $this->refresh_token = null;
         $this->expires = null;

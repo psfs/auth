@@ -1144,11 +1144,11 @@ abstract class LoginSession implements ActiveRecordInterface
             $keys[6] => $this->getCreatedAt(),
             $keys[7] => $this->getUpdatedAt(),
         );
-        if ($result[$keys[6]] instanceof \DateTime) {
+        if ($result[$keys[6]] instanceof \DateTimeInterface) {
             $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
-        if ($result[$keys[7]] instanceof \DateTime) {
+        if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('c');
         }
 

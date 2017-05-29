@@ -7,6 +7,7 @@ use AUTH\Models\LoginProvider;
 use AUTH\Models\LoginSessionQuery;
 use AUTH\Services\AUTHService;
 use PSFS\base\dto\Dto;
+use PSFS\base\Security;
 
 class AuthUserDto extends Dto {
     /**
@@ -74,6 +75,9 @@ class AuthUserDto extends Dto {
             if(!empty($this->refresh_token)) {
                 $this->account->setRefreshToken($this->refresh_token);
             }
+            if(!empty($this->email)) {
+                $this->account->setEmail($this->email);
+            }
             $this->account->setVerified($verified);
             $this->account->save();
             $session = LoginSessionQuery::getLastSession($this->account);
@@ -84,5 +88,20 @@ class AuthUserDto extends Dto {
             $session->save();
             $this->session_token = $session->getToken();
         }
+    }
+
+    /**
+     * Close user session
+     */
+    public function closeSession() {
+        if(null !== $this->session_token) {
+            $session = LoginSessionQuery::checkToken($this->session_token);
+            if(null !== $session) {
+                $session->setActive(false);
+                $session->save();
+            }
+        }
+        Security::getInstance()->updateUser(null);
+        Security::getInstance()->updateSession(true);
     }
 }

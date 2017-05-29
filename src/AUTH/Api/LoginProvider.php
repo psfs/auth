@@ -22,7 +22,7 @@ class LoginProvider extends LoginProviderBaseApi
             $closeSql .= ')';
         }
         $sql .= '"Error"';
-        $closeSql .= ', " [", IF(' . LoginProviderTableMap::COL_DEV . ' = 0, "Prod", "Dev"), "]")';
+        $closeSql .= ', " [", IF(' . LoginProviderTableMap::COL_DEV . ' = 0, "Prod", "Dev"), "] [", IFNULL('.LoginProviderTableMap::COL_PARENT_REF.', "ALL"), "]")';
         return $sql . $closeSql;
     }
 

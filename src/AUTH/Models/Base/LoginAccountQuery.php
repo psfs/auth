@@ -23,6 +23,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery orderByIdAccount($order = Criteria::ASC) Order by the ID_ACCOUNT column
  * @method     ChildLoginAccountQuery orderByIdSocial($order = Criteria::ASC) Order by the ID_PROVIDER column
  * @method     ChildLoginAccountQuery orderById($order = Criteria::ASC) Order by the IDENTIFIER column
+ * @method     ChildLoginAccountQuery orderByEmail($order = Criteria::ASC) Order by the EMAIL column
  * @method     ChildLoginAccountQuery orderByAccessToken($order = Criteria::ASC) Order by the ACCESS_TOKEN column
  * @method     ChildLoginAccountQuery orderByRefreshToken($order = Criteria::ASC) Order by the REFRESH_TOKEN column
  * @method     ChildLoginAccountQuery orderByExpireDate($order = Criteria::ASC) Order by the EXPIRES column
@@ -37,6 +38,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery groupByIdAccount() Group by the ID_ACCOUNT column
  * @method     ChildLoginAccountQuery groupByIdSocial() Group by the ID_PROVIDER column
  * @method     ChildLoginAccountQuery groupById() Group by the IDENTIFIER column
+ * @method     ChildLoginAccountQuery groupByEmail() Group by the EMAIL column
  * @method     ChildLoginAccountQuery groupByAccessToken() Group by the ACCESS_TOKEN column
  * @method     ChildLoginAccountQuery groupByRefreshToken() Group by the REFRESH_TOKEN column
  * @method     ChildLoginAccountQuery groupByExpireDate() Group by the EXPIRES column
@@ -84,6 +86,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccount filtered by the ID_ACCOUNT column
  * @method     ChildLoginAccount findOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginAccount filtered by the ID_PROVIDER column
  * @method     ChildLoginAccount findOneById(string $IDENTIFIER) Return the first ChildLoginAccount filtered by the IDENTIFIER column
+ * @method     ChildLoginAccount findOneByEmail(string $EMAIL) Return the first ChildLoginAccount filtered by the EMAIL column
  * @method     ChildLoginAccount findOneByAccessToken(string $ACCESS_TOKEN) Return the first ChildLoginAccount filtered by the ACCESS_TOKEN column
  * @method     ChildLoginAccount findOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column
  * @method     ChildLoginAccount findOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column
@@ -101,6 +104,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount requireOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccount filtered by the ID_ACCOUNT column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginAccount filtered by the ID_PROVIDER column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneById(string $IDENTIFIER) Return the first ChildLoginAccount filtered by the IDENTIFIER column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccount requireOneByEmail(string $EMAIL) Return the first ChildLoginAccount filtered by the EMAIL column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByAccessToken(string $ACCESS_TOKEN) Return the first ChildLoginAccount filtered by the ACCESS_TOKEN column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -116,6 +120,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccount[]|ObjectCollection findByIdAccount(int $ID_ACCOUNT) Return ChildLoginAccount objects filtered by the ID_ACCOUNT column
  * @method     ChildLoginAccount[]|ObjectCollection findByIdSocial(int $ID_PROVIDER) Return ChildLoginAccount objects filtered by the ID_PROVIDER column
  * @method     ChildLoginAccount[]|ObjectCollection findById(string $IDENTIFIER) Return ChildLoginAccount objects filtered by the IDENTIFIER column
+ * @method     ChildLoginAccount[]|ObjectCollection findByEmail(string $EMAIL) Return ChildLoginAccount objects filtered by the EMAIL column
  * @method     ChildLoginAccount[]|ObjectCollection findByAccessToken(string $ACCESS_TOKEN) Return ChildLoginAccount objects filtered by the ACCESS_TOKEN column
  * @method     ChildLoginAccount[]|ObjectCollection findByRefreshToken(string $REFRESH_TOKEN) Return ChildLoginAccount objects filtered by the REFRESH_TOKEN column
  * @method     ChildLoginAccount[]|ObjectCollection findByExpireDate(string $EXPIRES) Return ChildLoginAccount objects filtered by the EXPIRES column
@@ -227,7 +232,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, ACTIVE, VERIFIED, REFRESH_REQUESTED, RESET_TOKEN, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
+        $sql = 'SELECT ID_ACCOUNT, ID_PROVIDER, IDENTIFIER, EMAIL, ACCESS_TOKEN, REFRESH_TOKEN, EXPIRES, ROLE, ACTIVE, VERIFIED, REFRESH_REQUESTED, RESET_TOKEN, created_at, updated_at FROM AUTH_ACCOUNTS WHERE ID_ACCOUNT = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -424,6 +429,31 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(LoginAccountTableMap::COL_IDENTIFIER, $id, $comparison);
+    }
+
+    /**
+     * Filter the query on the EMAIL column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmail('fooValue');   // WHERE EMAIL = 'fooValue'
+     * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE EMAIL LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $email The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByEmail($email = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($email)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginAccountTableMap::COL_EMAIL, $email, $comparison);
     }
 
     /**

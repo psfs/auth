@@ -24,7 +24,7 @@ class LoginAccount extends LoginAccountBaseApi
     {
         parent::init();
         $this->extraColumns = [
-            'CONCAT(' . LoginProvider::getListNameSql() . ', " ", ' . LoginAccountTableMap::COL_IDENTIFIER . ')' => self::API_LIST_NAME_FIELD,
+            'CONCAT(' . LoginProvider::getListNameSql() . ', " ", IFNULL(' . LoginAccountTableMap::COL_EMAIL . ', ' . LoginAccountTableMap::COL_IDENTIFIER . '))' => self::API_LIST_NAME_FIELD,
         ];
     }
 

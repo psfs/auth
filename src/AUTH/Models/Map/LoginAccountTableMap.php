@@ -59,7 +59,7 @@ class LoginAccountTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class LoginAccountTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the ID_ACCOUNT field
@@ -85,6 +85,11 @@ class LoginAccountTableMap extends TableMap
      * the column name for the IDENTIFIER field
      */
     const COL_IDENTIFIER = 'AUTH_ACCOUNTS.IDENTIFIER';
+
+    /**
+     * the column name for the EMAIL field
+     */
+    const COL_EMAIL = 'AUTH_ACCOUNTS.EMAIL';
 
     /**
      * the column name for the ACCESS_TOKEN field
@@ -153,11 +158,11 @@ class LoginAccountTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('IdAccount', 'IdSocial', 'Id', 'AccessToken', 'RefreshToken', 'ExpireDate', 'AccountRole', 'Active', 'Verified', 'RefreshRequest', 'ResetToken', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('idAccount', 'idSocial', 'id', 'accessToken', 'refreshToken', 'expireDate', 'accountRole', 'active', 'verified', 'refreshRequest', 'resetToken', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT, LoginAccountTableMap::COL_ID_PROVIDER, LoginAccountTableMap::COL_IDENTIFIER, LoginAccountTableMap::COL_ACCESS_TOKEN, LoginAccountTableMap::COL_REFRESH_TOKEN, LoginAccountTableMap::COL_EXPIRES, LoginAccountTableMap::COL_ROLE, LoginAccountTableMap::COL_ACTIVE, LoginAccountTableMap::COL_VERIFIED, LoginAccountTableMap::COL_REFRESH_REQUESTED, LoginAccountTableMap::COL_RESET_TOKEN, LoginAccountTableMap::COL_CREATED_AT, LoginAccountTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('ID_ACCOUNT', 'ID_PROVIDER', 'IDENTIFIER', 'ACCESS_TOKEN', 'REFRESH_TOKEN', 'EXPIRES', 'ROLE', 'ACTIVE', 'VERIFIED', 'REFRESH_REQUESTED', 'RESET_TOKEN', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        self::TYPE_PHPNAME       => array('IdAccount', 'IdSocial', 'Id', 'Email', 'AccessToken', 'RefreshToken', 'ExpireDate', 'AccountRole', 'Active', 'Verified', 'RefreshRequest', 'ResetToken', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('idAccount', 'idSocial', 'id', 'email', 'accessToken', 'refreshToken', 'expireDate', 'accountRole', 'active', 'verified', 'refreshRequest', 'resetToken', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT, LoginAccountTableMap::COL_ID_PROVIDER, LoginAccountTableMap::COL_IDENTIFIER, LoginAccountTableMap::COL_EMAIL, LoginAccountTableMap::COL_ACCESS_TOKEN, LoginAccountTableMap::COL_REFRESH_TOKEN, LoginAccountTableMap::COL_EXPIRES, LoginAccountTableMap::COL_ROLE, LoginAccountTableMap::COL_ACTIVE, LoginAccountTableMap::COL_VERIFIED, LoginAccountTableMap::COL_REFRESH_REQUESTED, LoginAccountTableMap::COL_RESET_TOKEN, LoginAccountTableMap::COL_CREATED_AT, LoginAccountTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('ID_ACCOUNT', 'ID_PROVIDER', 'IDENTIFIER', 'EMAIL', 'ACCESS_TOKEN', 'REFRESH_TOKEN', 'EXPIRES', 'ROLE', 'ACTIVE', 'VERIFIED', 'REFRESH_REQUESTED', 'RESET_TOKEN', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -167,11 +172,11 @@ class LoginAccountTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('IdAccount' => 0, 'IdSocial' => 1, 'Id' => 2, 'AccessToken' => 3, 'RefreshToken' => 4, 'ExpireDate' => 5, 'AccountRole' => 6, 'Active' => 7, 'Verified' => 8, 'RefreshRequest' => 9, 'ResetToken' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ),
-        self::TYPE_CAMELNAME     => array('idAccount' => 0, 'idSocial' => 1, 'id' => 2, 'accessToken' => 3, 'refreshToken' => 4, 'expireDate' => 5, 'accountRole' => 6, 'active' => 7, 'verified' => 8, 'refreshRequest' => 9, 'resetToken' => 10, 'createdAt' => 11, 'updatedAt' => 12, ),
-        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT => 0, LoginAccountTableMap::COL_ID_PROVIDER => 1, LoginAccountTableMap::COL_IDENTIFIER => 2, LoginAccountTableMap::COL_ACCESS_TOKEN => 3, LoginAccountTableMap::COL_REFRESH_TOKEN => 4, LoginAccountTableMap::COL_EXPIRES => 5, LoginAccountTableMap::COL_ROLE => 6, LoginAccountTableMap::COL_ACTIVE => 7, LoginAccountTableMap::COL_VERIFIED => 8, LoginAccountTableMap::COL_REFRESH_REQUESTED => 9, LoginAccountTableMap::COL_RESET_TOKEN => 10, LoginAccountTableMap::COL_CREATED_AT => 11, LoginAccountTableMap::COL_UPDATED_AT => 12, ),
-        self::TYPE_FIELDNAME     => array('ID_ACCOUNT' => 0, 'ID_PROVIDER' => 1, 'IDENTIFIER' => 2, 'ACCESS_TOKEN' => 3, 'REFRESH_TOKEN' => 4, 'EXPIRES' => 5, 'ROLE' => 6, 'ACTIVE' => 7, 'VERIFIED' => 8, 'REFRESH_REQUESTED' => 9, 'RESET_TOKEN' => 10, 'created_at' => 11, 'updated_at' => 12, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        self::TYPE_PHPNAME       => array('IdAccount' => 0, 'IdSocial' => 1, 'Id' => 2, 'Email' => 3, 'AccessToken' => 4, 'RefreshToken' => 5, 'ExpireDate' => 6, 'AccountRole' => 7, 'Active' => 8, 'Verified' => 9, 'RefreshRequest' => 10, 'ResetToken' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
+        self::TYPE_CAMELNAME     => array('idAccount' => 0, 'idSocial' => 1, 'id' => 2, 'email' => 3, 'accessToken' => 4, 'refreshToken' => 5, 'expireDate' => 6, 'accountRole' => 7, 'active' => 8, 'verified' => 9, 'refreshRequest' => 10, 'resetToken' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
+        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT => 0, LoginAccountTableMap::COL_ID_PROVIDER => 1, LoginAccountTableMap::COL_IDENTIFIER => 2, LoginAccountTableMap::COL_EMAIL => 3, LoginAccountTableMap::COL_ACCESS_TOKEN => 4, LoginAccountTableMap::COL_REFRESH_TOKEN => 5, LoginAccountTableMap::COL_EXPIRES => 6, LoginAccountTableMap::COL_ROLE => 7, LoginAccountTableMap::COL_ACTIVE => 8, LoginAccountTableMap::COL_VERIFIED => 9, LoginAccountTableMap::COL_REFRESH_REQUESTED => 10, LoginAccountTableMap::COL_RESET_TOKEN => 11, LoginAccountTableMap::COL_CREATED_AT => 12, LoginAccountTableMap::COL_UPDATED_AT => 13, ),
+        self::TYPE_FIELDNAME     => array('ID_ACCOUNT' => 0, 'ID_PROVIDER' => 1, 'IDENTIFIER' => 2, 'EMAIL' => 3, 'ACCESS_TOKEN' => 4, 'REFRESH_TOKEN' => 5, 'EXPIRES' => 6, 'ROLE' => 7, 'ACTIVE' => 8, 'VERIFIED' => 9, 'REFRESH_REQUESTED' => 10, 'RESET_TOKEN' => 11, 'created_at' => 12, 'updated_at' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /** The enumerated values for this table */
@@ -224,6 +229,7 @@ class LoginAccountTableMap extends TableMap
         $this->addPrimaryKey('ID_ACCOUNT', 'IdAccount', 'INTEGER', true, null, null);
         $this->addForeignKey('ID_PROVIDER', 'IdSocial', 'INTEGER', 'AUTH_PROVIDERS', 'ID_PROVIDER', true, null, null);
         $this->addColumn('IDENTIFIER', 'Id', 'VARCHAR', true, 100, null);
+        $this->addColumn('EMAIL', 'Email', 'VARCHAR', false, 100, null);
         $this->addColumn('ACCESS_TOKEN', 'AccessToken', 'VARCHAR', true, 255, null);
         $this->addColumn('REFRESH_TOKEN', 'RefreshToken', 'BINARY', false, 255, null);
         $this->addColumn('EXPIRES', 'ExpireDate', 'TIMESTAMP', false, null, null);
@@ -421,6 +427,7 @@ class LoginAccountTableMap extends TableMap
             $criteria->addSelectColumn(LoginAccountTableMap::COL_ID_ACCOUNT);
             $criteria->addSelectColumn(LoginAccountTableMap::COL_ID_PROVIDER);
             $criteria->addSelectColumn(LoginAccountTableMap::COL_IDENTIFIER);
+            $criteria->addSelectColumn(LoginAccountTableMap::COL_EMAIL);
             $criteria->addSelectColumn(LoginAccountTableMap::COL_ACCESS_TOKEN);
             $criteria->addSelectColumn(LoginAccountTableMap::COL_REFRESH_TOKEN);
             $criteria->addSelectColumn(LoginAccountTableMap::COL_EXPIRES);
@@ -435,6 +442,7 @@ class LoginAccountTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.ID_ACCOUNT');
             $criteria->addSelectColumn($alias . '.ID_PROVIDER');
             $criteria->addSelectColumn($alias . '.IDENTIFIER');
+            $criteria->addSelectColumn($alias . '.EMAIL');
             $criteria->addSelectColumn($alias . '.ACCESS_TOKEN');
             $criteria->addSelectColumn($alias . '.REFRESH_TOKEN');
             $criteria->addSelectColumn($alias . '.EXPIRES');

@@ -10,6 +10,7 @@
         <column name="DEV" phpName="Debug" type="BOOLEAN" defaultValue="true" />
         <column name="CLIENT" type="VARCHAR" size="100" required="true" />
         <column name="SECRET" type="BINARY" sqlType="VARBINARY(100)" size="100" required="true" />
+        <column name="PARENT_REF" phpName="Parent" type="VARCHAR" size="50" />
         <column name="ACTIVE" type="BOOLEAN" defaultValue="true" />
         <index name="idx_providers">
             <index-column name="NAME" />
@@ -28,6 +29,7 @@
         <column name="ID_ACCOUNT" type="INTEGER" primaryKey="true" autoIncrement="true" />
         <column name="ID_PROVIDER" phpName="IdSocial" type="INTEGER" required="true" />
         <column name="IDENTIFIER" phpName="Id" type="VARCHAR" size="100" required="true" />
+        <column name="EMAIL" phpName="Email" type="VARCHAR" size="100" />
         <column name="ACCESS_TOKEN" phpName="AccessToken" type="VARCHAR" size="255" required="true" />
         <column name="REFRESH_TOKEN" phpName="RefreshToken" type="BINARY" sqlType="VARBINARY(255)" size="255" />
         <column name="EXPIRES" phpName="ExpireDate" type="TIMESTAMP" />

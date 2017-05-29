@@ -30,8 +30,11 @@ class TestAuthController extends AUTHController {
      * @visible false
      */
     public function logout() {
-        Security::getInstance()->updateUser(null);
-        Security::getInstance()->updateSession(true);
+        $user = unserialize(Security::getInstance()->getUser());
+        if(null !== $user) {
+            $user->closeSession();
+        }
+
         return $this->redirect(Config::getParam('logout.action'));
     }
 }

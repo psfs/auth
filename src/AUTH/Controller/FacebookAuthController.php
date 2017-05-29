@@ -1,5 +1,6 @@
 <?php
 namespace AUTH\Controller;
+
 use AUTH\Services\FacebookService;
 use PSFS\base\Request;
 

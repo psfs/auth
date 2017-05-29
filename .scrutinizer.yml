@@ -1,0 +1,26 @@
+checks:
+  php: true
+
+build:
+  tests:
+    override:
+      -
+        command: 'vendor/bin/phpunit --coverage-clover=psfs-coverage'
+        coverage:
+          file: 'psfs-coverage'
+          format: 'clover'
+  environment:
+    php: '7.1'
+
+filter:
+  excluded_paths:
+    - src/bin/*
+    - src/command/*
+    - src/test/*
+    - src/public/*
+    - src/templates/*
+    - locale/*
+    - cache/*
+    - config/*
+    - logs/*
+    - vendor/*

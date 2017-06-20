@@ -24,7 +24,7 @@ class LoginAccountQuery extends BaseLoginAccountQuery
      * @param LoginProvider $provider
      * @return $this|LoginAccountQuery
      */
-    private function filterByIdentifierAndProvider($identifier, LoginProvider $provider) {
+    private static function filterByIdentifierAndProvider($identifier, LoginProvider $provider) {
         return self::create()
             ->filterById($identifier)
             ->filterByActive(true)

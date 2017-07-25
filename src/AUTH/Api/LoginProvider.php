@@ -15,7 +15,7 @@ use AUTH\Models\Map\LoginProviderTableMap;
 class LoginProvider extends LoginProviderBaseApi
 {
     public static function getListNameSql() {
-        $sql = 'CONCAT(';
+        $sql = 'CONCAT("[", UPPER(' . LoginProviderTableMap::COL_CUSTOMER_CODE . '), "] ", ';
         $closeSql = '';
         foreach(LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_NAME) as $index => $value) {
             $sql .= 'IF(' . LoginProviderTableMap::COL_NAME . ' = ' . $index . ', "' . ucfirst($value) . '", ';

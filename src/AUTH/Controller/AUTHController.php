@@ -1,5 +1,6 @@
 <?php
 namespace AUTH\Controller;
+
 use AUTH\Controller\base\AUTHBaseController;
 use AUTH\Exception\AuthRedirectNotDefinedException;
 use AUTH\Services\AUTHService;

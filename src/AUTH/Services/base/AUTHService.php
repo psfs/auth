@@ -92,10 +92,10 @@ abstract class AUTHService extends Service {
     {
         parent::init();
         $this->debug = Config::getParam('debug', false);
-        $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug);
+        $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug, Config::getParam('psfs.auth.customer_code'));
         if(null === $this->provider) {
             Logger::log($this->getProviderName() . ' not defined for ' . ($this->debug) ? ' debug mode' : ' production mode');
-            $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug);
+            $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, Config::getParam('psfs.auth.customer_code'));
             if(null === $this->provider) {
                 throw new AuthProviderNotConfiguredException(_('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }

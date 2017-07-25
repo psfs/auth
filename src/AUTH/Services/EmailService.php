@@ -32,7 +32,7 @@ class EmailService extends AUTHService
      */
     public function getClient($callbackUri, $flow = self::FLOW_LOGIN)
     {
-        return LoginProviderQuery::getProvider($this->getProviderName(), Config::getParam('debug'));
+        return LoginProviderQuery::getProvider($this->getProviderName(), Config::getParam('debug'), Config::getParam('psfs.auth.customer_code'));
     }
 
     /**

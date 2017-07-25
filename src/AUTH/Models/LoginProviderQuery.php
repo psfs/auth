@@ -19,23 +19,31 @@ class LoginProviderQuery extends BaseLoginProviderQuery
     /**
      * @param $providerName
      * @param bool $devMode
+     * @param string $customerCode
      * @return LoginProvider
      */
-    public static function getProvider($providerName, $devMode = true) {
+    public static function getProvider($providerName, $devMode = true, $customerCode = null) {
         return self::create()
             ->filterByName($providerName)
             ->filterByDebug($devMode)
+            ->_if(null !== $customerCode)
+                ->filterByCustomerCode(strtolower($customerCode))
+            ->_endif()
             ->findOne();
     }
 
     /**
      * @param bool $debug
+     * @param string $customerCode
      * @return LoginProvider[]|\Propel\Runtime\Collection\ObjectCollection
      */
-    public static function getActiveProviders($debug = false) {
+    public static function getActiveProviders($debug = false, $customerCode = null) {
         return self::create()
             ->filterByDebug($debug)
             ->filterByActive(true)
+            ->_if(null !== $customerCode)
+                ->filterByCustomerCode(strtolower($customerCode))
+            ->_endif()
             ->find();
     }
 }

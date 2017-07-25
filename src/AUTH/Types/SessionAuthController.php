@@ -5,14 +5,14 @@ use AUTH\Models\LoginSessionQuery;
 use AUTH\Types\Interfaces\SessionAuthInterface;
 use PSFS\base\config\Config;
 use PSFS\base\dto\JsonResponse;
-use PSFS\base\types\Api;
+use PSFS\base\types\AuthController;
 
 /**
- * Class SessionAuthApi
- * @package AUTH\Type
+ * Class SessionAuthController
+ * @package AUTH\Types
  */
-abstract class SessionAuthApi extends Api implements SessionAuthInterface
-{
+abstract class SessionAuthController extends AuthController implements SessionAuthInterface {
+
     use SessionAuthTrait;
 
     public function init()

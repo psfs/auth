@@ -18,10 +18,12 @@ CREATE TABLE `AUTH_PROVIDERS`
     `SECRET` VARBINARY(100) NOT NULL,
     `PARENT_REF` VARCHAR(50),
     `ACTIVE` TINYINT(1) DEFAULT 1,
+    `CUSTOMER_CODE` VARCHAR(50),
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `ACCOUNTS` INTEGER,
     PRIMARY KEY (`ID_PROVIDER`),
+    UNIQUE INDEX `inq_psfs_auth_provider` (`NAME`, `CLIENT`, `CUSTOMER_CODE`),
     INDEX `idx_providers` (`NAME`, `ACTIVE`, `DEV`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login providers';
 

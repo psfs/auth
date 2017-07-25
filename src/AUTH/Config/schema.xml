@@ -12,11 +12,17 @@
         <column name="SECRET" type="BINARY" sqlType="VARBINARY(100)" size="100" required="true" />
         <column name="PARENT_REF" phpName="Parent" type="VARCHAR" size="50" />
         <column name="ACTIVE" type="BOOLEAN" defaultValue="true" />
+        <column name="CUSTOMER_CODE" phpName="CustomerCode" type="VARCHAR" size="50" required="false" />
         <index name="idx_providers">
             <index-column name="NAME" />
             <index-column name="ACTIVE" />
             <index-column name="DEV" />
         </index>
+        <unique name="inq_psfs_auth_provider">
+            <unique-column name="NAME"/>
+            <unique-column name="CLIENT"/>
+            <unique-column name="CUSTOMER_CODE"/>
+        </unique>
         <behavior name="query_cache" />
         <behavior name="timestampable" />
         <behavior name="aggregate_column">

@@ -1,6 +1,10 @@
 <?php
-namespace AUTH\Types\Interfaces;
+namespace AUTH\Types\Base;
 
+/**
+ * Interface SessionAuthInterface
+ * @package AUTH\Types\Interfaces
+ */
 interface SessionAuthInterface {
     /**
      * @return mixed

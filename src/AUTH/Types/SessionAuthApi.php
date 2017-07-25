@@ -2,7 +2,7 @@
 namespace AUTH\Types;
 
 use AUTH\Models\LoginSessionQuery;
-use AUTH\Types\Interfaces\SessionAuthInterface;
+use AUTH\Types\Base\SessionAuthInterface;
 use PSFS\base\config\Config;
 use PSFS\base\dto\JsonResponse;
 use PSFS\base\types\Api;

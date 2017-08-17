@@ -107,7 +107,7 @@ class EmailService extends AUTHService
         $iv = self::strtohex($identifier);
         $key = self::strtohex(Config::getParam('auth.email.phrase', 'psfs'));
         $method = Config::getParam('auth.email.method', 'aes-128-cbc');
-        return bin2hex(openssl_encrypt($password, $method, $key, OPENSSL_RAW_DATA, $iv));
+        return bin2hex(@openssl_encrypt($password, $method, $key, OPENSSL_RAW_DATA, $iv));
     }
 
 

@@ -8,6 +8,15 @@ use PSFS\base\Request;
  * @package AUTH\Types
  */
 trait SessionAuthTrait {
+
+    /**
+     * @var string
+     * @header Authorization
+     * @label Token de autenticación REST
+     * @default Bearer
+     */
+    protected $token;
+
     /**
      * @var bool
      */

@@ -51,7 +51,7 @@ class AuthUserDto extends Dto {
      */
     public $raw;
     /**
-     * @var LoginAccount
+     * @var \AUTH\Models\LoginAccount
      */
     public $account;
     /**

@@ -112,10 +112,12 @@ class GoogleService extends AUTHService {
         $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false));
         $verification = $client->verifyIdToken($idToken);
         $response = new GoogleCheckDto();
-        $response->fromArray($verification);
-        $response->sub = (string)$response->sub;
-        $response->iat = (string)$response->iat;
-        $response->exp = (string)$response->exp;
+        if(false !== $response){
+            $response->fromArray($verification);
+            $response->sub = (string)$response->sub;
+            $response->iat = (string)$response->iat;
+            $response->exp = (string)$response->exp;
+        }
         return $response;
     }
 }

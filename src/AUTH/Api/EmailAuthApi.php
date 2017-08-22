@@ -10,6 +10,7 @@ use PSFS\base\Security;
 /**
  * Class EmailAuthApi
  * @package AUTH\Api
+ * @Api Email
  */
 class EmailAuthApi extends LoginProviderAuthBase {
     /**
@@ -38,7 +39,7 @@ class EmailAuthApi extends LoginProviderAuthBase {
     /**
      * @label Registra a un usuario por email
      * @POST
-     * @route /register/email
+     * @route /register/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function register() {
@@ -49,7 +50,7 @@ class EmailAuthApi extends LoginProviderAuthBase {
      * @label Hace login de un usuario por email
      * @POST
      * @param integer $flow
-     * @route /auth/email
+     * @route /auth/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data=\AUTH\Dto\AuthUserDto)
      */
     public function login($flow = EmailService::FLOW_LOGIN) {

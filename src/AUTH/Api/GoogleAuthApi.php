@@ -6,6 +6,11 @@ use AUTH\Services\GoogleService;
 use PSFS\base\dto\JsonResponse;
 use PSFS\base\Request;
 
+/**
+ * Class GoogleAuthApi
+ * @package AUTH\Api
+ * @Api Google
+ */
 class GoogleAuthApi extends LoginProviderAuthBase {
     /**
      * @Injectable
@@ -16,7 +21,7 @@ class GoogleAuthApi extends LoginProviderAuthBase {
     /**
      * @label Solicitar login mediante Google Sign In
      * @GET
-     * @route /auth/google
+     * @route /auth/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function requestLogin() {
@@ -26,7 +31,7 @@ class GoogleAuthApi extends LoginProviderAuthBase {
     /**
      * @label Callback del flujo OAuth para el login
      * @GET
-     * @route /auth/google/callback
+     * @route /auth/{__API__}/callback
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function loginCallback() {
@@ -36,7 +41,7 @@ class GoogleAuthApi extends LoginProviderAuthBase {
     /**
      * @label Solicitar registro mediane Google Sign In
      * @GET
-     * @route /register/google
+     * @route /register/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function requestRegistration() {
@@ -46,7 +51,7 @@ class GoogleAuthApi extends LoginProviderAuthBase {
     /**
      * @label Callback del flujo OAuth para el registro
      * @GET
-     * @route /register/google/callback
+     * @route /register/{__API__}/callback
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function registerCallback() {

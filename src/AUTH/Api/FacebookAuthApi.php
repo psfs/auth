@@ -8,6 +8,7 @@ use PSFS\base\Request;
 /**
  * Class FacebookAuthApi
  * @package AUTH\Api
+ * @Api Facebook
  */
 class FacebookAuthApi extends LoginProviderAuthBase {
     /**
@@ -19,7 +20,7 @@ class FacebookAuthApi extends LoginProviderAuthBase {
     /**
      * @label Solicitar login mediante Facebook
      * @GET
-     * @route /auth/Facebook
+     * @route /auth/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function requestLogin() {
@@ -29,7 +30,7 @@ class FacebookAuthApi extends LoginProviderAuthBase {
     /**
      * @label Callback del flujo OAuth para el login
      * @GET
-     * @route /auth/Facebook/callback
+     * @route /auth/{__API__}/callback
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function loginCallback() {
@@ -39,7 +40,7 @@ class FacebookAuthApi extends LoginProviderAuthBase {
     /**
      * @label Solicitar registro mediante Facebook
      * @GET
-     * @route /register/Facebook
+     * @route /register/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function requestRegistration() {
@@ -49,7 +50,7 @@ class FacebookAuthApi extends LoginProviderAuthBase {
     /**
      * @label Callback del flujo OAuth para el registro
      * @GET
-     * @route /register/Facebook/callback
+     * @route /register/{__API__}/callback
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function registerCallback() {

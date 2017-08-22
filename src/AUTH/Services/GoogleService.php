@@ -2,6 +2,7 @@
 namespace AUTH\Services;
 
 use AUTH\Dto\AuthUserDto;
+use AUTH\Dto\GoogleCheckDto;
 use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
@@ -101,5 +102,17 @@ class GoogleService extends AUTHService {
         }
 
         return self::$client;
+    }
+
+    /**
+     * @param string $idToken
+     * @return GoogleCheckDto
+     */
+    public function verifyIdToken($idToken) {
+        $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false));
+        $verification = $client->verifyIdToken($idToken);
+        $response = new GoogleCheckDto();
+        $response->fromArray($verification);
+        return $response;
     }
 }

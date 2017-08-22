@@ -113,6 +113,9 @@ class GoogleService extends AUTHService {
         $verification = $client->verifyIdToken($idToken);
         $response = new GoogleCheckDto();
         $response->fromArray($verification);
+        $response->sub = (string)$response->sub;
+        $response->iat = (string)$response->iat;
+        $response->exp = (string)$response->exp;
         return $response;
     }
 }

@@ -1,11 +1,10 @@
 <?php
 namespace AUTH\Dto;
 
-use AUTH\Models\LoginAccount;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\LoginProvider;
 use AUTH\Models\LoginSessionQuery;
-use AUTH\Services\AUTHService;
+use AUTH\Services\base\AUTHService;
 use PSFS\base\dto\Dto;
 use PSFS\base\Security;
 

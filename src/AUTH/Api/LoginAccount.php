@@ -6,6 +6,7 @@ use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\Map\LoginAccountTableMap;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\AUTHService;
+use AUTH\Services\EmailService;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use PSFS\base\dto\JsonResponse;
 
@@ -49,7 +50,7 @@ class LoginAccount extends LoginAccountBaseApi
         $account = self::_get($IdAccount);
         $requested = false;
         if(null !== $account && $account->getAccountProvider()->getName() === LoginProviderTableMap::COL_NAME_EMAIL) {
-            $requested = AUTHService::getInstance()->resetAccount($account);
+            $requested = EmailService::getInstance()->resetAccount($account);
         }
         return $this->json(new JsonResponse($requested, $requested), $requested ? 200 : 400);
     }
@@ -64,8 +65,9 @@ class LoginAccount extends LoginAccountBaseApi
      * @return \PSFS\base\dto\JsonResponse(data=boolean)
      */
     public function logout($IdAccount, $token) {
+        /** @var \AUTH\Models\LoginAccount $account */
         $account = self::_get($IdAccount);
-        $loggedOut = AUTHService::getInstance()->logoutSession($account, $token);
+        $loggedOut = EmailService::getInstance()->logoutSession($account, $token);
         return $this->json(new JsonResponse($loggedOut, $loggedOut), $loggedOut ? 200 : 400);
     }
 

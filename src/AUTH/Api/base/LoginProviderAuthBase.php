@@ -20,8 +20,7 @@ abstract class LoginProviderAuthBase extends CustomApi {
     }
 
     /**
-     * @Injectable
-     * @var \AUTH\Services\AUTHService
+     * @var \AUTH\Services\base\AUTHService
      */
     protected $auth;
 

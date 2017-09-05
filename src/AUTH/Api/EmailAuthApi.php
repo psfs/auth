@@ -75,7 +75,7 @@ class EmailAuthApi extends LoginProviderAuthBase {
         $data = $this->getRequest()->getData();
         $code = 200;
         try {
-            $reset = $this->auth->resetPassword($data);
+            $reset = $this->srv->resetPassword($data);
         } catch(\Exception $e) {
             $reset = false;
             $code = $e->getCode();

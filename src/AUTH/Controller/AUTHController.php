@@ -3,7 +3,7 @@ namespace AUTH\Controller;
 
 use AUTH\Controller\base\AUTHBaseController;
 use AUTH\Exception\AuthRedirectNotDefinedException;
-use AUTH\Services\AUTHService;
+use AUTH\Services\EmailService;
 use PSFS\base\config\Config;
 use PSFS\base\dto\JsonResponse;
 use PSFS\base\Logger;
@@ -72,7 +72,7 @@ class AUTHController extends AUTHBaseController {
         $data = $this->getRequest()->getData();
         $code = 200;
         try {
-            $reset = AUTHService::getInstance()->resetPassword($data);
+            $reset = EmailService::getInstance()->resetPassword($data);
         } catch(\Exception $e) {
             $reset = false;
             $code = $e->getCode();

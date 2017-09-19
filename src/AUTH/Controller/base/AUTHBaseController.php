@@ -15,8 +15,7 @@ abstract class AUTHBaseController extends Controller {
     const DOMAIN = 'AUTH';
 
     /**
-    * @Autoload
-    * @var \AUTH\Services\AUTHService
+    * @var \AUTH\Services\base\AUTHService
     */
     protected $srv;
 

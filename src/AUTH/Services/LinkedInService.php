@@ -29,7 +29,7 @@ class LinkedInService extends AUTHService {
             self::$client = new LinkedIn([
                 'api_key' => $this->provider->getClient(),
                 'api_secret' => $this->provider->getSecret(),
-                'callback_url' => Router::getInstance()->getRoute($oauth_url, true),
+                'callback_url' => $this->base . Router::getInstance()->getRoute($oauth_url),
             ]);
         }
 

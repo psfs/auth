@@ -6,6 +6,7 @@ use AUTH\Dto\GoogleCheckDto;
 use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
+use AUTH\Types\GoogleClientWrapper;
 use PSFS\base\config\Config;
 use PSFS\base\Router;
 
@@ -83,7 +84,7 @@ class GoogleService extends AUTHService {
     /**
      * @param string $callbackUri
      * @param integer $flow
-     * @return \Google_Client
+     * @return GoogleClientWrapper
      */
     public function getClient($callbackUri, $flow = self::FLOW_LOGIN)
     {
@@ -96,7 +97,7 @@ class GoogleService extends AUTHService {
             if(self::FLOW_REGISTER === $flow) {
                 $config['approval_prompt'] = Config::getParam('google.prompt', false);
             }
-            self::$client = new \Google_Client($config);
+            self::$client = new GoogleClientWrapper($config);
             self::$client->setAccessType(Config::getParam('google.accessType', 'offline'));
             self::$client->setScopes($this->getScopes());
         }
@@ -110,6 +111,9 @@ class GoogleService extends AUTHService {
      */
     public function verifyIdToken($idToken) {
         $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false));
+        if(Config::getParam('psfs.auth.google.verifyaud')) {
+            $client->setAud($this->provider->getClient());
+        }
         $verification = $client->verifyIdToken($idToken);
         $response = new GoogleCheckDto();
         if(false !== $verification){

@@ -126,13 +126,13 @@ class EmailService extends AUTHService
         $access_token = self::encryptPassword($identifier, $auth['password']);
         $userExists = LoginAccountQuery::existsIdentifierForProvider($identifier, $this->provider, true);
         if(self::FLOW_REGISTER === $flow && $userExists) {
-            throw new EmailAlreadyExistsException(_('Email en uso'), 400);
+            throw new EmailAlreadyExistsException(_('Email en uso'), 403);
         } elseif ($flow === self::FLOW_LOGIN && !$userExists) {
-            throw new EmailNotExistsException(_('El email no existe'), 400);
+            throw new EmailNotExistsException(_('El email no existe'), 404);
         } elseif($flow === self::FLOW_LOGIN) {
             $userExistsWithPassword = LoginAccountQuery::existsIdentifierWithPassword($identifier, $access_token, $this->provider);
             if(!$userExistsWithPassword) {
-                throw new EmailNotExistsException(_('Contraseña no válida'), 400);
+                throw new EmailNotExistsException(_('Contraseña no válida'), 401);
             }
         }
         $user = new AuthUserDto();

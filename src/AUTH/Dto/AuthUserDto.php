@@ -11,50 +11,67 @@ use PSFS\base\Security;
 class AuthUserDto extends Dto {
     /**
      * @var string
+     * @required
+     * @label External identifier from the provider
      */
     public $id;
     /**
      * @var string
+     * @required
+     * @label Complete name or alias from the external provider
      */
     public $name;
     /**
      * @var string
+     * @required
+     * @label First name from the external provider
      */
     public $first_name;
     /**
      * @var string
+     * @label Last name from the external provider
      */
     public $last_name;
     /**
      * @var string
+     * @label Photo url from the external provider
      */
     public $photo;
     /**
      * @var string
+     * @label Email from the external provider
      */
     public $email;
     /**
      * @var string
+     * @required
+     * @label Access token from the external provider
      */
     public $access_token;
     /**
      * @var string
+     * @label REfresh token for some cases
      */
     public $refresh_token;
     /**
      * @var \DateTime
+     * @label Expiration date for the access token
      */
     public $expires;
     /**
      * @var array
+     * @label Raw data from the provider request
      */
     public $raw;
     /**
      * @var \AUTH\Models\LoginAccount
+     * @label Account related with the AuthUserDto
      */
     public $account;
     /**
      * @var string
+     * @required
+     * @label Session token to authenticate the API requests
      */
     public $session_token;
 

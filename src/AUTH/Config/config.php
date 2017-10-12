@@ -8,9 +8,9 @@ $serviceContainer->checkVersion('2.0.0-dev');
 $serviceContainer->setAdapterClass('AUTH', 'mysql');
 $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
 $manager->setConfiguration(array(
-    'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host') . ';port=' . \PSFS\base\config\Config::getParam('db.port') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name') . '',
-    'user' => \PSFS\base\config\Config::getParam('db.user'),
-    'password' => \PSFS\base\config\Config::getParam('db.password'),
+    'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host', null, 'auth') . ';port=' . \PSFS\base\config\Config::getParam('db.port', null, 'auth') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name', null, 'auth') . '',
+    'user' => \PSFS\base\config\Config::getParam('db.user', null, 'auth'),
+    'password' => \PSFS\base\config\Config::getParam('db.password', null, 'auth'),
     'classname' => 'Propel\\Runtime\\Connection\\PropelPDO',
     'model_paths' => array(
         0 => 'src',
@@ -23,9 +23,9 @@ $serviceContainer->setConnectionManager('AUTH', $manager);
 $serviceContainer->setAdapterClass('debugAUTH', 'mysql');
 $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
 $manager->setConfiguration(array(
-    'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host') . ';port=' . \PSFS\base\config\Config::getParam('db.port') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name') . '',
-    'user' => \PSFS\base\config\Config::getParam('db.user'),
-    'password' => \PSFS\base\config\Config::getParam('db.password'),
+    'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host', null, 'auth') . ';port=' . \PSFS\base\config\Config::getParam('db.port', null, 'auth') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name', null, 'auth') . '',
+    'user' => \PSFS\base\config\Config::getParam('db.user', null, 'auth'),
+    'password' => \PSFS\base\config\Config::getParam('db.password', null, 'auth'),
     'classname' => 'Propel\\Runtime\\Connection\\DebugPDO',
     'model_paths' => array(
         0 => 'src',

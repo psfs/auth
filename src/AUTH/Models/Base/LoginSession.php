@@ -1504,7 +1504,7 @@ abstract class LoginSession implements ActiveRecordInterface
      */
     public function getAccountSession(ConnectionInterface $con = null)
     {
-        if ($this->aAccountSession === null && ($this->id_account !== null)) {
+        if ($this->aAccountSession === null && ($this->id_account != 0)) {
             $this->aAccountSession = ChildLoginAccountQuery::create()->findPk($this->id_account, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference

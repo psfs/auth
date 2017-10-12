@@ -2022,7 +2022,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function getAccountProvider(ConnectionInterface $con = null)
     {
-        if ($this->aAccountProvider === null && ($this->id_provider !== null)) {
+        if ($this->aAccountProvider === null && ($this->id_provider != 0)) {
             $this->aAccountProvider = ChildLoginProviderQuery::create()->findPk($this->id_provider, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference

@@ -6,6 +6,10 @@ use PSFS\base\dto\JsonResponse;
 use PSFS\base\Logger;
 use PSFS\base\Security;
 
+/**
+ * Class EmailAuthController
+ * @package AUTH\Controller
+ */
 class EmailAuthController extends AUTHController {
 
     /**

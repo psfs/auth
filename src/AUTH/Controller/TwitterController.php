@@ -4,6 +4,10 @@ namespace AUTH\Controller;
 use AUTH\Services\TwitterService;
 use PSFS\base\Request;
 
+/**
+ * Class TwitterController
+ * @package AUTH\Controller
+ */
 class TwitterController extends AUTHController {
     /**
      * @Injectable

@@ -3,6 +3,10 @@ namespace AUTH\Dto;
 
 use PSFS\base\dto\Dto;
 
+/**
+ * Class GoogleCheckDto
+ * @package AUTH\Dto
+ */
 class GoogleCheckDto extends Dto {
     /**
      * @var string

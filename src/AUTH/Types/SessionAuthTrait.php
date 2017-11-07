@@ -55,10 +55,8 @@ trait SessionAuthTrait {
     private static function getAuthorizationHeader()
     {
         $headers = null;
-        if (null !== Request::getInstance()->getHeader('Authorization')) {
-            $headers = trim(Request::getInstance()->getHeader('Authorization'));
-        } else if (null !== Request::getInstance()->getHeader('HTTP_AUTHORIZATION')) { //Nginx or fast CGI
-            $headers = trim(Request::getInstance()->getHeader("HTTP_AUTHORIZATION"));
+        if (null !== Request::header('Authorization')) {
+            $headers = trim(Request::header('Authorization'));
         } elseif (function_exists('apache_request_headers')) {
             $requestHeaders = apache_request_headers();
             // Server-side fix for bug in old Android versions (a nice side-effect of this fix means we don't care about capitalization for Authorization)

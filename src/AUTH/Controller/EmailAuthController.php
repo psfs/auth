@@ -61,4 +61,21 @@ class EmailAuthController extends AUTHController {
         return $this->json(new JsonResponse($user, $success), $success ? 200 : 400);
     }
 
+    /**
+     * @POST
+     * @route /auth/password/reset
+     * @return string JSON
+     */
+    public function resetPassword() {
+        $data = $this->getRequest()->getData();
+        $code = 200;
+        try {
+            $reset = $this->srv->resetPassword($data);
+        } catch(\Exception $e) {
+            $reset = false;
+            $code = $e->getCode();
+        }
+        return $this->json(new JsonResponse($reset, $reset), $code);
+    }
+
 }

@@ -62,21 +62,4 @@ class AUTHController extends AUTHBaseController {
         }
         return $this->getRequest()->redirect($this->srv->base . $this->getRoute($route));
     }
-
-    /**
-     * @POST
-     * @route /auth/password/reset
-     * @return string JSON
-     */
-    public function resetPassword() {
-        $data = $this->getRequest()->getData();
-        $code = 200;
-        try {
-            $reset = EmailService::getInstance()->resetPassword($data);
-        } catch(\Exception $e) {
-            $reset = false;
-            $code = $e->getCode();
-        }
-        return $this->json(new JsonResponse($reset, $reset), $code);
-    }
 }

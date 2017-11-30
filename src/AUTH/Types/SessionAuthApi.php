@@ -2,6 +2,7 @@
 namespace AUTH\Types;
 
 use AUTH\Models\LoginSessionQuery;
+use AUTH\Models\Map\LoginAccountTableMap;
 use AUTH\Types\Base\SessionAuthInterface;
 use PSFS\base\config\Config;
 use PSFS\base\dto\JsonResponse;
@@ -39,6 +40,19 @@ abstract class SessionAuthApi extends Api implements SessionAuthInterface
                     return $this->json(new JsonResponse(_('Not authorized, token not valid'), false), 401);
                 } elseif(null !== $session) {
                     $this->account = $session->getAccountSession();
+                    if($this->account->getAccountRole() !== LoginAccountTableMap::COL_ROLE_USER) {
+                        $profile = null;
+                        switch($this->account->getAccountRole())
+                        {
+                            case LoginAccountTableMap::COL_ROLE_MANAGER:
+                                $profile = Security::MANAGER_ID_TOKEN;
+                                break;
+                            case LoginAccountTableMap::COL_ROLE_ADMIN:
+                                $profile = Security::ADMIN_ID_TOKEN;
+                                break;
+                        }
+                        Security::getInstance()->updateAdmin($this->account->getEmail(), $profile);
+                    }
                 } elseif(!$this->security->isAdmin()) {
                     return $this->json(new JsonResponse(_('Not authorized, restricted zone'), false), 412);
                 }

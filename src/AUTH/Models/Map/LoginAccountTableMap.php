@@ -259,6 +259,13 @@ class LoginAccountTableMap extends TableMap
     1 => ':ID_PROVIDER',
   ),
 ), null, null, null, false);
+        $this->addRelation('LoginAccountPassword', '\\AUTH\\Models\\LoginAccountPassword', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':ID_ACCOUNT',
+    1 => ':ID_ACCOUNT',
+  ),
+), null, null, 'LoginAccountPasswords', false);
         $this->addRelation('LoginSession', '\\AUTH\\Models\\LoginSession', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

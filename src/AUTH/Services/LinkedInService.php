@@ -2,10 +2,10 @@
 namespace AUTH\Services;
 
 use AUTH\Dto\AuthUserDto;
-use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
 use LinkedIn\LinkedIn;
+use PSFS\base\exception\GeneratorException;
 use PSFS\base\Router;
 
 class LinkedInService extends AUTHService {
@@ -50,9 +50,9 @@ class LinkedInService extends AUTHService {
 
     /**
      * @param array $query
-     * @param  integer $flow
+     * @param int $flow
      * @return AuthUserDto|null
-     * @throws InvalidCallbackParametersException
+     * @throws GeneratorException
      */
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
     {
@@ -67,8 +67,9 @@ class LinkedInService extends AUTHService {
 
     /**
      * @param array $auth
-     * @param integer $flow
+     * @param int $flow
      * @return AuthUserDto|null
+     * @throws GeneratorException
      */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {

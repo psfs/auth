@@ -1,2 +1,4 @@
 # auth
-Auth libraries for PSFS
+Librería de autenticación OAuth para PSFS
+
+

@@ -68,6 +68,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery rightJoinWithAccountProvider() Adds a RIGHT JOIN clause and with to the query using the AccountProvider relation
  * @method     ChildLoginAccountQuery innerJoinWithAccountProvider() Adds a INNER JOIN clause and with to the query using the AccountProvider relation
  *
+ * @method     ChildLoginAccountQuery leftJoinLoginAccountPassword($relationAlias = null) Adds a LEFT JOIN clause to the query using the LoginAccountPassword relation
+ * @method     ChildLoginAccountQuery rightJoinLoginAccountPassword($relationAlias = null) Adds a RIGHT JOIN clause to the query using the LoginAccountPassword relation
+ * @method     ChildLoginAccountQuery innerJoinLoginAccountPassword($relationAlias = null) Adds a INNER JOIN clause to the query using the LoginAccountPassword relation
+ *
+ * @method     ChildLoginAccountQuery joinWithLoginAccountPassword($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the LoginAccountPassword relation
+ *
+ * @method     ChildLoginAccountQuery leftJoinWithLoginAccountPassword() Adds a LEFT JOIN clause and with to the query using the LoginAccountPassword relation
+ * @method     ChildLoginAccountQuery rightJoinWithLoginAccountPassword() Adds a RIGHT JOIN clause and with to the query using the LoginAccountPassword relation
+ * @method     ChildLoginAccountQuery innerJoinWithLoginAccountPassword() Adds a INNER JOIN clause and with to the query using the LoginAccountPassword relation
+ *
  * @method     ChildLoginAccountQuery leftJoinLoginSession($relationAlias = null) Adds a LEFT JOIN clause to the query using the LoginSession relation
  * @method     ChildLoginAccountQuery rightJoinLoginSession($relationAlias = null) Adds a RIGHT JOIN clause to the query using the LoginSession relation
  * @method     ChildLoginAccountQuery innerJoinLoginSession($relationAlias = null) Adds a INNER JOIN clause to the query using the LoginSession relation
@@ -78,7 +88,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountQuery rightJoinWithLoginSession() Adds a RIGHT JOIN clause and with to the query using the LoginSession relation
  * @method     ChildLoginAccountQuery innerJoinWithLoginSession() Adds a INNER JOIN clause and with to the query using the LoginSession relation
  *
- * @method     \AUTH\Models\LoginProviderQuery|\AUTH\Models\LoginSessionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \AUTH\Models\LoginProviderQuery|\AUTH\Models\LoginAccountPasswordQuery|\AUTH\Models\LoginSessionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLoginAccount findOne(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query
  * @method     ChildLoginAccount findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query, or a new ChildLoginAccount object populated from the query conditions when no match is found
@@ -854,6 +864,79 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         return $this
             ->joinAccountProvider($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'AccountProvider', '\AUTH\Models\LoginProviderQuery');
+    }
+
+    /**
+     * Filter the query by a related \AUTH\Models\LoginAccountPassword object
+     *
+     * @param \AUTH\Models\LoginAccountPassword|ObjectCollection $loginAccountPassword the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function filterByLoginAccountPassword($loginAccountPassword, $comparison = null)
+    {
+        if ($loginAccountPassword instanceof \AUTH\Models\LoginAccountPassword) {
+            return $this
+                ->addUsingAlias(LoginAccountTableMap::COL_ID_ACCOUNT, $loginAccountPassword->getIdAccount(), $comparison);
+        } elseif ($loginAccountPassword instanceof ObjectCollection) {
+            return $this
+                ->useLoginAccountPasswordQuery()
+                ->filterByPrimaryKeys($loginAccountPassword->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByLoginAccountPassword() only accepts arguments of type \AUTH\Models\LoginAccountPassword or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the LoginAccountPassword relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildLoginAccountQuery The current query, for fluid interface
+     */
+    public function joinLoginAccountPassword($relationAlias = null, $joinType = 'INNER JOIN')
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('LoginAccountPassword');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'LoginAccountPassword');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the LoginAccountPassword relation LoginAccountPassword object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AUTH\Models\LoginAccountPasswordQuery A secondary query class using the current class as primary query
+     */
+    public function useLoginAccountPasswordQuery($relationAlias = null, $joinType = 'INNER JOIN')
+    {
+        return $this
+            ->joinLoginAccountPassword($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'LoginAccountPassword', '\AUTH\Models\LoginAccountPasswordQuery');
     }
 
     /**

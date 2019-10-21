@@ -6,19 +6,22 @@
     </vendor>
     <table name="PROVIDERS" phpName="LoginProvider" description="Table with the login providers">
         <column name="ID_PROVIDER" type="INTEGER" primaryKey="true" autoIncrement="true" />
-        <column name="NAME" type="ENUM" valueSet="EMAIL,GOOGLE,FACEBOOK,TWITTER,LINKEDIN" required="true" />
-        <column name="DEV" phpName="Debug" type="BOOLEAN" defaultValue="true" />
-        <column name="CLIENT" type="VARCHAR" size="100" required="true" />
-        <column name="SECRET" type="BINARY" sqlType="VARBINARY(100)" size="100" required="true" />
+        <column name="NAME" type="ENUM" valueSet="EMAIL,GOOGLE,FACEBOOK,TWITTER,LINKEDIN,LIVE" required="true" description="Different kind of oauth social network"/>
+        <column name="DEV" phpName="Debug" type="BOOLEAN" defaultValue="true" description="Flag to define if the provider is for dev purposes"/>
+        <column name="CLIENT" type="VARCHAR" size="100" required="true" description="Client id for the provider"/>
+        <column name="SECRET" type="BINARY" sqlType="VARBINARY(100)" size="100" required="true" description="Secret for the client id"/>
         <column name="PARENT_REF" phpName="Parent" type="VARCHAR" size="50" />
+        <column name="SCOPES" phpName="Scopes" type="VARCHAR" size="1000" />
         <column name="ACTIVE" type="BOOLEAN" defaultValue="true" />
         <column name="CUSTOMER_CODE" phpName="CustomerCode" type="VARCHAR" size="50" required="false" />
+        <column name="EXPIRATION" type="ENUM" valueSet="NEVER,WEEKLY,MONTHLY,YEARLY" defaultValue="NEVER" required="true" description="Expiration mode for passwords"/>
+        <column name="EXPIRATION_PERIOD" type="INTEGER" size="3" />
         <index name="idx_providers">
             <index-column name="NAME" />
             <index-column name="ACTIVE" />
             <index-column name="DEV" />
         </index>
-        <unique name="inq_psfs_auth_provider">
+        <unique name="unq_psfs_auth_provider">
             <unique-column name="NAME"/>
             <unique-column name="CLIENT"/>
             <unique-column name="CUSTOMER_CODE"/>
@@ -30,6 +33,15 @@
             <parameter name="foreign_table" value="ACCOUNTS" />
             <parameter name="expression" value="COUNT(ID_ACCOUNT)" />
         </behavior>
+    </table>
+    <table name="PATHS" phpName="LoginPath" description="Customer provider paths to redirect">
+        <column name="ID_PATH" type="INTEGER" primaryKey="true" autoIncrement="true" />
+        <column name="ID_PROVIDER" type="INTEGER" phpName="IdSocial" required="true" />
+        <column name="TYPE" type="ENUM" valueSet="LOGIN_OK,LOGIN_ERROR,REGISTER_OK,REGISTER_ERROR,HANDSHAKE_ERROR,LOGOUT_OK,LOGOUT_ERROR" defaultValue="LOGIN_OK" required="true" description="Type of path"/>
+        <column name="PATH" type="VARCHAR" size="500" required="true" />
+        <foreign-key foreignTable="PROVIDERS" name="fk_path_provider" phpName="ProviderPath" defaultJoin="INNER JOIN">
+            <reference local="ID_PROVIDER" foreign="ID_PROVIDER" />
+        </foreign-key>
     </table>
     <table name="ACCOUNTS" phpName="LoginAccount" description="Table with the login accounts">
         <column name="ID_ACCOUNT" type="INTEGER" primaryKey="true" autoIncrement="true" />
@@ -58,6 +70,16 @@
             <unique-column name="IDENTIFIER" />
         </unique>
         <behavior name="query_cache" />
+        <behavior name="timestampable" />
+    </table>
+    <table name="ACCOUNT_PASSWORDS" phpName="LoginAccountPassword" description="Table with an history for account passwords">
+        <column name="ID_PASSWORD" type="INTEGER" primaryKey="true" autoIncrement="true" />
+        <column name="ID_ACCOUNT" type="INTEGER" required="true" />
+        <column name="VALUE" type="VARCHAR" size="100" sqlType="VARBINARY(100)" required="true" />
+        <column name="EXPIRATION_DATE" type="TIMESTAMP" required="true" />
+        <foreign-key foreignTable="ACCOUNTS" name="fk_account_passwords" phpName="AccountPasswords" defaultJoin="INNER JOIN">
+            <reference local="ID_ACCOUNT" foreign="ID_ACCOUNT" />
+        </foreign-key>
         <behavior name="timestampable" />
     </table>
     <table name="SESSIONS" phpName="LoginSession" description="Table with the login session token">

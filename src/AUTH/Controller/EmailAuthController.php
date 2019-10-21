@@ -48,6 +48,7 @@ class EmailAuthController extends AUTHController {
      * @param integer $flow
      * @route /auth/email
      * @return string JSON
+     * @throws \PSFS\base\exception\GeneratorException
      */
     public function login($flow = EmailService::FLOW_LOGIN) {
         $success = true;
@@ -65,6 +66,7 @@ class EmailAuthController extends AUTHController {
      * @POST
      * @route /auth/password/reset
      * @return string JSON
+     * @throws \PSFS\base\exception\GeneratorException
      */
     public function resetPassword() {
         $data = $this->getRequest()->getData();

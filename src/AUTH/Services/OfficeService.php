@@ -10,21 +10,20 @@ use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\FacebookResponse;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
-use PSFS\base\config\Config;
 use PSFS\base\exception\GeneratorException;
 use PSFS\base\Router;
 
 /**
- * Class FacebookService
+ * Class OfficeService
  * @package AUTH\Services
  */
-class FacebookService extends AUTHService {
+class OfficeService extends AUTHService {
     /**
      * @return string
      */
     public function getProviderName()
     {
-        return LoginProviderTableMap::COL_NAME_FACEBOOK;
+        return LoginProviderTableMap::COL_NAME_LIVE;
     }
 
     /**
@@ -44,9 +43,9 @@ class FacebookService extends AUTHService {
 
         $redirectUri = $this->base;
         if(self::FLOW_LOGIN === $flow) {
-            $redirectUri .= Router::getInstance()->getRoute('auth-facebook-callback');
+            $redirectUri .= Router::getInstance()->getRoute('auth-office-callback');
         } else {
-            $redirectUri .= Router::getInstance()->getRoute('register-facebook-callback');
+            $redirectUri .= Router::getInstance()->getRoute('register-office-callback');
         }
         return $redirectUri;
     }
@@ -58,9 +57,8 @@ class FacebookService extends AUTHService {
      */
     public function getAuthUrl($flow = self::FLOW_LOGIN)
     {
-        $client = $this->getClient(null, $flow);
-        $helper = $client->getRedirectLoginHelper();
-        return $helper->getLoginUrl($this->getRedirectUri($flow), $this->getScopes());
+        $credentials = $this->getClient(null);
+        return "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={$credentials['app_id']}&response_type=id_token&redirect_uri=http%3A%2F%2Flocalhost%2Fmyapp%2F&scope=openid&response_mode=fragment&state=12345&nonce=678910";
     }
 
     /**
@@ -140,12 +138,10 @@ class FacebookService extends AUTHService {
     public function getClient($callbackUri, $flow = self::FLOW_LOGIN)
     {
         if(null === self::$client) {
-            $config = [
+            self::$client = [
                 'app_id' => $this->provider->getClient(),
                 'app_secret' => $this->provider->getSecret(),
-                'default_graph_version' => Config::getParam('facebook.version', 'v4.0'),
             ];
-            self::$client = new Facebook($config);
         }
 
         return self::$client;

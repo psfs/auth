@@ -14,29 +14,11 @@ use PSFS\base\types\CustomApi;
  * @package AUTH\Api\base
  */
 abstract class LoginProviderAuthBase extends CustomApi {
-    function getModelTableMap()
-    {
-        return LoginAccountTableMap::getTableMap();
-    }
 
     /**
      * @var \AUTH\Services\base\AUTHService
      */
     protected $auth;
-
-    public function init()
-    {
-        if(null == Config::getParam('login.action')) {
-            throw new AuthRedirectNotDefinedException(_('Es necesario que se parametrice la ruta de redirección después del login usando la variable login.action'), 503);
-        }
-        if(null == Config::getParam('logout.action')) {
-            throw new AuthRedirectNotDefinedException(_('Es necesario que se parametrice la ruta de redirección después del logout usando la variable logout.action'), 503);
-        }
-        if(null == Config::getParam('login.cancel')) {
-            throw new AuthRedirectNotDefinedException(_('Es necesario que se parametrice la ruta de redirección si el usuario cancela el login locin.cancel'), 503);
-        }
-        parent::init();
-    }
 
     /**
      * @param array $query

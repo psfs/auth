@@ -12,6 +12,7 @@ use AUTH\Models\LoginProviderQuery;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
 use PSFS\base\config\Config;
+use PSFS\base\exception\GeneratorException;
 use PSFS\base\Logger;
 
 class EmailService extends AUTHService
@@ -55,16 +56,16 @@ class EmailService extends AUTHService
      */
     public static function checkPassword($password) {
         if(!strlen($password)) {
-            throw new EmailWrongPasswordException(_('Contraseña vacía'), 400);
+            throw new EmailWrongPasswordException(t('Contraseña vacía'), 400);
         }
         if(strlen($password) < Config::getParam('auth.email.passlen', 6)) {
-            throw new EmailWrongPasswordException(str_replace('%s%', Config::getParam('auth.email.passlen', 6), _('Contraseña demasiado corta, debe tener al menos %s% caracteres')), 400);
+            throw new EmailWrongPasswordException(str_replace('%s%', Config::getParam('auth.email.passlen', 6), t('Contraseña demasiado corta, debe tener al menos %s% caracteres')), 400);
         }
         $pattern = Config::getParam('auth.email.pattern');
         if(null !== $pattern) {
             try {
                 if(!preg_match($pattern, $password)) {
-                    throw new EmailWrongPasswordException(_(Config::getParam('auth.email.pattern.message', 'Contraseña no segura, prueba a incluir caracteres y números')), 400);
+                    throw new EmailWrongPasswordException(t(Config::getParam('auth.email.pattern.message', 'Contraseña no segura, prueba a incluir caracteres y números')), 400);
                 }
             } catch(\Exception $e) {
                 if($e instanceof EmailWrongPasswordException) {
@@ -81,10 +82,10 @@ class EmailService extends AUTHService
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
     {
         if(!array_key_exists('email', $query)) {
-            throw new EmailProviderMissingParametersException(_('El campo email es obligatorio'), 400);
+            throw new EmailProviderMissingParametersException(t('El campo email es obligatorio'), 400);
         }
         if(!array_key_exists('password', $query)) {
-            throw new EmailProviderMissingParametersException(_('El campo contraseña es obligatorio'), 400);
+            throw new EmailProviderMissingParametersException(t('El campo contraseña es obligatorio'), 400);
         }
         if($flow === self::FLOW_REGISTER) {
             self::checkPassword($query['password']);
@@ -117,7 +118,13 @@ class EmailService extends AUTHService
 
 
     /**
-     * @inheritDoc
+     * @param array $auth
+     * @param int $flow
+     * @return AuthUserDto|null
+     * @throws EmailAlreadyExistsException
+     * @throws EmailNotExistsException
+     * @throws GeneratorException
+     * @throws \ReflectionException
      */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {
@@ -126,13 +133,13 @@ class EmailService extends AUTHService
         $access_token = self::encryptPassword($identifier, $auth['password']);
         $userExists = LoginAccountQuery::existsIdentifierForProvider($identifier, $this->provider, true);
         if(self::FLOW_REGISTER === $flow && $userExists) {
-            throw new EmailAlreadyExistsException(_('Email en uso'), 403);
+            throw new EmailAlreadyExistsException(t('Email en uso'), 403);
         } elseif ($flow === self::FLOW_LOGIN && !$userExists) {
-            throw new EmailNotExistsException(_('El email no existe'), 404);
+            throw new EmailNotExistsException(t('El email no existe'), 404);
         } elseif($flow === self::FLOW_LOGIN) {
             $userExistsWithPassword = LoginAccountQuery::existsIdentifierWithPassword($identifier, $access_token, $this->provider);
             if(!$userExistsWithPassword) {
-                throw new EmailNotExistsException(_('Contraseña no válida'), 401);
+                throw new EmailNotExistsException(t('Contraseña no válida'), 401);
             }
         }
         $user = new AuthUserDto();
@@ -148,7 +155,6 @@ class EmailService extends AUTHService
      * @param array $data
      * @return bool
      * @throws EmailResetFailedException
-     * @throws \Exception
      */
     public function resetPassword(array $data) {
         if(array_key_exists('token', $data)) {
@@ -166,10 +172,10 @@ class EmailService extends AUTHService
                                 ->setResetToken(null);
                             $reseted = false !== $account->save();
                         } else {
-                            throw new EmailResetFailedException(_('Ha expirado el plazo para resetear la contraseña'), self::EMAIL_ERROR_RESET_FORBIDDEN);
+                            throw new EmailResetFailedException(t('Ha expirado el plazo para resetear la contraseña'), self::EMAIL_ERROR_RESET_FORBIDDEN);
                         }
                     } else {
-                        throw new EmailResetFailedException(_('No se ha encontrado el usuario para resetear la contraseña'), self::EMAIL_ERROR_RESET_INVALID_TOKEN);
+                        throw new EmailResetFailedException(t('No se ha encontrado el usuario para resetear la contraseña'), self::EMAIL_ERROR_RESET_INVALID_TOKEN);
                     }
                 } catch(\Exception $e) {
                     Logger::log($e->getMessage(), LOG_ERR, $data);
@@ -180,10 +186,10 @@ class EmailService extends AUTHService
                     }
                 }
             } else {
-                throw new EmailResetFailedException(_('Es necesario una nueva password'), self::EMAIL_ERROR_RESET_PASS_NOT_FOUND);
+                throw new EmailResetFailedException(t('Es necesario una nueva password'), self::EMAIL_ERROR_RESET_PASS_NOT_FOUND);
             }
         } else {
-            throw new EmailResetFailedException(_('Es necesario el token del usuario'), self::EMAIL_ERROR_RESET_TOKEN_NOT_FOUND);
+            throw new EmailResetFailedException(t('Es necesario el token del usuario'), self::EMAIL_ERROR_RESET_TOKEN_NOT_FOUND);
         }
         return $reseted;
     }

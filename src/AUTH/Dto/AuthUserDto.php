@@ -99,7 +99,7 @@ class AuthUserDto extends Dto {
             $session = LoginSessionQuery::getLastSession($this->account);
             $session->setIdAccount($this->account->getPrimaryKey());
             $session->setDevice($_SERVER['HTTP_USER_AGENT']);
-            $session->setIP(AUTHService::get_ip_address());
+            $session->setIP(AUTHService::getIpAddress());
             $session->setToken(hash_hmac('sha256', $this->id, $provider->getSecret()));
             $session->save();
             $this->session_token = $session->getToken();

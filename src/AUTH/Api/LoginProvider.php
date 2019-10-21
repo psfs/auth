@@ -31,7 +31,7 @@ class LoginProvider extends LoginProviderBaseApi
     {
         parent::init();
         $this->extraColumns = [
-            self::getListNameSql() => self::API_LIST_NAME_FIELD
+            self::getListNameSql() => self::API_LIST_NAME_FIELD,
         ];
     }
 }

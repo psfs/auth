@@ -59,7 +59,7 @@ class LoginProviderTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class LoginProviderTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the ID_PROVIDER field
@@ -102,6 +102,11 @@ class LoginProviderTableMap extends TableMap
     const COL_PARENT_REF = 'AUTH_PROVIDERS.PARENT_REF';
 
     /**
+     * the column name for the SCOPES field
+     */
+    const COL_SCOPES = 'AUTH_PROVIDERS.SCOPES';
+
+    /**
      * the column name for the ACTIVE field
      */
     const COL_ACTIVE = 'AUTH_PROVIDERS.ACTIVE';
@@ -110,6 +115,16 @@ class LoginProviderTableMap extends TableMap
      * the column name for the CUSTOMER_CODE field
      */
     const COL_CUSTOMER_CODE = 'AUTH_PROVIDERS.CUSTOMER_CODE';
+
+    /**
+     * the column name for the EXPIRATION field
+     */
+    const COL_EXPIRATION = 'AUTH_PROVIDERS.EXPIRATION';
+
+    /**
+     * the column name for the EXPIRATION_PERIOD field
+     */
+    const COL_EXPIRATION_PERIOD = 'AUTH_PROVIDERS.EXPIRATION_PERIOD';
 
     /**
      * the column name for the created_at field
@@ -137,6 +152,13 @@ class LoginProviderTableMap extends TableMap
     const COL_NAME_FACEBOOK = 'FACEBOOK';
     const COL_NAME_TWITTER = 'TWITTER';
     const COL_NAME_LINKEDIN = 'LINKEDIN';
+    const COL_NAME_LIVE = 'LIVE';
+
+    /** The enumerated values for the EXPIRATION field */
+    const COL_EXPIRATION_NEVER = 'NEVER';
+    const COL_EXPIRATION_WEEKLY = 'WEEKLY';
+    const COL_EXPIRATION_MONTHLY = 'MONTHLY';
+    const COL_EXPIRATION_YEARLY = 'YEARLY';
 
     /**
      * holds an array of fieldnames
@@ -145,11 +167,11 @@ class LoginProviderTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('IdProvider', 'Name', 'Debug', 'Client', 'Secret', 'Parent', 'Active', 'CustomerCode', 'CreatedAt', 'UpdatedAt', 'Accounts', ),
-        self::TYPE_CAMELNAME     => array('idProvider', 'name', 'debug', 'client', 'secret', 'parent', 'active', 'customerCode', 'createdAt', 'updatedAt', 'accounts', ),
-        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER, LoginProviderTableMap::COL_NAME, LoginProviderTableMap::COL_DEV, LoginProviderTableMap::COL_CLIENT, LoginProviderTableMap::COL_SECRET, LoginProviderTableMap::COL_PARENT_REF, LoginProviderTableMap::COL_ACTIVE, LoginProviderTableMap::COL_CUSTOMER_CODE, LoginProviderTableMap::COL_CREATED_AT, LoginProviderTableMap::COL_UPDATED_AT, LoginProviderTableMap::COL_ACCOUNTS, ),
-        self::TYPE_FIELDNAME     => array('ID_PROVIDER', 'NAME', 'DEV', 'CLIENT', 'SECRET', 'PARENT_REF', 'ACTIVE', 'CUSTOMER_CODE', 'created_at', 'updated_at', 'ACCOUNTS', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('IdProvider', 'Name', 'Debug', 'Client', 'Secret', 'Parent', 'Scopes', 'Active', 'CustomerCode', 'Expiration', 'ExpirationPeriod', 'CreatedAt', 'UpdatedAt', 'Accounts', ),
+        self::TYPE_CAMELNAME     => array('idProvider', 'name', 'debug', 'client', 'secret', 'parent', 'scopes', 'active', 'customerCode', 'expiration', 'expirationPeriod', 'createdAt', 'updatedAt', 'accounts', ),
+        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER, LoginProviderTableMap::COL_NAME, LoginProviderTableMap::COL_DEV, LoginProviderTableMap::COL_CLIENT, LoginProviderTableMap::COL_SECRET, LoginProviderTableMap::COL_PARENT_REF, LoginProviderTableMap::COL_SCOPES, LoginProviderTableMap::COL_ACTIVE, LoginProviderTableMap::COL_CUSTOMER_CODE, LoginProviderTableMap::COL_EXPIRATION, LoginProviderTableMap::COL_EXPIRATION_PERIOD, LoginProviderTableMap::COL_CREATED_AT, LoginProviderTableMap::COL_UPDATED_AT, LoginProviderTableMap::COL_ACCOUNTS, ),
+        self::TYPE_FIELDNAME     => array('ID_PROVIDER', 'NAME', 'DEV', 'CLIENT', 'SECRET', 'PARENT_REF', 'SCOPES', 'ACTIVE', 'CUSTOMER_CODE', 'EXPIRATION', 'EXPIRATION_PERIOD', 'created_at', 'updated_at', 'ACCOUNTS', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -159,11 +181,11 @@ class LoginProviderTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('IdProvider' => 0, 'Name' => 1, 'Debug' => 2, 'Client' => 3, 'Secret' => 4, 'Parent' => 5, 'Active' => 6, 'CustomerCode' => 7, 'CreatedAt' => 8, 'UpdatedAt' => 9, 'Accounts' => 10, ),
-        self::TYPE_CAMELNAME     => array('idProvider' => 0, 'name' => 1, 'debug' => 2, 'client' => 3, 'secret' => 4, 'parent' => 5, 'active' => 6, 'customerCode' => 7, 'createdAt' => 8, 'updatedAt' => 9, 'accounts' => 10, ),
-        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER => 0, LoginProviderTableMap::COL_NAME => 1, LoginProviderTableMap::COL_DEV => 2, LoginProviderTableMap::COL_CLIENT => 3, LoginProviderTableMap::COL_SECRET => 4, LoginProviderTableMap::COL_PARENT_REF => 5, LoginProviderTableMap::COL_ACTIVE => 6, LoginProviderTableMap::COL_CUSTOMER_CODE => 7, LoginProviderTableMap::COL_CREATED_AT => 8, LoginProviderTableMap::COL_UPDATED_AT => 9, LoginProviderTableMap::COL_ACCOUNTS => 10, ),
-        self::TYPE_FIELDNAME     => array('ID_PROVIDER' => 0, 'NAME' => 1, 'DEV' => 2, 'CLIENT' => 3, 'SECRET' => 4, 'PARENT_REF' => 5, 'ACTIVE' => 6, 'CUSTOMER_CODE' => 7, 'created_at' => 8, 'updated_at' => 9, 'ACCOUNTS' => 10, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        self::TYPE_PHPNAME       => array('IdProvider' => 0, 'Name' => 1, 'Debug' => 2, 'Client' => 3, 'Secret' => 4, 'Parent' => 5, 'Scopes' => 6, 'Active' => 7, 'CustomerCode' => 8, 'Expiration' => 9, 'ExpirationPeriod' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, 'Accounts' => 13, ),
+        self::TYPE_CAMELNAME     => array('idProvider' => 0, 'name' => 1, 'debug' => 2, 'client' => 3, 'secret' => 4, 'parent' => 5, 'scopes' => 6, 'active' => 7, 'customerCode' => 8, 'expiration' => 9, 'expirationPeriod' => 10, 'createdAt' => 11, 'updatedAt' => 12, 'accounts' => 13, ),
+        self::TYPE_COLNAME       => array(LoginProviderTableMap::COL_ID_PROVIDER => 0, LoginProviderTableMap::COL_NAME => 1, LoginProviderTableMap::COL_DEV => 2, LoginProviderTableMap::COL_CLIENT => 3, LoginProviderTableMap::COL_SECRET => 4, LoginProviderTableMap::COL_PARENT_REF => 5, LoginProviderTableMap::COL_SCOPES => 6, LoginProviderTableMap::COL_ACTIVE => 7, LoginProviderTableMap::COL_CUSTOMER_CODE => 8, LoginProviderTableMap::COL_EXPIRATION => 9, LoginProviderTableMap::COL_EXPIRATION_PERIOD => 10, LoginProviderTableMap::COL_CREATED_AT => 11, LoginProviderTableMap::COL_UPDATED_AT => 12, LoginProviderTableMap::COL_ACCOUNTS => 13, ),
+        self::TYPE_FIELDNAME     => array('ID_PROVIDER' => 0, 'NAME' => 1, 'DEV' => 2, 'CLIENT' => 3, 'SECRET' => 4, 'PARENT_REF' => 5, 'SCOPES' => 6, 'ACTIVE' => 7, 'CUSTOMER_CODE' => 8, 'EXPIRATION' => 9, 'EXPIRATION_PERIOD' => 10, 'created_at' => 11, 'updated_at' => 12, 'ACCOUNTS' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /** The enumerated values for this table */
@@ -174,6 +196,13 @@ class LoginProviderTableMap extends TableMap
             self::COL_NAME_FACEBOOK,
             self::COL_NAME_TWITTER,
             self::COL_NAME_LINKEDIN,
+            self::COL_NAME_LIVE,
+        ),
+                LoginProviderTableMap::COL_EXPIRATION => array(
+                            self::COL_EXPIRATION_NEVER,
+            self::COL_EXPIRATION_WEEKLY,
+            self::COL_EXPIRATION_MONTHLY,
+            self::COL_EXPIRATION_YEARLY,
         ),
     );
 
@@ -223,13 +252,23 @@ class LoginProviderTableMap extends TableMap
   2 => 'FACEBOOK',
   3 => 'TWITTER',
   4 => 'LINKEDIN',
+  5 => 'LIVE',
 ));
         $this->addColumn('DEV', 'Debug', 'BOOLEAN', false, 1, true);
         $this->addColumn('CLIENT', 'Client', 'VARCHAR', true, 100, null);
         $this->addColumn('SECRET', 'Secret', 'BINARY', true, 100, null);
         $this->addColumn('PARENT_REF', 'Parent', 'VARCHAR', false, 50, null);
+        $this->addColumn('SCOPES', 'Scopes', 'VARCHAR', false, 1000, null);
         $this->addColumn('ACTIVE', 'Active', 'BOOLEAN', false, 1, true);
         $this->addColumn('CUSTOMER_CODE', 'CustomerCode', 'VARCHAR', false, 50, null);
+        $this->addColumn('EXPIRATION', 'Expiration', 'ENUM', true, null, 'NEVER');
+        $this->getColumn('EXPIRATION')->setValueSet(array (
+  0 => 'NEVER',
+  1 => 'WEEKLY',
+  2 => 'MONTHLY',
+  3 => 'YEARLY',
+));
+        $this->addColumn('EXPIRATION_PERIOD', 'ExpirationPeriod', 'INTEGER', false, 3, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('ACCOUNTS', 'Accounts', 'INTEGER', false, null, null);
@@ -240,6 +279,13 @@ class LoginProviderTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('LoginPath', '\\AUTH\\Models\\LoginPath', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':ID_PROVIDER',
+    1 => ':ID_PROVIDER',
+  ),
+), null, null, 'LoginPaths', false);
         $this->addRelation('LoginAccount', '\\AUTH\\Models\\LoginAccount', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -411,8 +457,11 @@ class LoginProviderTableMap extends TableMap
             $criteria->addSelectColumn(LoginProviderTableMap::COL_CLIENT);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_SECRET);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_PARENT_REF);
+            $criteria->addSelectColumn(LoginProviderTableMap::COL_SCOPES);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_ACTIVE);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_CUSTOMER_CODE);
+            $criteria->addSelectColumn(LoginProviderTableMap::COL_EXPIRATION);
+            $criteria->addSelectColumn(LoginProviderTableMap::COL_EXPIRATION_PERIOD);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_UPDATED_AT);
             $criteria->addSelectColumn(LoginProviderTableMap::COL_ACCOUNTS);
@@ -423,8 +472,11 @@ class LoginProviderTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.CLIENT');
             $criteria->addSelectColumn($alias . '.SECRET');
             $criteria->addSelectColumn($alias . '.PARENT_REF');
+            $criteria->addSelectColumn($alias . '.SCOPES');
             $criteria->addSelectColumn($alias . '.ACTIVE');
             $criteria->addSelectColumn($alias . '.CUSTOMER_CODE');
+            $criteria->addSelectColumn($alias . '.EXPIRATION');
+            $criteria->addSelectColumn($alias . '.EXPIRATION_PERIOD');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.ACCOUNTS');

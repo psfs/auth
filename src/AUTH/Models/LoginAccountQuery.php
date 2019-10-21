@@ -5,7 +5,6 @@ namespace AUTH\Models;
 use AUTH\Models\Base\LoginAccountQuery as BaseLoginAccountQuery;
 use AUTH\Models\Map\LoginProviderTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
-use PSFS\base\config\Config;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'AUTH_ACCOUNTS' table.

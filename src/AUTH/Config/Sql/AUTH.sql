@@ -12,20 +12,42 @@ DROP TABLE IF EXISTS `AUTH_PROVIDERS`;
 CREATE TABLE `AUTH_PROVIDERS`
 (
     `ID_PROVIDER` INTEGER NOT NULL AUTO_INCREMENT,
-    `NAME` TINYINT NOT NULL,
-    `DEV` TINYINT(1) DEFAULT 1,
-    `CLIENT` VARCHAR(100) NOT NULL,
-    `SECRET` VARBINARY(100) NOT NULL,
+    `NAME` TINYINT NOT NULL COMMENT 'Different kind of oauth social network',
+    `DEV` TINYINT(1) DEFAULT 1 COMMENT 'Flag to define if the provider is for dev purposes',
+    `CLIENT` VARCHAR(100) NOT NULL COMMENT 'Client id for the provider',
+    `SECRET` VARBINARY(100) NOT NULL COMMENT 'Secret for the client id',
     `PARENT_REF` VARCHAR(50),
+    `SCOPES` VARCHAR(1000),
     `ACTIVE` TINYINT(1) DEFAULT 1,
     `CUSTOMER_CODE` VARCHAR(50),
+    `EXPIRATION` TINYINT DEFAULT 0 NOT NULL COMMENT 'Expiration mode for passwords',
+    `EXPIRATION_PERIOD` INTEGER(3),
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `ACCOUNTS` INTEGER,
     PRIMARY KEY (`ID_PROVIDER`),
-    UNIQUE INDEX `inq_psfs_auth_provider` (`NAME`, `CLIENT`, `CUSTOMER_CODE`),
+    UNIQUE INDEX `unq_psfs_auth_provider` (`NAME`, `CLIENT`, `CUSTOMER_CODE`),
     INDEX `idx_providers` (`NAME`, `ACTIVE`, `DEV`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login providers';
+
+-- ---------------------------------------------------------------------
+-- AUTH_PATHS
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `AUTH_PATHS`;
+
+CREATE TABLE `AUTH_PATHS`
+(
+    `ID_PATH` INTEGER NOT NULL AUTO_INCREMENT,
+    `ID_PROVIDER` INTEGER NOT NULL,
+    `TYPE` TINYINT DEFAULT 0 NOT NULL COMMENT 'Type of path',
+    `PATH` VARCHAR(500) NOT NULL,
+    PRIMARY KEY (`ID_PATH`),
+    INDEX `fi_path_provider` (`ID_PROVIDER`),
+    CONSTRAINT `fk_path_provider`
+        FOREIGN KEY (`ID_PROVIDER`)
+        REFERENCES `AUTH_PROVIDERS` (`ID_PROVIDER`)
+) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Customer provider paths to redirect';
 
 -- ---------------------------------------------------------------------
 -- AUTH_ACCOUNTS
@@ -56,6 +78,27 @@ CREATE TABLE `AUTH_ACCOUNTS`
         FOREIGN KEY (`ID_PROVIDER`)
         REFERENCES `AUTH_PROVIDERS` (`ID_PROVIDER`)
 ) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with the login accounts';
+
+-- ---------------------------------------------------------------------
+-- AUTH_ACCOUNT_PASSWORDS
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `AUTH_ACCOUNT_PASSWORDS`;
+
+CREATE TABLE `AUTH_ACCOUNT_PASSWORDS`
+(
+    `ID_PASSWORD` INTEGER NOT NULL AUTO_INCREMENT,
+    `ID_ACCOUNT` INTEGER NOT NULL,
+    `VALUE` VARBINARY(100) NOT NULL,
+    `EXPIRATION_DATE` DATETIME NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`ID_PASSWORD`),
+    INDEX `fi_account_passwords` (`ID_ACCOUNT`),
+    CONSTRAINT `fk_account_passwords`
+        FOREIGN KEY (`ID_ACCOUNT`)
+        REFERENCES `AUTH_ACCOUNTS` (`ID_ACCOUNT`)
+) ENGINE=InnoDB CHARACTER SET='utf8' COMMENT='Table with an history for account passwords';
 
 -- ---------------------------------------------------------------------
 -- AUTH_SESSIONS

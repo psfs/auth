@@ -8,6 +8,7 @@ use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\LoginAccount;
 use AUTH\Models\LoginProviderQuery;
 use AUTH\Models\LoginSessionQuery;
+use Propel\Runtime\Exception\PropelException;
 use PSFS\base\config\Config;
 use PSFS\base\Logger;
 use PSFS\base\Router;
@@ -77,19 +78,15 @@ abstract class AUTHService extends Service {
     abstract public function getUser(array $auth, $flow = self::FLOW_LOGIN);
 
     /**
-     * @return array
-     */
-    public function getScopes() {
-        return $this->scopes;
-    }
-
-    /**
      * @param array $scopes
      */
     public function setScopes(array $scopes) {
         $this->scopes = $scopes;
     }
 
+    /**
+     * @throws AuthProviderNotConfiguredException
+     */
     public function init()
     {
         parent::init();
@@ -99,7 +96,7 @@ abstract class AUTHService extends Service {
             Logger::log($this->getProviderName() . ' not defined for ' . ($this->debug) ? ' debug mode' : ' production mode');
             $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, Config::getParam('psfs.auth.customer_code'));
             if(null === $this->provider) {
-                throw new AuthProviderNotConfiguredException(_('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
+                throw new AuthProviderNotConfiguredException(t('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }
         }
         $this->base = preg_replace('/\/$/', '', Config::getParam('login.base', Router::getInstance()->getRoute('', true)));
@@ -111,13 +108,14 @@ abstract class AUTHService extends Service {
     public static function checkAccess() {
         $isAdmin = Security::getInstance()->canAccessRestrictedAdmin();
         if(!$isAdmin) {
-            throw new AuthApiAccessRestrictedException(_('Only administrators can access auth models'), 403);
+            throw new AuthApiAccessRestrictedException(t('Only administrators can access auth models'), 403);
         }
     }
 
     /**
      * @param LoginAccount $account
      * @return bool
+     * @throws PropelException
      */
     public function resetAccount(LoginAccount $account) {
         $account->setResetToken(sha1(uniqid(time())));
@@ -131,6 +129,7 @@ abstract class AUTHService extends Service {
      * @param LoginAccount $account
      * @param $sessionToken
      * @return bool
+     * @throws PropelException
      */
     public function logoutSession(LoginAccount $account, $sessionToken) {
         $logout = false;
@@ -150,9 +149,9 @@ abstract class AUTHService extends Service {
         return $logout;
     }
 
-    public static function get_ip_address() {
+    public static function getIpAddress() {
         // check for shared internet/ISP IP
-        if (!empty($_SERVER['HTTP_CLIENT_IP']) && self::validate_ip($_SERVER['HTTP_CLIENT_IP'])) {
+        if (!empty($_SERVER['HTTP_CLIENT_IP']) && self::validateIp($_SERVER['HTTP_CLIENT_IP'])) {
             return $_SERVER['HTTP_CLIENT_IP'];
         }
 
@@ -162,21 +161,21 @@ abstract class AUTHService extends Service {
             if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',') !== false) {
                 $iplist = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
                 foreach ($iplist as $ip) {
-                    if (self::validate_ip($ip))
+                    if (self::validateIp($ip))
                         return $ip;
                 }
             } else {
-                if (self::validate_ip($_SERVER['HTTP_X_FORWARDED_FOR']))
+                if (self::validateIp($_SERVER['HTTP_X_FORWARDED_FOR']))
                     return $_SERVER['HTTP_X_FORWARDED_FOR'];
             }
         }
-        if (!empty($_SERVER['HTTP_X_FORWARDED']) && self::validate_ip($_SERVER['HTTP_X_FORWARDED']))
+        if (!empty($_SERVER['HTTP_X_FORWARDED']) && self::validateIp($_SERVER['HTTP_X_FORWARDED']))
             return $_SERVER['HTTP_X_FORWARDED'];
-        if (!empty($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && self::validate_ip($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
+        if (!empty($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && self::validateIp($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']))
             return $_SERVER['HTTP_X_CLUSTER_CLIENT_IP'];
-        if (!empty($_SERVER['HTTP_FORWARDED_FOR']) && self::validate_ip($_SERVER['HTTP_FORWARDED_FOR']))
+        if (!empty($_SERVER['HTTP_FORWARDED_FOR']) && self::validateIp($_SERVER['HTTP_FORWARDED_FOR']))
             return $_SERVER['HTTP_FORWARDED_FOR'];
-        if (!empty($_SERVER['HTTP_FORWARDED']) && self::validate_ip($_SERVER['HTTP_FORWARDED']))
+        if (!empty($_SERVER['HTTP_FORWARDED']) && self::validateIp($_SERVER['HTTP_FORWARDED']))
             return $_SERVER['HTTP_FORWARDED'];
 
         // return unreliable ip since all else failed
@@ -187,7 +186,7 @@ abstract class AUTHService extends Service {
      * Ensures an ip address is both a valid IP and does not fall within
      * a private network range.
      */
-    public static function validate_ip($ip) {
+    public static function validateIp($ip) {
         if (strtolower($ip) === 'unknown')
             return false;
 
@@ -211,5 +210,27 @@ abstract class AUTHService extends Service {
             if ($ip >= 4294967040) return false;
         }
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function getScopes() {
+        if(!count($this->scopes)) {
+            $providerScopes = $this->provider->getScopes();
+            if(strlen($providerScopes)) {
+                $this->scopes = explode(",", $providerScopes);
+            } else {
+                $this->scopes = $this->getProviderDefaultScopes();
+            }
+        }
+        return $this->scopes;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getProviderDefaultScopes() {
+        return [];
     }
 }

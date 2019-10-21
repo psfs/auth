@@ -6,11 +6,14 @@ use \DateTime;
 use \Exception;
 use \PDO;
 use AUTH\Models\LoginAccount as ChildLoginAccount;
+use AUTH\Models\LoginAccountPassword as ChildLoginAccountPassword;
+use AUTH\Models\LoginAccountPasswordQuery as ChildLoginAccountPasswordQuery;
 use AUTH\Models\LoginAccountQuery as ChildLoginAccountQuery;
 use AUTH\Models\LoginProvider as ChildLoginProvider;
 use AUTH\Models\LoginProviderQuery as ChildLoginProviderQuery;
 use AUTH\Models\LoginSession as ChildLoginSession;
 use AUTH\Models\LoginSessionQuery as ChildLoginSessionQuery;
+use AUTH\Models\Map\LoginAccountPasswordTableMap;
 use AUTH\Models\Map\LoginAccountTableMap;
 use AUTH\Models\Map\LoginSessionTableMap;
 use Propel\Runtime\Propel;
@@ -175,6 +178,12 @@ abstract class LoginAccount implements ActiveRecordInterface
     protected $aAccountProvider;
 
     /**
+     * @var        ObjectCollection|ChildLoginAccountPassword[] Collection to store aggregation of ChildLoginAccountPassword objects.
+     */
+    protected $collLoginAccountPasswords;
+    protected $collLoginAccountPasswordsPartial;
+
+    /**
      * @var        ObjectCollection|ChildLoginSession[] Collection to store aggregation of ChildLoginSession objects.
      */
     protected $collLoginSessions;
@@ -193,6 +202,12 @@ abstract class LoginAccount implements ActiveRecordInterface
      * @var ChildLoginProvider
      */
     protected $oldAccountProviderAccounts;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildLoginAccountPassword[]
+     */
+    protected $loginAccountPasswordsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -504,7 +519,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [expires] column value.
      *
      *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
@@ -583,7 +598,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [refresh_requested] column value.
      *
      *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
@@ -613,7 +628,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
@@ -633,7 +648,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
@@ -1128,6 +1143,8 @@ abstract class LoginAccount implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aAccountProvider = null;
+            $this->collLoginAccountPasswords = null;
+
             $this->collLoginSessions = null;
 
         } // if (deep)
@@ -1197,12 +1214,13 @@ abstract class LoginAccount implements ActiveRecordInterface
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
                 if (!$this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setCreatedAt($highPrecision);
                 }
                 if (!$this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
@@ -1268,6 +1286,23 @@ abstract class LoginAccount implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->loginAccountPasswordsScheduledForDeletion !== null) {
+                if (!$this->loginAccountPasswordsScheduledForDeletion->isEmpty()) {
+                    \AUTH\Models\LoginAccountPasswordQuery::create()
+                        ->filterByPrimaryKeys($this->loginAccountPasswordsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->loginAccountPasswordsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collLoginAccountPasswords !== null) {
+                foreach ($this->collLoginAccountPasswords as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->loginSessionsScheduledForDeletion !== null) {
@@ -1593,6 +1628,21 @@ abstract class LoginAccount implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aAccountProvider->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collLoginAccountPasswords) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'loginAccountPasswords';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'AUTH_ACCOUNT_PASSWORDSs';
+                        break;
+                    default:
+                        $key = 'LoginAccountPasswords';
+                }
+
+                $result[$key] = $this->collLoginAccountPasswords->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collLoginSessions) {
 
@@ -1945,6 +1995,12 @@ abstract class LoginAccount implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
+            foreach ($this->getLoginAccountPasswords() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addLoginAccountPassword($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getLoginSessions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addLoginSession($relObj->copy($deepCopy));
@@ -2047,10 +2103,239 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('LoginAccountPassword' == $relationName) {
+            $this->initLoginAccountPasswords();
+            return;
+        }
         if ('LoginSession' == $relationName) {
             $this->initLoginSessions();
             return;
         }
+    }
+
+    /**
+     * Clears out the collLoginAccountPasswords collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addLoginAccountPasswords()
+     */
+    public function clearLoginAccountPasswords()
+    {
+        $this->collLoginAccountPasswords = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collLoginAccountPasswords collection loaded partially.
+     */
+    public function resetPartialLoginAccountPasswords($v = true)
+    {
+        $this->collLoginAccountPasswordsPartial = $v;
+    }
+
+    /**
+     * Initializes the collLoginAccountPasswords collection.
+     *
+     * By default this just sets the collLoginAccountPasswords collection to an empty array (like clearcollLoginAccountPasswords());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initLoginAccountPasswords($overrideExisting = true)
+    {
+        if (null !== $this->collLoginAccountPasswords && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = LoginAccountPasswordTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collLoginAccountPasswords = new $collectionClassName;
+        $this->collLoginAccountPasswords->setModel('\AUTH\Models\LoginAccountPassword');
+    }
+
+    /**
+     * Gets an array of ChildLoginAccountPassword objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildLoginAccount is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildLoginAccountPassword[] List of ChildLoginAccountPassword objects
+     * @throws PropelException
+     */
+    public function getLoginAccountPasswords(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collLoginAccountPasswordsPartial && !$this->isNew();
+        if (null === $this->collLoginAccountPasswords || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collLoginAccountPasswords) {
+                // return empty collection
+                $this->initLoginAccountPasswords();
+            } else {
+                $collLoginAccountPasswords = ChildLoginAccountPasswordQuery::create(null, $criteria)
+                    ->filterByAccountPasswords($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collLoginAccountPasswordsPartial && count($collLoginAccountPasswords)) {
+                        $this->initLoginAccountPasswords(false);
+
+                        foreach ($collLoginAccountPasswords as $obj) {
+                            if (false == $this->collLoginAccountPasswords->contains($obj)) {
+                                $this->collLoginAccountPasswords->append($obj);
+                            }
+                        }
+
+                        $this->collLoginAccountPasswordsPartial = true;
+                    }
+
+                    return $collLoginAccountPasswords;
+                }
+
+                if ($partial && $this->collLoginAccountPasswords) {
+                    foreach ($this->collLoginAccountPasswords as $obj) {
+                        if ($obj->isNew()) {
+                            $collLoginAccountPasswords[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collLoginAccountPasswords = $collLoginAccountPasswords;
+                $this->collLoginAccountPasswordsPartial = false;
+            }
+        }
+
+        return $this->collLoginAccountPasswords;
+    }
+
+    /**
+     * Sets a collection of ChildLoginAccountPassword objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $loginAccountPasswords A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildLoginAccount The current object (for fluent API support)
+     */
+    public function setLoginAccountPasswords(Collection $loginAccountPasswords, ConnectionInterface $con = null)
+    {
+        /** @var ChildLoginAccountPassword[] $loginAccountPasswordsToDelete */
+        $loginAccountPasswordsToDelete = $this->getLoginAccountPasswords(new Criteria(), $con)->diff($loginAccountPasswords);
+
+
+        $this->loginAccountPasswordsScheduledForDeletion = $loginAccountPasswordsToDelete;
+
+        foreach ($loginAccountPasswordsToDelete as $loginAccountPasswordRemoved) {
+            $loginAccountPasswordRemoved->setAccountPasswords(null);
+        }
+
+        $this->collLoginAccountPasswords = null;
+        foreach ($loginAccountPasswords as $loginAccountPassword) {
+            $this->addLoginAccountPassword($loginAccountPassword);
+        }
+
+        $this->collLoginAccountPasswords = $loginAccountPasswords;
+        $this->collLoginAccountPasswordsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related LoginAccountPassword objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related LoginAccountPassword objects.
+     * @throws PropelException
+     */
+    public function countLoginAccountPasswords(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collLoginAccountPasswordsPartial && !$this->isNew();
+        if (null === $this->collLoginAccountPasswords || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collLoginAccountPasswords) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getLoginAccountPasswords());
+            }
+
+            $query = ChildLoginAccountPasswordQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAccountPasswords($this)
+                ->count($con);
+        }
+
+        return count($this->collLoginAccountPasswords);
+    }
+
+    /**
+     * Method called to associate a ChildLoginAccountPassword object to this object
+     * through the ChildLoginAccountPassword foreign key attribute.
+     *
+     * @param  ChildLoginAccountPassword $l ChildLoginAccountPassword
+     * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
+     */
+    public function addLoginAccountPassword(ChildLoginAccountPassword $l)
+    {
+        if ($this->collLoginAccountPasswords === null) {
+            $this->initLoginAccountPasswords();
+            $this->collLoginAccountPasswordsPartial = true;
+        }
+
+        if (!$this->collLoginAccountPasswords->contains($l)) {
+            $this->doAddLoginAccountPassword($l);
+
+            if ($this->loginAccountPasswordsScheduledForDeletion and $this->loginAccountPasswordsScheduledForDeletion->contains($l)) {
+                $this->loginAccountPasswordsScheduledForDeletion->remove($this->loginAccountPasswordsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildLoginAccountPassword $loginAccountPassword The ChildLoginAccountPassword object to add.
+     */
+    protected function doAddLoginAccountPassword(ChildLoginAccountPassword $loginAccountPassword)
+    {
+        $this->collLoginAccountPasswords[]= $loginAccountPassword;
+        $loginAccountPassword->setAccountPasswords($this);
+    }
+
+    /**
+     * @param  ChildLoginAccountPassword $loginAccountPassword The ChildLoginAccountPassword object to remove.
+     * @return $this|ChildLoginAccount The current object (for fluent API support)
+     */
+    public function removeLoginAccountPassword(ChildLoginAccountPassword $loginAccountPassword)
+    {
+        if ($this->getLoginAccountPasswords()->contains($loginAccountPassword)) {
+            $pos = $this->collLoginAccountPasswords->search($loginAccountPassword);
+            $this->collLoginAccountPasswords->remove($pos);
+            if (null === $this->loginAccountPasswordsScheduledForDeletion) {
+                $this->loginAccountPasswordsScheduledForDeletion = clone $this->collLoginAccountPasswords;
+                $this->loginAccountPasswordsScheduledForDeletion->clear();
+            }
+            $this->loginAccountPasswordsScheduledForDeletion[]= clone $loginAccountPassword;
+            $loginAccountPassword->setAccountPasswords(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -2321,6 +2606,11 @@ abstract class LoginAccount implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collLoginAccountPasswords) {
+                foreach ($this->collLoginAccountPasswords as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collLoginSessions) {
                 foreach ($this->collLoginSessions as $o) {
                     $o->clearAllReferences($deep);
@@ -2328,6 +2618,7 @@ abstract class LoginAccount implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collLoginAccountPasswords = null;
         $this->collLoginSessions = null;
         $this->aAccountProvider = null;
     }

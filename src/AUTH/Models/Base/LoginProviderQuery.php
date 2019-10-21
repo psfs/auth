@@ -26,8 +26,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProviderQuery orderByClient($order = Criteria::ASC) Order by the CLIENT column
  * @method     ChildLoginProviderQuery orderBySecret($order = Criteria::ASC) Order by the SECRET column
  * @method     ChildLoginProviderQuery orderByParent($order = Criteria::ASC) Order by the PARENT_REF column
+ * @method     ChildLoginProviderQuery orderByScopes($order = Criteria::ASC) Order by the SCOPES column
  * @method     ChildLoginProviderQuery orderByActive($order = Criteria::ASC) Order by the ACTIVE column
  * @method     ChildLoginProviderQuery orderByCustomerCode($order = Criteria::ASC) Order by the CUSTOMER_CODE column
+ * @method     ChildLoginProviderQuery orderByExpiration($order = Criteria::ASC) Order by the EXPIRATION column
+ * @method     ChildLoginProviderQuery orderByExpirationPeriod($order = Criteria::ASC) Order by the EXPIRATION_PERIOD column
  * @method     ChildLoginProviderQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildLoginProviderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ChildLoginProviderQuery orderByAccounts($order = Criteria::ASC) Order by the ACCOUNTS column
@@ -38,8 +41,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProviderQuery groupByClient() Group by the CLIENT column
  * @method     ChildLoginProviderQuery groupBySecret() Group by the SECRET column
  * @method     ChildLoginProviderQuery groupByParent() Group by the PARENT_REF column
+ * @method     ChildLoginProviderQuery groupByScopes() Group by the SCOPES column
  * @method     ChildLoginProviderQuery groupByActive() Group by the ACTIVE column
  * @method     ChildLoginProviderQuery groupByCustomerCode() Group by the CUSTOMER_CODE column
+ * @method     ChildLoginProviderQuery groupByExpiration() Group by the EXPIRATION column
+ * @method     ChildLoginProviderQuery groupByExpirationPeriod() Group by the EXPIRATION_PERIOD column
  * @method     ChildLoginProviderQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildLoginProviderQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ChildLoginProviderQuery groupByAccounts() Group by the ACCOUNTS column
@@ -52,6 +58,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProviderQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildLoginProviderQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildLoginProviderQuery leftJoinLoginPath($relationAlias = null) Adds a LEFT JOIN clause to the query using the LoginPath relation
+ * @method     ChildLoginProviderQuery rightJoinLoginPath($relationAlias = null) Adds a RIGHT JOIN clause to the query using the LoginPath relation
+ * @method     ChildLoginProviderQuery innerJoinLoginPath($relationAlias = null) Adds a INNER JOIN clause to the query using the LoginPath relation
+ *
+ * @method     ChildLoginProviderQuery joinWithLoginPath($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the LoginPath relation
+ *
+ * @method     ChildLoginProviderQuery leftJoinWithLoginPath() Adds a LEFT JOIN clause and with to the query using the LoginPath relation
+ * @method     ChildLoginProviderQuery rightJoinWithLoginPath() Adds a RIGHT JOIN clause and with to the query using the LoginPath relation
+ * @method     ChildLoginProviderQuery innerJoinWithLoginPath() Adds a INNER JOIN clause and with to the query using the LoginPath relation
+ *
  * @method     ChildLoginProviderQuery leftJoinLoginAccount($relationAlias = null) Adds a LEFT JOIN clause to the query using the LoginAccount relation
  * @method     ChildLoginProviderQuery rightJoinLoginAccount($relationAlias = null) Adds a RIGHT JOIN clause to the query using the LoginAccount relation
  * @method     ChildLoginProviderQuery innerJoinLoginAccount($relationAlias = null) Adds a INNER JOIN clause to the query using the LoginAccount relation
@@ -62,7 +78,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProviderQuery rightJoinWithLoginAccount() Adds a RIGHT JOIN clause and with to the query using the LoginAccount relation
  * @method     ChildLoginProviderQuery innerJoinWithLoginAccount() Adds a INNER JOIN clause and with to the query using the LoginAccount relation
  *
- * @method     \AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \AUTH\Models\LoginPathQuery|\AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLoginProvider findOne(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query
  * @method     ChildLoginProvider findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query, or a new ChildLoginProvider object populated from the query conditions when no match is found
@@ -73,8 +89,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider findOneByClient(string $CLIENT) Return the first ChildLoginProvider filtered by the CLIENT column
  * @method     ChildLoginProvider findOneBySecret(string $SECRET) Return the first ChildLoginProvider filtered by the SECRET column
  * @method     ChildLoginProvider findOneByParent(string $PARENT_REF) Return the first ChildLoginProvider filtered by the PARENT_REF column
+ * @method     ChildLoginProvider findOneByScopes(string $SCOPES) Return the first ChildLoginProvider filtered by the SCOPES column
  * @method     ChildLoginProvider findOneByActive(boolean $ACTIVE) Return the first ChildLoginProvider filtered by the ACTIVE column
  * @method     ChildLoginProvider findOneByCustomerCode(string $CUSTOMER_CODE) Return the first ChildLoginProvider filtered by the CUSTOMER_CODE column
+ * @method     ChildLoginProvider findOneByExpiration(int $EXPIRATION) Return the first ChildLoginProvider filtered by the EXPIRATION column
+ * @method     ChildLoginProvider findOneByExpirationPeriod(int $EXPIRATION_PERIOD) Return the first ChildLoginProvider filtered by the EXPIRATION_PERIOD column
  * @method     ChildLoginProvider findOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column
  * @method     ChildLoginProvider findOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column
  * @method     ChildLoginProvider findOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column *
@@ -88,8 +107,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider requireOneByClient(string $CLIENT) Return the first ChildLoginProvider filtered by the CLIENT column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneBySecret(string $SECRET) Return the first ChildLoginProvider filtered by the SECRET column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByParent(string $PARENT_REF) Return the first ChildLoginProvider filtered by the PARENT_REF column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginProvider requireOneByScopes(string $SCOPES) Return the first ChildLoginProvider filtered by the SCOPES column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByActive(boolean $ACTIVE) Return the first ChildLoginProvider filtered by the ACTIVE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByCustomerCode(string $CUSTOMER_CODE) Return the first ChildLoginProvider filtered by the CUSTOMER_CODE column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginProvider requireOneByExpiration(int $EXPIRATION) Return the first ChildLoginProvider filtered by the EXPIRATION column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginProvider requireOneByExpirationPeriod(int $EXPIRATION_PERIOD) Return the first ChildLoginProvider filtered by the EXPIRATION_PERIOD column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -101,8 +123,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider[]|ObjectCollection findByClient(string $CLIENT) Return ChildLoginProvider objects filtered by the CLIENT column
  * @method     ChildLoginProvider[]|ObjectCollection findBySecret(string $SECRET) Return ChildLoginProvider objects filtered by the SECRET column
  * @method     ChildLoginProvider[]|ObjectCollection findByParent(string $PARENT_REF) Return ChildLoginProvider objects filtered by the PARENT_REF column
+ * @method     ChildLoginProvider[]|ObjectCollection findByScopes(string $SCOPES) Return ChildLoginProvider objects filtered by the SCOPES column
  * @method     ChildLoginProvider[]|ObjectCollection findByActive(boolean $ACTIVE) Return ChildLoginProvider objects filtered by the ACTIVE column
  * @method     ChildLoginProvider[]|ObjectCollection findByCustomerCode(string $CUSTOMER_CODE) Return ChildLoginProvider objects filtered by the CUSTOMER_CODE column
+ * @method     ChildLoginProvider[]|ObjectCollection findByExpiration(int $EXPIRATION) Return ChildLoginProvider objects filtered by the EXPIRATION column
+ * @method     ChildLoginProvider[]|ObjectCollection findByExpirationPeriod(int $EXPIRATION_PERIOD) Return ChildLoginProvider objects filtered by the EXPIRATION_PERIOD column
  * @method     ChildLoginProvider[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginProvider objects filtered by the created_at column
  * @method     ChildLoginProvider[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginProvider objects filtered by the updated_at column
  * @method     ChildLoginProvider[]|ObjectCollection findByAccounts(int $ACCOUNTS) Return ChildLoginProvider objects filtered by the ACCOUNTS column
@@ -207,7 +232,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT ID_PROVIDER, NAME, DEV, CLIENT, SECRET, PARENT_REF, ACTIVE, CUSTOMER_CODE, created_at, updated_at, ACCOUNTS FROM AUTH_PROVIDERS WHERE ID_PROVIDER = :p0';
+        $sql = 'SELECT ID_PROVIDER, NAME, DEV, CLIENT, SECRET, PARENT_REF, SCOPES, ACTIVE, CUSTOMER_CODE, EXPIRATION, EXPIRATION_PERIOD, created_at, updated_at, ACCOUNTS FROM AUTH_PROVIDERS WHERE ID_PROVIDER = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -463,6 +488,31 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Filter the query on the SCOPES column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByScopes('fooValue');   // WHERE SCOPES = 'fooValue'
+     * $query->filterByScopes('%fooValue%', Criteria::LIKE); // WHERE SCOPES LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $scopes The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     */
+    public function filterByScopes($scopes = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($scopes)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginProviderTableMap::COL_SCOPES, $scopes, $comparison);
+    }
+
+    /**
      * Filter the query on the ACTIVE column
      *
      * Example usage:
@@ -512,6 +562,80 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(LoginProviderTableMap::COL_CUSTOMER_CODE, $customerCode, $comparison);
+    }
+
+    /**
+     * Filter the query on the EXPIRATION column
+     *
+     * @param     mixed $expiration The value to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     */
+    public function filterByExpiration($expiration = null, $comparison = null)
+    {
+        $valueSet = LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_EXPIRATION);
+        if (is_scalar($expiration)) {
+            if (!in_array($expiration, $valueSet)) {
+                throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $expiration));
+            }
+            $expiration = array_search($expiration, $valueSet);
+        } elseif (is_array($expiration)) {
+            $convertedValues = array();
+            foreach ($expiration as $value) {
+                if (!in_array($value, $valueSet)) {
+                    throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $value));
+                }
+                $convertedValues []= array_search($value, $valueSet);
+            }
+            $expiration = $convertedValues;
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION, $expiration, $comparison);
+    }
+
+    /**
+     * Filter the query on the EXPIRATION_PERIOD column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByExpirationPeriod(1234); // WHERE EXPIRATION_PERIOD = 1234
+     * $query->filterByExpirationPeriod(array(12, 34)); // WHERE EXPIRATION_PERIOD IN (12, 34)
+     * $query->filterByExpirationPeriod(array('min' => 12)); // WHERE EXPIRATION_PERIOD > 12
+     * </code>
+     *
+     * @param     mixed $expirationPeriod The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     */
+    public function filterByExpirationPeriod($expirationPeriod = null, $comparison = null)
+    {
+        if (is_array($expirationPeriod)) {
+            $useMinMax = false;
+            if (isset($expirationPeriod['min'])) {
+                $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION_PERIOD, $expirationPeriod['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($expirationPeriod['max'])) {
+                $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION_PERIOD, $expirationPeriod['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION_PERIOD, $expirationPeriod, $comparison);
     }
 
     /**
@@ -639,6 +763,79 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         }
 
         return $this->addUsingAlias(LoginProviderTableMap::COL_ACCOUNTS, $accounts, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \AUTH\Models\LoginPath object
+     *
+     * @param \AUTH\Models\LoginPath|ObjectCollection $loginPath the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildLoginProviderQuery The current query, for fluid interface
+     */
+    public function filterByLoginPath($loginPath, $comparison = null)
+    {
+        if ($loginPath instanceof \AUTH\Models\LoginPath) {
+            return $this
+                ->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $loginPath->getIdSocial(), $comparison);
+        } elseif ($loginPath instanceof ObjectCollection) {
+            return $this
+                ->useLoginPathQuery()
+                ->filterByPrimaryKeys($loginPath->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByLoginPath() only accepts arguments of type \AUTH\Models\LoginPath or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the LoginPath relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     */
+    public function joinLoginPath($relationAlias = null, $joinType = 'INNER JOIN')
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('LoginPath');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'LoginPath');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the LoginPath relation LoginPath object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \AUTH\Models\LoginPathQuery A secondary query class using the current class as primary query
+     */
+    public function useLoginPathQuery($relationAlias = null, $joinType = 'INNER JOIN')
+    {
+        return $this
+            ->joinLoginPath($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'LoginPath', '\AUTH\Models\LoginPathQuery');
     }
 
     /**

@@ -7,9 +7,12 @@ use \Exception;
 use \PDO;
 use AUTH\Models\LoginAccount as ChildLoginAccount;
 use AUTH\Models\LoginAccountQuery as ChildLoginAccountQuery;
+use AUTH\Models\LoginPath as ChildLoginPath;
+use AUTH\Models\LoginPathQuery as ChildLoginPathQuery;
 use AUTH\Models\LoginProvider as ChildLoginProvider;
 use AUTH\Models\LoginProviderQuery as ChildLoginProviderQuery;
 use AUTH\Models\Map\LoginAccountTableMap;
+use AUTH\Models\Map\LoginPathTableMap;
 use AUTH\Models\Map\LoginProviderTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -75,14 +78,14 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * The value for the name field.
-     *
+     * Different kind of oauth social network
      * @var        int
      */
     protected $name;
 
     /**
      * The value for the dev field.
-     *
+     * Flag to define if the provider is for dev purposes
      * Note: this column has a database default value of: true
      * @var        boolean
      */
@@ -90,14 +93,14 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * The value for the client field.
-     *
+     * Client id for the provider
      * @var        string
      */
     protected $client;
 
     /**
      * The value for the secret field.
-     *
+     * Secret for the client id
      * @var        string
      */
     protected $secret;
@@ -108,6 +111,13 @@ abstract class LoginProvider implements ActiveRecordInterface
      * @var        string
      */
     protected $parent_ref;
+
+    /**
+     * The value for the scopes field.
+     *
+     * @var        string
+     */
+    protected $scopes;
 
     /**
      * The value for the active field.
@@ -123,6 +133,21 @@ abstract class LoginProvider implements ActiveRecordInterface
      * @var        string
      */
     protected $customer_code;
+
+    /**
+     * The value for the expiration field.
+     * Expiration mode for passwords
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $expiration;
+
+    /**
+     * The value for the expiration_period field.
+     *
+     * @var        int
+     */
+    protected $expiration_period;
 
     /**
      * The value for the created_at field.
@@ -146,6 +171,12 @@ abstract class LoginProvider implements ActiveRecordInterface
     protected $accounts;
 
     /**
+     * @var        ObjectCollection|ChildLoginPath[] Collection to store aggregation of ChildLoginPath objects.
+     */
+    protected $collLoginPaths;
+    protected $collLoginPathsPartial;
+
+    /**
      * @var        ObjectCollection|ChildLoginAccount[] Collection to store aggregation of ChildLoginAccount objects.
      */
     protected $collLoginAccounts;
@@ -158,6 +189,12 @@ abstract class LoginProvider implements ActiveRecordInterface
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildLoginPath[]
+     */
+    protected $loginPathsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -175,6 +212,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     {
         $this->dev = true;
         $this->active = true;
+        $this->expiration = 0;
     }
 
     /**
@@ -416,7 +454,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * Different kind of oauth social network
      * @return string
      * @throws \Propel\Runtime\Exception\PropelException
      */
@@ -435,7 +473,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Get the [dev] column value.
-     *
+     * Flag to define if the provider is for dev purposes
      * @return boolean
      */
     public function getDebug()
@@ -445,7 +483,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Get the [dev] column value.
-     *
+     * Flag to define if the provider is for dev purposes
      * @return boolean
      */
     public function isDebug()
@@ -455,7 +493,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Get the [client] column value.
-     *
+     * Client id for the provider
      * @return string
      */
     public function getClient()
@@ -465,7 +503,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Get the [secret] column value.
-     *
+     * Secret for the client id
      * @return string
      */
     public function getSecret()
@@ -481,6 +519,16 @@ abstract class LoginProvider implements ActiveRecordInterface
     public function getParent()
     {
         return $this->parent_ref;
+    }
+
+    /**
+     * Get the [scopes] column value.
+     *
+     * @return string
+     */
+    public function getScopes()
+    {
+        return $this->scopes;
     }
 
     /**
@@ -514,10 +562,39 @@ abstract class LoginProvider implements ActiveRecordInterface
     }
 
     /**
+     * Get the [expiration] column value.
+     * Expiration mode for passwords
+     * @return string
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getExpiration()
+    {
+        if (null === $this->expiration) {
+            return null;
+        }
+        $valueSet = LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_EXPIRATION);
+        if (!isset($valueSet[$this->expiration])) {
+            throw new PropelException('Unknown stored enum key: ' . $this->expiration);
+        }
+
+        return $valueSet[$this->expiration];
+    }
+
+    /**
+     * Get the [expiration_period] column value.
+     *
+     * @return int
+     */
+    public function getExpirationPeriod()
+    {
+        return $this->expiration_period;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
@@ -537,7 +614,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
@@ -585,7 +662,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * Different kind of oauth social network
      * @param  string $v new value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
@@ -614,7 +691,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * Flag to define if the provider is for dev purposes
      * @param  boolean|integer|string $v The new value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
@@ -638,7 +715,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Set the value of [client] column.
-     *
+     * Client id for the provider
      * @param string $v new value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
@@ -658,7 +735,7 @@ abstract class LoginProvider implements ActiveRecordInterface
 
     /**
      * Set the value of [secret] column.
-     *
+     * Secret for the client id
      * @param string $v new value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
@@ -695,6 +772,26 @@ abstract class LoginProvider implements ActiveRecordInterface
 
         return $this;
     } // setParent()
+
+    /**
+     * Set the value of [scopes] column.
+     *
+     * @param string $v new value
+     * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
+     */
+    public function setScopes($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->scopes !== $v) {
+            $this->scopes = $v;
+            $this->modifiedColumns[LoginProviderTableMap::COL_SCOPES] = true;
+        }
+
+        return $this;
+    } // setScopes()
 
     /**
      * Sets the value of the [active] column.
@@ -743,6 +840,51 @@ abstract class LoginProvider implements ActiveRecordInterface
 
         return $this;
     } // setCustomerCode()
+
+    /**
+     * Set the value of [expiration] column.
+     * Expiration mode for passwords
+     * @param  string $v new value
+     * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setExpiration($v)
+    {
+        if ($v !== null) {
+            $valueSet = LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_EXPIRATION);
+            if (!in_array($v, $valueSet)) {
+                throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $v));
+            }
+            $v = array_search($v, $valueSet);
+        }
+
+        if ($this->expiration !== $v) {
+            $this->expiration = $v;
+            $this->modifiedColumns[LoginProviderTableMap::COL_EXPIRATION] = true;
+        }
+
+        return $this;
+    } // setExpiration()
+
+    /**
+     * Set the value of [expiration_period] column.
+     *
+     * @param int $v new value
+     * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
+     */
+    public function setExpirationPeriod($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->expiration_period !== $v) {
+            $this->expiration_period = $v;
+            $this->modifiedColumns[LoginProviderTableMap::COL_EXPIRATION_PERIOD] = true;
+        }
+
+        return $this;
+    } // setExpirationPeriod()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
@@ -822,6 +964,10 @@ abstract class LoginProvider implements ActiveRecordInterface
                 return false;
             }
 
+            if ($this->expiration !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -866,25 +1012,34 @@ abstract class LoginProvider implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : LoginProviderTableMap::translateFieldName('Parent', TableMap::TYPE_PHPNAME, $indexType)];
             $this->parent_ref = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginProviderTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : LoginProviderTableMap::translateFieldName('Scopes', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->scopes = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginProviderTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
             $this->active = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginProviderTableMap::translateFieldName('CustomerCode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginProviderTableMap::translateFieldName('CustomerCode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_code = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginProviderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginProviderTableMap::translateFieldName('Expiration', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->expiration = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LoginProviderTableMap::translateFieldName('ExpirationPeriod', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->expiration_period = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : LoginProviderTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginProviderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : LoginProviderTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LoginProviderTableMap::translateFieldName('Accounts', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : LoginProviderTableMap::translateFieldName('Accounts', TableMap::TYPE_PHPNAME, $indexType)];
             $this->accounts = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -894,7 +1049,7 @@ abstract class LoginProvider implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = LoginProviderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = LoginProviderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginProvider'), 0, $e);
@@ -954,6 +1109,8 @@ abstract class LoginProvider implements ActiveRecordInterface
         $this->hydrate($row, 0, true, $dataFetcher->getIndexType()); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->collLoginPaths = null;
 
             $this->collLoginAccounts = null;
 
@@ -1024,12 +1181,13 @@ abstract class LoginProvider implements ActiveRecordInterface
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-
+                $time = time();
+                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
                 if (!$this->isColumnModified(LoginProviderTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setCreatedAt($highPrecision);
                 }
                 if (!$this->isColumnModified(LoginProviderTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setUpdatedAt($highPrecision);
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
@@ -1081,6 +1239,23 @@ abstract class LoginProvider implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->loginPathsScheduledForDeletion !== null) {
+                if (!$this->loginPathsScheduledForDeletion->isEmpty()) {
+                    \AUTH\Models\LoginPathQuery::create()
+                        ->filterByPrimaryKeys($this->loginPathsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->loginPathsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collLoginPaths !== null) {
+                foreach ($this->collLoginPaths as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->loginAccountsScheduledForDeletion !== null) {
@@ -1144,11 +1319,20 @@ abstract class LoginProvider implements ActiveRecordInterface
         if ($this->isColumnModified(LoginProviderTableMap::COL_PARENT_REF)) {
             $modifiedColumns[':p' . $index++]  = 'PARENT_REF';
         }
+        if ($this->isColumnModified(LoginProviderTableMap::COL_SCOPES)) {
+            $modifiedColumns[':p' . $index++]  = 'SCOPES';
+        }
         if ($this->isColumnModified(LoginProviderTableMap::COL_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = 'ACTIVE';
         }
         if ($this->isColumnModified(LoginProviderTableMap::COL_CUSTOMER_CODE)) {
             $modifiedColumns[':p' . $index++]  = 'CUSTOMER_CODE';
+        }
+        if ($this->isColumnModified(LoginProviderTableMap::COL_EXPIRATION)) {
+            $modifiedColumns[':p' . $index++]  = 'EXPIRATION';
+        }
+        if ($this->isColumnModified(LoginProviderTableMap::COL_EXPIRATION_PERIOD)) {
+            $modifiedColumns[':p' . $index++]  = 'EXPIRATION_PERIOD';
         }
         if ($this->isColumnModified(LoginProviderTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
@@ -1188,11 +1372,20 @@ abstract class LoginProvider implements ActiveRecordInterface
                     case 'PARENT_REF':
                         $stmt->bindValue($identifier, $this->parent_ref, PDO::PARAM_STR);
                         break;
+                    case 'SCOPES':
+                        $stmt->bindValue($identifier, $this->scopes, PDO::PARAM_STR);
+                        break;
                     case 'ACTIVE':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
                         break;
                     case 'CUSTOMER_CODE':
                         $stmt->bindValue($identifier, $this->customer_code, PDO::PARAM_STR);
+                        break;
+                    case 'EXPIRATION':
+                        $stmt->bindValue($identifier, $this->expiration, PDO::PARAM_INT);
+                        break;
+                    case 'EXPIRATION_PERIOD':
+                        $stmt->bindValue($identifier, $this->expiration_period, PDO::PARAM_INT);
                         break;
                     case 'created_at':
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1284,18 +1477,27 @@ abstract class LoginProvider implements ActiveRecordInterface
                 return $this->getParent();
                 break;
             case 6:
-                return $this->getActive();
+                return $this->getScopes();
                 break;
             case 7:
-                return $this->getCustomerCode();
+                return $this->getActive();
                 break;
             case 8:
-                return $this->getCreatedAt();
+                return $this->getCustomerCode();
                 break;
             case 9:
-                return $this->getUpdatedAt();
+                return $this->getExpiration();
                 break;
             case 10:
+                return $this->getExpirationPeriod();
+                break;
+            case 11:
+                return $this->getCreatedAt();
+                break;
+            case 12:
+                return $this->getUpdatedAt();
+                break;
+            case 13:
                 return $this->getAccounts();
                 break;
             default:
@@ -1334,18 +1536,21 @@ abstract class LoginProvider implements ActiveRecordInterface
             $keys[3] => $this->getClient(),
             $keys[4] => $this->getSecret(),
             $keys[5] => $this->getParent(),
-            $keys[6] => $this->getActive(),
-            $keys[7] => $this->getCustomerCode(),
-            $keys[8] => $this->getCreatedAt(),
-            $keys[9] => $this->getUpdatedAt(),
-            $keys[10] => $this->getAccounts(),
+            $keys[6] => $this->getScopes(),
+            $keys[7] => $this->getActive(),
+            $keys[8] => $this->getCustomerCode(),
+            $keys[9] => $this->getExpiration(),
+            $keys[10] => $this->getExpirationPeriod(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
+            $keys[13] => $this->getAccounts(),
         );
-        if ($result[$keys[8]] instanceof \DateTimeInterface) {
-            $result[$keys[8]] = $result[$keys[8]]->format('c');
+        if ($result[$keys[11]] instanceof \DateTimeInterface) {
+            $result[$keys[11]] = $result[$keys[11]]->format('c');
         }
 
-        if ($result[$keys[9]] instanceof \DateTimeInterface) {
-            $result[$keys[9]] = $result[$keys[9]]->format('c');
+        if ($result[$keys[12]] instanceof \DateTimeInterface) {
+            $result[$keys[12]] = $result[$keys[12]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1354,6 +1559,21 @@ abstract class LoginProvider implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collLoginPaths) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'loginPaths';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'AUTH_PATHSs';
+                        break;
+                    default:
+                        $key = 'LoginPaths';
+                }
+
+                $result[$key] = $this->collLoginPaths->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collLoginAccounts) {
 
                 switch ($keyType) {
@@ -1426,18 +1646,31 @@ abstract class LoginProvider implements ActiveRecordInterface
                 $this->setParent($value);
                 break;
             case 6:
-                $this->setActive($value);
+                $this->setScopes($value);
                 break;
             case 7:
-                $this->setCustomerCode($value);
+                $this->setActive($value);
                 break;
             case 8:
-                $this->setCreatedAt($value);
+                $this->setCustomerCode($value);
                 break;
             case 9:
-                $this->setUpdatedAt($value);
+                $valueSet = LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_EXPIRATION);
+                if (isset($valueSet[$value])) {
+                    $value = $valueSet[$value];
+                }
+                $this->setExpiration($value);
                 break;
             case 10:
+                $this->setExpirationPeriod($value);
+                break;
+            case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
+                $this->setUpdatedAt($value);
+                break;
+            case 13:
                 $this->setAccounts($value);
                 break;
         } // switch()
@@ -1485,19 +1718,28 @@ abstract class LoginProvider implements ActiveRecordInterface
             $this->setParent($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setActive($arr[$keys[6]]);
+            $this->setScopes($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setCustomerCode($arr[$keys[7]]);
+            $this->setActive($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setCreatedAt($arr[$keys[8]]);
+            $this->setCustomerCode($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setUpdatedAt($arr[$keys[9]]);
+            $this->setExpiration($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setAccounts($arr[$keys[10]]);
+            $this->setExpirationPeriod($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setCreatedAt($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setUpdatedAt($arr[$keys[12]]);
+        }
+        if (array_key_exists($keys[13], $arr)) {
+            $this->setAccounts($arr[$keys[13]]);
         }
     }
 
@@ -1558,11 +1800,20 @@ abstract class LoginProvider implements ActiveRecordInterface
         if ($this->isColumnModified(LoginProviderTableMap::COL_PARENT_REF)) {
             $criteria->add(LoginProviderTableMap::COL_PARENT_REF, $this->parent_ref);
         }
+        if ($this->isColumnModified(LoginProviderTableMap::COL_SCOPES)) {
+            $criteria->add(LoginProviderTableMap::COL_SCOPES, $this->scopes);
+        }
         if ($this->isColumnModified(LoginProviderTableMap::COL_ACTIVE)) {
             $criteria->add(LoginProviderTableMap::COL_ACTIVE, $this->active);
         }
         if ($this->isColumnModified(LoginProviderTableMap::COL_CUSTOMER_CODE)) {
             $criteria->add(LoginProviderTableMap::COL_CUSTOMER_CODE, $this->customer_code);
+        }
+        if ($this->isColumnModified(LoginProviderTableMap::COL_EXPIRATION)) {
+            $criteria->add(LoginProviderTableMap::COL_EXPIRATION, $this->expiration);
+        }
+        if ($this->isColumnModified(LoginProviderTableMap::COL_EXPIRATION_PERIOD)) {
+            $criteria->add(LoginProviderTableMap::COL_EXPIRATION_PERIOD, $this->expiration_period);
         }
         if ($this->isColumnModified(LoginProviderTableMap::COL_CREATED_AT)) {
             $criteria->add(LoginProviderTableMap::COL_CREATED_AT, $this->created_at);
@@ -1664,8 +1915,11 @@ abstract class LoginProvider implements ActiveRecordInterface
         $copyObj->setClient($this->getClient());
         $copyObj->setSecret($this->getSecret());
         $copyObj->setParent($this->getParent());
+        $copyObj->setScopes($this->getScopes());
         $copyObj->setActive($this->getActive());
         $copyObj->setCustomerCode($this->getCustomerCode());
+        $copyObj->setExpiration($this->getExpiration());
+        $copyObj->setExpirationPeriod($this->getExpirationPeriod());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setAccounts($this->getAccounts());
@@ -1674,6 +1928,12 @@ abstract class LoginProvider implements ActiveRecordInterface
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
+
+            foreach ($this->getLoginPaths() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addLoginPath($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getLoginAccounts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1722,10 +1982,239 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
+        if ('LoginPath' == $relationName) {
+            $this->initLoginPaths();
+            return;
+        }
         if ('LoginAccount' == $relationName) {
             $this->initLoginAccounts();
             return;
         }
+    }
+
+    /**
+     * Clears out the collLoginPaths collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addLoginPaths()
+     */
+    public function clearLoginPaths()
+    {
+        $this->collLoginPaths = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collLoginPaths collection loaded partially.
+     */
+    public function resetPartialLoginPaths($v = true)
+    {
+        $this->collLoginPathsPartial = $v;
+    }
+
+    /**
+     * Initializes the collLoginPaths collection.
+     *
+     * By default this just sets the collLoginPaths collection to an empty array (like clearcollLoginPaths());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initLoginPaths($overrideExisting = true)
+    {
+        if (null !== $this->collLoginPaths && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = LoginPathTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collLoginPaths = new $collectionClassName;
+        $this->collLoginPaths->setModel('\AUTH\Models\LoginPath');
+    }
+
+    /**
+     * Gets an array of ChildLoginPath objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildLoginProvider is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildLoginPath[] List of ChildLoginPath objects
+     * @throws PropelException
+     */
+    public function getLoginPaths(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collLoginPathsPartial && !$this->isNew();
+        if (null === $this->collLoginPaths || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collLoginPaths) {
+                // return empty collection
+                $this->initLoginPaths();
+            } else {
+                $collLoginPaths = ChildLoginPathQuery::create(null, $criteria)
+                    ->filterByProviderPath($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collLoginPathsPartial && count($collLoginPaths)) {
+                        $this->initLoginPaths(false);
+
+                        foreach ($collLoginPaths as $obj) {
+                            if (false == $this->collLoginPaths->contains($obj)) {
+                                $this->collLoginPaths->append($obj);
+                            }
+                        }
+
+                        $this->collLoginPathsPartial = true;
+                    }
+
+                    return $collLoginPaths;
+                }
+
+                if ($partial && $this->collLoginPaths) {
+                    foreach ($this->collLoginPaths as $obj) {
+                        if ($obj->isNew()) {
+                            $collLoginPaths[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collLoginPaths = $collLoginPaths;
+                $this->collLoginPathsPartial = false;
+            }
+        }
+
+        return $this->collLoginPaths;
+    }
+
+    /**
+     * Sets a collection of ChildLoginPath objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $loginPaths A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildLoginProvider The current object (for fluent API support)
+     */
+    public function setLoginPaths(Collection $loginPaths, ConnectionInterface $con = null)
+    {
+        /** @var ChildLoginPath[] $loginPathsToDelete */
+        $loginPathsToDelete = $this->getLoginPaths(new Criteria(), $con)->diff($loginPaths);
+
+
+        $this->loginPathsScheduledForDeletion = $loginPathsToDelete;
+
+        foreach ($loginPathsToDelete as $loginPathRemoved) {
+            $loginPathRemoved->setProviderPath(null);
+        }
+
+        $this->collLoginPaths = null;
+        foreach ($loginPaths as $loginPath) {
+            $this->addLoginPath($loginPath);
+        }
+
+        $this->collLoginPaths = $loginPaths;
+        $this->collLoginPathsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related LoginPath objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related LoginPath objects.
+     * @throws PropelException
+     */
+    public function countLoginPaths(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collLoginPathsPartial && !$this->isNew();
+        if (null === $this->collLoginPaths || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collLoginPaths) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getLoginPaths());
+            }
+
+            $query = ChildLoginPathQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProviderPath($this)
+                ->count($con);
+        }
+
+        return count($this->collLoginPaths);
+    }
+
+    /**
+     * Method called to associate a ChildLoginPath object to this object
+     * through the ChildLoginPath foreign key attribute.
+     *
+     * @param  ChildLoginPath $l ChildLoginPath
+     * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
+     */
+    public function addLoginPath(ChildLoginPath $l)
+    {
+        if ($this->collLoginPaths === null) {
+            $this->initLoginPaths();
+            $this->collLoginPathsPartial = true;
+        }
+
+        if (!$this->collLoginPaths->contains($l)) {
+            $this->doAddLoginPath($l);
+
+            if ($this->loginPathsScheduledForDeletion and $this->loginPathsScheduledForDeletion->contains($l)) {
+                $this->loginPathsScheduledForDeletion->remove($this->loginPathsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildLoginPath $loginPath The ChildLoginPath object to add.
+     */
+    protected function doAddLoginPath(ChildLoginPath $loginPath)
+    {
+        $this->collLoginPaths[]= $loginPath;
+        $loginPath->setProviderPath($this);
+    }
+
+    /**
+     * @param  ChildLoginPath $loginPath The ChildLoginPath object to remove.
+     * @return $this|ChildLoginProvider The current object (for fluent API support)
+     */
+    public function removeLoginPath(ChildLoginPath $loginPath)
+    {
+        if ($this->getLoginPaths()->contains($loginPath)) {
+            $pos = $this->collLoginPaths->search($loginPath);
+            $this->collLoginPaths->remove($pos);
+            if (null === $this->loginPathsScheduledForDeletion) {
+                $this->loginPathsScheduledForDeletion = clone $this->collLoginPaths;
+                $this->loginPathsScheduledForDeletion->clear();
+            }
+            $this->loginPathsScheduledForDeletion[]= clone $loginPath;
+            $loginPath->setProviderPath(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -1966,8 +2455,11 @@ abstract class LoginProvider implements ActiveRecordInterface
         $this->client = null;
         $this->secret = null;
         $this->parent_ref = null;
+        $this->scopes = null;
         $this->active = null;
         $this->customer_code = null;
+        $this->expiration = null;
+        $this->expiration_period = null;
         $this->created_at = null;
         $this->updated_at = null;
         $this->accounts = null;
@@ -1990,6 +2482,11 @@ abstract class LoginProvider implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collLoginPaths) {
+                foreach ($this->collLoginPaths as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collLoginAccounts) {
                 foreach ($this->collLoginAccounts as $o) {
                     $o->clearAllReferences($deep);
@@ -1997,6 +2494,7 @@ abstract class LoginProvider implements ActiveRecordInterface
             }
         } // if ($deep)
 
+        $this->collLoginPaths = null;
         $this->collLoginAccounts = null;
     }
 

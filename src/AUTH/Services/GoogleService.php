@@ -6,8 +6,8 @@ use AUTH\Dto\GoogleCheckDto;
 use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
-use AUTH\Types\GoogleClientWrapper;
 use PSFS\base\config\Config;
+use PSFS\base\exception\GeneratorException;
 use PSFS\base\Router;
 
 /**
@@ -23,11 +23,9 @@ class GoogleService extends AUTHService {
         return LoginProviderTableMap::COL_NAME_GOOGLE;
     }
 
-    /**
-     * @return array
-     */
-    public function getScopes() {
-        return (count($this->scopes)) ? $this->scopes : [
+    protected function getProviderDefaultScopes()
+    {
+        return [
             \Google_Service_Plus::PLUS_LOGIN,
             \Google_Service_Plus::PLUS_ME,
             \Google_Service_Plus::USERINFO_EMAIL,
@@ -35,12 +33,23 @@ class GoogleService extends AUTHService {
         ];
     }
 
+    /**
+     * @param int $flow
+     * @return string
+     */
     public function getAuthUrl($flow = self::FLOW_LOGIN)
     {
         $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false), $flow);
         return $client->createAuthUrl();
     }
 
+    /**
+     * @param array $query
+     * @param int $flow
+     * @return AuthUserDto|null
+     * @throws GeneratorException
+     * @throws InvalidCallbackParametersException
+     */
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
     {
         if(!array_key_exists('code', $query)) {
@@ -51,6 +60,12 @@ class GoogleService extends AUTHService {
         return $this->getUser($token);
     }
 
+    /**
+     * @param array $auth
+     * @param int $flow
+     * @return AuthUserDto|null
+     * @throws GeneratorException
+     */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {
         $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false), $flow);
@@ -84,7 +99,7 @@ class GoogleService extends AUTHService {
     /**
      * @param string $callbackUri
      * @param integer $flow
-     * @return GoogleClientWrapper
+     * @return \Google_Client
      */
     public function getClient($callbackUri, $flow = self::FLOW_LOGIN)
     {
@@ -97,7 +112,7 @@ class GoogleService extends AUTHService {
             if(self::FLOW_REGISTER === $flow) {
                 $config['approval_prompt'] = Config::getParam('google.prompt', false);
             }
-            self::$client = new GoogleClientWrapper($config);
+            self::$client = new \Google_Client($config);
             self::$client->setAccessType(Config::getParam('google.accessType', 'offline'));
             self::$client->setScopes($this->getScopes());
         }
@@ -106,14 +121,13 @@ class GoogleService extends AUTHService {
     }
 
     /**
-     * @param string $idToken
+     * @param $idToken
      * @return GoogleCheckDto
+     * @throws GeneratorException
+     * @throws \ReflectionException
      */
     public function verifyIdToken($idToken) {
         $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false));
-        if(Config::getParam('psfs.auth.google.verifyaud')) {
-            $client->setAud($this->provider->getClient());
-        }
         $verification = $client->verifyIdToken($idToken);
         $response = new GoogleCheckDto();
         if(false !== $verification){

@@ -2,10 +2,11 @@
 namespace AUTH\Services;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Abraham\TwitterOAuth\TwitterOAuthException;
 use AUTH\Dto\AuthUserDto;
-use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
+use PSFS\base\exception\GeneratorException;
 use PSFS\base\Router;
 use PSFS\base\Security;
 
@@ -38,8 +39,9 @@ class TwitterService extends AUTHService {
     }
 
     /**
-     * @param integer $flow
+     * @param int $flow
      * @return string
+     * @throws TwitterOAuthException
      */
     public function getAuthUrl($flow = self::FLOW_LOGIN)
     {
@@ -58,9 +60,10 @@ class TwitterService extends AUTHService {
 
     /**
      * @param array $query
-     * @param  integer $flow
+     * @param int $flow
      * @return AuthUserDto|null
-     * @throws InvalidCallbackParametersException
+     * @throws TwitterOAuthException
+     * @throws GeneratorException
      */
     public function authenticate(array $query, $flow = self::FLOW_LOGIN)
     {
@@ -73,8 +76,9 @@ class TwitterService extends AUTHService {
 
     /**
      * @param array $auth
-     * @param integer $flow
+     * @param int $flow
      * @return AuthUserDto|null
+     * @throws GeneratorException
      */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {

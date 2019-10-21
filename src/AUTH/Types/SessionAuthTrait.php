@@ -50,8 +50,8 @@ trait SessionAuthTrait {
     protected $account;
 
     /**
-     * Get hearder Authorization
-     * */
+     * @return string|null
+     */
     private static function getAuthorizationHeader()
     {
         $headers = null;
@@ -69,8 +69,8 @@ trait SessionAuthTrait {
     }
 
     /**
-     * get access token from header
-     * */
+     * @return mixed|null
+     */
     public static function getBearerToken()
     {
         $headers = self::getAuthorizationHeader();

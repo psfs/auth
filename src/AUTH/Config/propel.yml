@@ -12,16 +12,16 @@ propel:
 
         # The directory where Propel should output classes, sql, config, etc.
         # Default value is current path #
-        outputDir: %projectDir%
+        outputDir: "%projectDir%"
 
         # The directory where Propel should output generated object model classes.
-        phpDir: %projectDir%
+        phpDir: "%projectDir%"
 
         # The directory where Propel should output the compiled runtime configuration.
-        phpConfDir: %projectDir%/%project%/Config
+        phpConfDir: "%projectDir%/%project%/Config"
 
         # The directory where Propel should output the generated DDL (or data insert statements, etc.)
-        sqlDir: %projectDir%/%project%/Config
+        sqlDir: "%projectDir%/%project%/Config"
 
         # Directory in which your composer.json resides
         composerDir: .
@@ -33,14 +33,14 @@ propel:
             AUTH:
                 # The PDO dsn
                 adapter: mysql
-                dsn: mysql:host=127.0.0.1;port=3306;dbname=PSFS
+                dsn: mysql:host=127.0.0.1;port=3306;dbname=psfs_auth
                 user: psfs
                 password: psfs
                 classname: Propel\Runtime\Connection\PropelPDO
             debugAUTH:
                 # The PDO dsn
                 adapter: mysql
-                dsn: mysql:host=127.0.0.1;port=3306;dbname=PSFS
+                dsn: mysql:host=127.0.0.1;port=3306;dbname=psfs_auth
                 user: psfs
                 password: psfs
                 classname: Propel\Runtime\Connection\DebugPDO

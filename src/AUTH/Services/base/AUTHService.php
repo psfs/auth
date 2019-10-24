@@ -8,9 +8,12 @@ use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\LoginAccount;
 use AUTH\Models\LoginProviderQuery;
 use AUTH\Models\LoginSessionQuery;
+use AUTH\Models\Map\LoginPathTableMap;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use PSFS\base\config\Config;
 use PSFS\base\Logger;
+use PSFS\base\Request;
 use PSFS\base\Router;
 use PSFS\base\Security;
 use PSFS\base\Service;
@@ -25,6 +28,8 @@ use PSFS\base\Service;
 abstract class AUTHService extends Service {
     const FLOW_LOGIN = 1;
     const FLOW_REGISTER = 2;
+
+    const HEADER_AUTH_CUSTOMER = 'X-AUTH-CUSTOMER';
 
     public static $client;
     /**
@@ -90,11 +95,12 @@ abstract class AUTHService extends Service {
     public function init()
     {
         parent::init();
+        $customer = Request::header(self::HEADER_AUTH_CUSTOMER);
         $this->debug = Config::getParam('debug', false);
-        $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug, Config::getParam('psfs.auth.customer_code'));
+        $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug, $customer);
         if(null === $this->provider) {
             Logger::log($this->getProviderName() . ' not defined for ' . ($this->debug) ? ' debug mode' : ' production mode');
-            $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, Config::getParam('psfs.auth.customer_code'));
+            $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, $customer);
             if(null === $this->provider) {
                 throw new AuthProviderNotConfiguredException(t('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }
@@ -149,6 +155,9 @@ abstract class AUTHService extends Service {
         return $logout;
     }
 
+    /**
+     * @return mixed
+     */
     public static function getIpAddress() {
         // check for shared internet/ISP IP
         if (!empty($_SERVER['HTTP_CLIENT_IP']) && self::validateIp($_SERVER['HTTP_CLIENT_IP'])) {
@@ -225,6 +234,25 @@ abstract class AUTHService extends Service {
             }
         }
         return $this->scopes;
+    }
+
+    /**
+     * @param $path
+     * @return |null
+     * @throws AuthProviderNotConfiguredException
+     * @throws PropelException
+     */
+    public function getPath($path) {
+        $criteria = new Criteria();
+        $criteria->add(LoginPathTableMap::COL_PATH, $path);
+        $paths = $this->provider->getLoginPaths($criteria);
+        $path = null;
+        if($paths->count() > 0) {
+            $path = $paths->getFirst()->getPath();
+        } else {
+            throw new AuthProviderNotConfiguredException(str_replace(['%p', '%a'], [$this->provider->getName(), $paths], t('Missing path %a for provider %p')));
+        }
+        return $path;
     }
 
     /**

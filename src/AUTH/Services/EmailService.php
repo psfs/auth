@@ -8,12 +8,14 @@ use AUTH\Exception\EmailProviderMissingParametersException;
 use AUTH\Exception\EmailResetFailedException;
 use AUTH\Exception\EmailWrongPasswordException;
 use AUTH\Models\LoginAccountQuery;
+use AUTH\Models\LoginProvider;
 use AUTH\Models\LoginProviderQuery;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
 use PSFS\base\config\Config;
 use PSFS\base\exception\GeneratorException;
 use PSFS\base\Logger;
+use PSFS\base\Request;
 
 class EmailService extends AUTHService
 {
@@ -38,7 +40,7 @@ class EmailService extends AUTHService
      */
     public function getClient($callbackUri, $flow = self::FLOW_LOGIN)
     {
-        return LoginProviderQuery::getProvider($this->getProviderName(), Config::getParam('debug'), Config::getParam('psfs.auth.customer_code'));
+        return LoginProviderQuery::getProvider($this->getProviderName(), Config::getParam('debug'), Request::header(AUTHService::HEADER_AUTH_CUSTOMER));
     }
 
     /**
@@ -58,14 +60,14 @@ class EmailService extends AUTHService
         if(!strlen($password)) {
             throw new EmailWrongPasswordException(t('Contraseña vacía'), 400);
         }
-        if(strlen($password) < Config::getParam('auth.email.passlen', 6)) {
-            throw new EmailWrongPasswordException(str_replace('%s%', Config::getParam('auth.email.passlen', 6), t('Contraseña demasiado corta, debe tener al menos %s% caracteres')), 400);
+        if(strlen($password) < Config::getParam('auth.email.passlen', 8)) {
+            throw new EmailWrongPasswordException(str_replace('%s%', Config::getParam('auth.email.passlen', 8), t('Contraseña demasiado corta, debe tener al menos %s% caracteres')), 400);
         }
         $pattern = Config::getParam('auth.email.pattern');
         if(null !== $pattern) {
             try {
                 if(!preg_match($pattern, $password)) {
-                    throw new EmailWrongPasswordException(t(Config::getParam('auth.email.pattern.message', 'Contraseña no segura, prueba a incluir caracteres y números')), 400);
+                    throw new EmailWrongPasswordException(t('Contraseña no segura, prueba a incluir caracteres y números'), 400);
                 }
             } catch(\Exception $e) {
                 if($e instanceof EmailWrongPasswordException) {
@@ -107,11 +109,12 @@ class EmailService extends AUTHService
     /**
      * @param string $identifier
      * @param string $password
+     * @param LoginProvider $provider
      * @return string
      */
-    public static function encryptPassword($identifier, $password) {
+    public static function encryptPassword($identifier, $password, LoginProvider $provider) {
         $iv = self::strtohex($identifier);
-        $key = self::strtohex(Config::getParam('auth.email.phrase', 'psfs'));
+        $key = self::strtohex($provider->getSecret());
         $method = Config::getParam('auth.email.method', 'aes-128-cbc');
         return bin2hex(@openssl_encrypt($password, $method, $key, OPENSSL_RAW_DATA, $iv));
     }
@@ -130,7 +133,7 @@ class EmailService extends AUTHService
     {
         $email = strtolower($auth['email']);
         $identifier = sha1($email);
-        $access_token = self::encryptPassword($identifier, $auth['password']);
+        $access_token = self::encryptPassword($identifier, $auth['password'], $this->provider);
         $userExists = LoginAccountQuery::existsIdentifierForProvider($identifier, $this->provider, true);
         if(self::FLOW_REGISTER === $flow && $userExists) {
             throw new EmailAlreadyExistsException(t('Email en uso'), 403);
@@ -147,7 +150,7 @@ class EmailService extends AUTHService
         $user->id = $identifier;
         $user->access_token = $access_token;
         $user->raw = $auth;
-        $user->hydrate($this->provider, self::FLOW_LOGIN === $flow);
+        $user->hydrate($this->provider, self::FLOW_LOGIN === $flow, $access_token);
         return $user;
     }
 
@@ -165,7 +168,7 @@ class EmailService extends AUTHService
                     if(null !== $account) {
                         $now = new \DateTime();
                         if(null !== $account->getRefreshRequest() && $now < $account->getRefreshRequest()) {
-                            $password = EmailService::encryptPassword($account->getId(), $data['password']);
+                            $password = EmailService::encryptPassword($account->getId(), $data['password'], $this->provider);
                             $account->setAccessToken($password)
                                 ->setRefreshToken($password)
                                 ->setRefreshRequest(null)

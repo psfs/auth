@@ -2,9 +2,14 @@
 namespace AUTH\Api;
 
 use AUTH\Api\base\LoginProviderAuthBase;
+use AUTH\Models\LoginAccountQuery;
+use AUTH\Models\LoginSessionQuery;
+use AUTH\Services\base\AUTHService;
 use AUTH\Services\EmailService;
 use PSFS\base\dto\JsonResponse;
+use PSFS\base\exception\ApiException;
 use PSFS\base\Logger;
+use PSFS\base\Request;
 use PSFS\base\Security;
 
 /**
@@ -39,7 +44,8 @@ class EmailAuthApi extends LoginProviderAuthBase {
     /**
      * @label Registra a un usuario por email
      * @POST
-     * @route /register/{__API__}
+     * @route /{__DOMAIN__}/Api/register/{__API__}
+     * @payload \AUTH\Dto\RegisterDto
      * @return \PSFS\base\dto\JsonResponse(data={__API__})
      */
     public function register() {
@@ -50,7 +56,7 @@ class EmailAuthApi extends LoginProviderAuthBase {
      * @label Hace login de un usuario por email
      * @POST
      * @param integer $flow
-     * @route /auth/{__API__}
+     * @route /{__DOMAIN__}/Api/auth/{__API__}
      * @return \PSFS\base\dto\JsonResponse(data=\AUTH\Dto\AuthUserDto)
      */
     public function login($flow = EmailService::FLOW_LOGIN) {
@@ -68,7 +74,7 @@ class EmailAuthApi extends LoginProviderAuthBase {
     /**
      * @label Resetea la contraseña de un usuario
      * @POST
-     * @route /auth/password/reset
+     * @route /{__DOMAIN__}/Api/auth/password/reset
      * @return \PSFS\base\dto\JsonResponse(data=string)
      */
     public function resetPassword() {
@@ -81,5 +87,52 @@ class EmailAuthApi extends LoginProviderAuthBase {
             $code = $e->getCode();
         }
         return $this->json(new JsonResponse($reset, $reset), $code);
+    }
+
+    /**
+     * @GET
+     * @route /{__DOMAIN__}/Api/verify/{userToken}
+     * @param string $userToken
+     * @return \PSFS\base\dto\JsonResponse(data=bool)
+     * @throws ApiException
+     * @throws \PSFS\base\exception\GeneratorException
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function verify($userToken) {
+        $user = LoginAccountQuery::getUserByToken($userToken, $this->customer);
+        if(null === $user) {
+            throw new ApiException(t('User not found'));
+        }
+        $user->setVerified(true);
+        $success = false !== $user->save($this->con);
+        return $this->json(new JsonResponse($success, $success), $success ? 200 : 400);
+    }
+
+    /**
+     * @POST
+     * @route /{__DOMAIN__}/Api/handshake/{token}
+     * @param string $token
+     * @return \PSFS\base\dto\JsonResponse(data=string)
+     */
+    public function handshake($token) {
+        $session = LoginSessionQuery::checkToken($token, $this->customer);
+        return $this->json(new JsonResponse($token, null !== $session), 200);
+    }
+
+    /**
+     * @DELETE
+     * @route /{__DOMAIN__}/Api/logout/{token}
+     * @param string $token
+     * @return \PSFS\base\dto\JsonResponse(data=string)
+     */
+    public function logout($token) {
+        $session = LoginSessionQuery::checkToken($token, $this->customer);
+        if(null !== $session) {
+            $logout = false !== $session->setActive(false)
+                    ->save($this->con);
+        } else {
+            $logout = false;
+        }
+        return $this->json(new JsonResponse($logout, $logout), 200);
     }
 }

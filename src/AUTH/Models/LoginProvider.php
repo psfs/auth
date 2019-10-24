@@ -16,5 +16,7 @@ use AUTH\Models\Base\LoginProvider as BaseLoginProvider;
  */
 class LoginProvider extends BaseLoginProvider
 {
+    public function checkPaths() {
 
+    }
 }

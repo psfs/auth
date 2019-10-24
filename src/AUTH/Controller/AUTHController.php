@@ -40,10 +40,10 @@ abstract class AUTHController extends AUTHBaseController {
         try {
             $user = $this->srv->authenticate($query, $flow);
             Security::getInstance()->updateUser(serialize($user));
-            $route = Config::getParam('login.action');
+            $route = $this->srv->getPath('login.action');
         } catch (\Exception $e) {
             Logger::log($e->getMessage(), LOG_ERR);
-            $route = Config::getParam('login.cancel');
+            $route = $this->srv->getPath('login.cancel');
             Security::getInstance()->setFlash('callback_message', $e->getMessage());
         }
         return $this->getRequest()->redirect($this->srv->base . $this->getRoute($route));

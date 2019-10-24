@@ -1,9 +1,11 @@
 <?php
 namespace AUTH\Dto;
 
+use AUTH\Models\LoginAccountPassword;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\LoginProvider;
 use AUTH\Models\LoginSessionQuery;
+use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
 use PSFS\base\dto\Dto;
 use PSFS\base\Security;
@@ -76,10 +78,12 @@ class AuthUserDto extends Dto {
     public $session_token;
 
     /**
-     * @param \Auth\Models\LoginProvider $provider
-     * @param boolean $verified
+     * @param LoginProvider $provider
+     * @param bool $verified
+     * @param string $password
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function hydrate(LoginProvider $provider, $verified = true) {
+    public function hydrate(LoginProvider $provider, $verified = true, $password = null) {
         if(null !== $this->id) {
             $this->account = LoginAccountQuery::getAccountByIdentifier($this->id, $provider);
             if($this->account->isNew()) {
@@ -96,6 +100,29 @@ class AuthUserDto extends Dto {
             }
             $this->account->setVerified($verified);
             $this->account->save();
+            if(LoginProviderTableMap::COL_NAME_EMAIL === $provider->getName() && !empty($password)) {
+                $now = new \DateTime();
+                switch($provider->getExpiration()) {
+                    case LoginProviderTableMap::COL_EXPIRATION_WEEKLY:
+                        $now->modify($provider->getExpirationPeriod() . ' week');
+                        break;
+                    case LoginProviderTableMap::COL_EXPIRATION_MONTHLY:
+                        $now->modify($provider->getExpirationPeriod() . ' month');
+                        break;
+                    case LoginProviderTableMap::COL_EXPIRATION_YEARLY:
+                        $now->modify($provider->getExpirationPeriod() . ' year');
+                        break;
+                    default:
+                        $now->modify('100 year');
+                        break;
+                }
+
+                $passwordHistory = new LoginAccountPassword();
+                $passwordHistory->setIdAccount($this->account->getPrimaryKey())
+                    ->setValue($password)
+                    ->setExpirationDate($now);
+                $passwordHistory->save();
+            }
             $session = LoginSessionQuery::getLastSession($this->account);
             $session->setIdAccount($this->account->getPrimaryKey());
             $session->setDevice($_SERVER['HTTP_USER_AGENT']);

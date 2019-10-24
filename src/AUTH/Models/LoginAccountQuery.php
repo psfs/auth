@@ -5,6 +5,8 @@ namespace AUTH\Models;
 use AUTH\Models\Base\LoginAccountQuery as BaseLoginAccountQuery;
 use AUTH\Models\Map\LoginProviderTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Propel;
+use PSFS\base\config\Config;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'AUTH_ACCOUNTS' table.
@@ -91,5 +93,22 @@ class LoginAccountQuery extends BaseLoginAccountQuery
                 ->filterByActive(true)
             ->endUse()
             ->findOne();
+    }
+
+    /**
+     * @param $userToken
+     * @param $customer
+     * @return LoginAccount
+     */
+    public static function getUserByToken($userToken, $customer) {
+        $con = Propel::getReadConnection(LoginProviderTableMap::DATABASE_NAME);
+        $con->useDebug(Config::getParam('debug'));
+        $user = self::create()
+            ->filterById($userToken)
+            ->useAccountProviderQuery()
+                ->filterByCustomerCode($customer)
+            ->endUse()
+            ->findOne($con);
+        return $user;
     }
 }

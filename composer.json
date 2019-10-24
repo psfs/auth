@@ -9,18 +9,21 @@
         }
     ],
     "require": {
-        "psfs/core": "dev-master",
-        "google/apiclient": "^2.4",
-        "facebook/graph-sdk": "^5.7",
-        "linkedinapi/linkedin": "^1.1",
-        "abraham/twitteroauth": "^0.7.2",
-        "microsoft/microsoft-graph": "dev-master"
+        "psfs/core": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.6"
+        "phpunit/phpunit": "^5.6",
+        "google/apiclient": "^2.4",
+        "facebook/graph-sdk": "^5.7",
+        "abraham/twitteroauth": "^1.0.1",
+        "microsoft/microsoft-graph": "^1.11.0"
     },
     "suggest": {
-        "ext-apache": "Useful to extract all headers native"
+        "ext-apache": "Useful to extract all headers native",
+        "google/apiclient": "Use almost ^2.4 version",
+        "facebook/graph-sdk": "Use almost ^5.7",
+        "abraham/twitteroauth": "Use almost ^1.0.1",
+        "microsoft/microsoft-graph": "Use almost 1.11.0"
     },
     "license": "MIT",
     "authors": [

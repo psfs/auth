@@ -3,7 +3,10 @@
 namespace AUTH\Models;
 
 use AUTH\Models\Base\LoginSessionQuery as BaseLoginSessionQuery;
+use AUTH\Models\Map\LoginSessionTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Propel;
+use PSFS\base\config\Config;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'AUTH_SESSIONS' table.
@@ -19,19 +22,24 @@ class LoginSessionQuery extends BaseLoginSessionQuery
 {
     /**
      * @param string $token
+     * @param string $customer
      * @return LoginSession
      */
-    public static function checkToken($token) {
-        return self::create()
+    public static function checkToken($token, $customer) {
+        $con = Propel::getReadConnection(LoginSessionTableMap::DATABASE_NAME);
+        $con->useDebug(Config::getParam('debug'));
+        $session = self::create()
             ->filterByActive(true)
             ->filterByToken($token)
             ->useAccountSessionQuery()
                 ->filterByActive(true)
                 ->useAccountProviderQuery()
+                    ->filterByCustomerCode($customer)
                     ->filterByActive(true)
                 ->endUse()
             ->endUse()
-            ->findOne();
+            ->findOne($con);
+        return $session;
     }
 
     /**

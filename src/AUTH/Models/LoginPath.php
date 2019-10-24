@@ -16,5 +16,10 @@ use AUTH\Models\Base\LoginPath as BaseLoginPath;
  */
 class LoginPath extends BaseLoginPath
 {
-
+    const PATH_BASE = 'login.base';
+    const PATH_LOGIN = 'login.action';
+    const PATH_LOGIN_CANCEL = 'login.cancel';
+    const PATH_REGISTER = '';
+    const PATH_REGISTER_CANCEL = '';
+    const PATH_LOGOUT = '';
 }

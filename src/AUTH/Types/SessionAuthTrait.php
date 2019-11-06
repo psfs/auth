@@ -50,6 +50,11 @@ trait SessionAuthTrait {
     protected $account;
 
     /**
+     * @var string
+     */
+    protected $customer;
+
+    /**
      * @return string|null
      */
     private static function getAuthorizationHeader()

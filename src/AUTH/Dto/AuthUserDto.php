@@ -121,12 +121,13 @@ class AuthUserDto extends Dto {
                         break;
                 }
 
-                $passwordHistory = LoginAccountPasswordQuery::getSavedActivePassword($this->account, $password);
-                $passwordHistory->setIdAccount($this->account->getPrimaryKey())
-                    ->setValue($password)
-                    ->setExpirationDate($now);
-                $passwordHistory->save();
-                LoginAccountPasswordQuery::deactivateOldPasswords($passwordHistory);
+                if($this->account->isNew()) {
+                    $passwordHistory = new LoginAccountPassword();
+                    $passwordHistory->setIdAccount($this->account->getPrimaryKey())
+                        ->setValue($password)
+                        ->setExpirationDate($now);
+                    $passwordHistory->save();
+                }
             }
             $session = LoginSessionQuery::getLastSession($this->account);
             $session->setIdAccount($this->account->getPrimaryKey());

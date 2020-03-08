@@ -44,7 +44,7 @@ abstract class SessionAuthApi extends Api implements SessionAuthInterface
             if (empty($token) && !$this->security->isAdmin()) {
                 return $this->json(new JsonResponse(t('Not authorized, missing Api Token in the request'), false), 412);
             } else {
-                $session = LoginSessionQuery::checkToken($token);
+                $session = LoginSessionQuery::checkToken($token, $this->customer);
                 if (!$session && !$this->security->isAdmin()) {
                     return $this->json(new JsonResponse(t('Not authorized, token not valid'), false), 401);
                 } elseif(null !== $session) {

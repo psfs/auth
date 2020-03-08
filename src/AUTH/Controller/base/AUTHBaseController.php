@@ -14,12 +14,6 @@ abstract class AUTHBaseController extends AuthAdminController {
     const DOMAIN = 'AUTH';
 
     /**
-    * @Autoload
-    * @var \AUTH\Services\AUTHService
-    */
-    protected $srv;
-
-    /**
     * Constructor por defecto
     */
     function __construct() {

@@ -1,7 +1,7 @@
 <?php
 namespace AUTH\Dto;
 
-use AUTH\Models\LoginAccountPassword;
+use AUTH\Models\LoginAccountPasswordQuery;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\LoginProvider;
 use AUTH\Models\LoginSessionQuery;
@@ -28,17 +28,17 @@ class AuthUserDto extends Dto {
      * @required
      * @label First name from the external provider
      */
-    public $first_name;
+    public $firstName;
     /**
      * @var string
      * @label Last name from the external provider
      */
-    public $last_name;
+    public $lastName;
     /**
      * @var string
      * @label Photo url from the external provider
      */
-    public $photo;
+    public $photoUrl;
     /**
      * @var string
      * @label Email from the external provider
@@ -49,12 +49,12 @@ class AuthUserDto extends Dto {
      * @required
      * @label Access token from the external provider
      */
-    public $access_token;
+    public $accessToken;
     /**
      * @var string
      * @label REfresh token for some cases
      */
-    public $refresh_token;
+    public $refreshToken;
     /**
      * @var \DateTime
      * @label Expiration date for the access token
@@ -75,7 +75,11 @@ class AuthUserDto extends Dto {
      * @required
      * @label Session token to authenticate the API requests
      */
-    public $session_token;
+    public $sessionToken;
+    /**
+     * @var bool
+     */
+    public $hasToChangePassword = false;
 
     /**
      * @param LoginProvider $provider
@@ -87,20 +91,20 @@ class AuthUserDto extends Dto {
         if(null !== $this->id) {
             $this->account = LoginAccountQuery::getAccountByIdentifier($this->id, $provider);
             if($this->account->isNew()) {
-                $this->account->setAccessToken($this->access_token);
+                $this->account->setAccessToken($this->accessToken);
                 $this->account->setExpireDate($this->expires);
                 $this->account->setId($this->id);
             }
             $this->account->setIdSocial($provider->getPrimaryKey());
-            if(!empty($this->refresh_token)) {
-                $this->account->setRefreshToken($this->refresh_token);
+            if(!empty($this->refreshToken)) {
+                $this->account->setRefreshToken($this->refreshToken);
             }
             if(!empty($this->email)) {
                 $this->account->setEmail($this->email);
             }
             $this->account->setVerified($verified);
             $this->account->save();
-            if(LoginProviderTableMap::COL_NAME_EMAIL === $provider->getName() && !empty($password)) {
+            if($this->account->isNew() && LoginProviderTableMap::COL_NAME_EMAIL === $provider->getName() && !empty($password)) {
                 $now = new \DateTime();
                 switch($provider->getExpiration()) {
                     case LoginProviderTableMap::COL_EXPIRATION_WEEKLY:
@@ -117,19 +121,22 @@ class AuthUserDto extends Dto {
                         break;
                 }
 
-                $passwordHistory = new LoginAccountPassword();
+                $passwordHistory = LoginAccountPasswordQuery::getSavedActivePassword($this->account, $password);
                 $passwordHistory->setIdAccount($this->account->getPrimaryKey())
                     ->setValue($password)
                     ->setExpirationDate($now);
                 $passwordHistory->save();
+                LoginAccountPasswordQuery::deactivateOldPasswords($passwordHistory);
             }
             $session = LoginSessionQuery::getLastSession($this->account);
             $session->setIdAccount($this->account->getPrimaryKey());
-            $session->setDevice($_SERVER['HTTP_USER_AGENT']);
-            $session->setIP(AUTHService::getIpAddress());
-            $session->setToken(hash_hmac('sha256', $this->id, $provider->getSecret()));
+            if($session->isNew() || $session->getIP() !== AUTHService::getIpAddress()) {
+                $session->setDevice($_SERVER['HTTP_USER_AGENT']);
+                $session->setIP(AUTHService::getIpAddress());
+                $session->setToken(hash_hmac('sha256', $this->id . time(), $provider->getSecret()));
+            }
             $session->save();
-            $this->session_token = $session->getToken();
+            $this->sessionToken = $session->getToken();
         }
     }
 
@@ -137,8 +144,8 @@ class AuthUserDto extends Dto {
      * Close user session
      */
     public function closeSession() {
-        if(null !== $this->session_token) {
-            $session = LoginSessionQuery::checkToken($this->session_token);
+        if(null !== $this->sessionToken) {
+            $session = LoginSessionQuery::checkToken($this->sessionToken);
             if(null !== $session) {
                 $session->setActive(false);
                 $session->save();

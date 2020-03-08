@@ -5,4 +5,4 @@ namespace AUTH\Exception;
  * Class EmailProviderMissingParametersException
  * @package AUTH\Exception
  */
-class EmailProviderMissingParametersException extends \Exception {}
+final class EmailProviderMissingParametersException extends \Exception {}

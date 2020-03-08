@@ -24,7 +24,7 @@ class LoginDto extends Dto {
     /**
      * @var string
      * @label PSFS provider code
-     * @values EMAIL,GOOGLE,FACEBOOK,TWITTER,LINKEDIN
+     * @values EMAIL,GOOGLE,FACEBOOK,TWITTER,LINKEDIN,OFFICE
      * @default EMAIL
      */
     public $provider;

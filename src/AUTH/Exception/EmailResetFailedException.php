@@ -5,4 +5,4 @@ namespace AUTH\Exception;
  * Class EmailResetFailedException
  * @package AUTH\Exception
  */
-class EmailResetFailedException extends \Exception {}
+final class EmailResetFailedException extends \Exception {}

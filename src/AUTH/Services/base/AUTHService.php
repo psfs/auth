@@ -237,14 +237,15 @@ abstract class AUTHService extends Service {
     }
 
     /**
-     * @param $path
-     * @return |null
+     * @param $type
+     * @return string|null
      * @throws AuthProviderNotConfiguredException
      * @throws PropelException
      */
-    public function getPath($path) {
+    public function getPath($type) {
         $criteria = new Criteria();
-        $criteria->add(LoginPathTableMap::COL_PATH, $path);
+        $types = LoginPathTableMap::getValueSet(LoginPathTableMap::COL_TYPE);
+        $criteria->add(LoginPathTableMap::COL_TYPE, array_search($type, $types));
         $paths = $this->provider->getLoginPaths($criteria);
         $path = null;
         if($paths->count() > 0) {

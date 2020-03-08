@@ -4,6 +4,7 @@ namespace AUTH\Api\base;
 use AUTH\Exception\AuthRedirectNotDefinedException;
 use AUTH\Models\LoginPath;
 use AUTH\Models\Map\LoginAccountTableMap;
+use AUTH\Models\Map\LoginPathTableMap;
 use AUTH\Services\base\AUTHService;
 use PSFS\base\config\Config;
 use PSFS\base\dto\JsonResponse;
@@ -21,7 +22,7 @@ abstract class LoginProviderAuthBase extends CustomApi {
     /**
      * @var \AUTH\Services\base\AUTHService
      */
-    protected $auth;
+    protected $srv;
 
     /**
      * @var string
@@ -46,12 +47,12 @@ abstract class LoginProviderAuthBase extends CustomApi {
         try {
             $user = $this->srv->authenticate($query, $flow);
             Security::getInstance()->updateUser(serialize($user));
-            $route = $this->auth->getPath(LoginPath::PATH_LOGIN);
+            $route = $this->srv->getPath(LoginPathTableMap::COL_TYPE_LOGIN_OK);
         } catch (\Exception $e) {
             Logger::log($e->getMessage(), LOG_ERR);
-            $route = $this->auth->getPath(LoginPath::PATH_LOGIN_CANCEL);
+            $route = $this->srv->getPath(LoginPathTableMap::COL_TYPE_LOGIN_ERROR);
             Security::getInstance()->setFlash('callback_message', $e->getMessage());
         }
-        return $this->getRequest()->redirect($this->auth->base . $this->getRoute($route));
+        return $this->getRequest()->redirect($this->srv->base . $this->getRoute($route));
     }
 }

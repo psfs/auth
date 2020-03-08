@@ -5,6 +5,6 @@ namespace AUTH\Exception;
  * Class AuthProviderNotConfiguredException
  * @package AUTH\Exception
  */
-class AuthProviderNotConfiguredException extends \Exception {
+final class AuthProviderNotConfiguredException extends \Exception {
 
 }

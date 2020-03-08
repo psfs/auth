@@ -5,4 +5,4 @@ namespace AUTH\Exception;
  * Class ProviderOauthFlowException
  * @package AUTH\Exception
  */
-class ProviderOauthFlowException extends \Exception {}
+final class ProviderOauthFlowException extends \Exception {}

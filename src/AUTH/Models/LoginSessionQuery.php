@@ -25,7 +25,7 @@ class LoginSessionQuery extends BaseLoginSessionQuery
      * @param string $customer
      * @return LoginSession
      */
-    public static function checkToken($token, $customer) {
+    public static function checkToken($token, $customer = 'psfs') {
         $con = Propel::getReadConnection(LoginSessionTableMap::DATABASE_NAME);
         $con->useDebug(Config::getParam('debug'));
         $session = self::create()

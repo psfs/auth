@@ -61,14 +61,16 @@ class EmailAuthApi extends LoginProviderAuthBase {
      */
     public function login($flow = EmailService::FLOW_LOGIN) {
         $success = true;
+        $code = 200;
         try {
             $user = $this->authenticate($this->getRequest()->getData(), $flow);
             Security::getInstance()->updateUser(serialize($user));
         } catch(\Exception $e) {
             $success = false;
             $user = $e->getMessage();
+            $code = $e->getCode();
         }
-        return $this->json(new JsonResponse($user, $success), $success ? 200 : 400);
+        return $this->json(new JsonResponse($user, $success), $code);
     }
 
     /**
@@ -116,7 +118,7 @@ class EmailAuthApi extends LoginProviderAuthBase {
      */
     public function handshake($token) {
         $session = LoginSessionQuery::checkToken($token, $this->customer);
-        return $this->json(new JsonResponse($token, null !== $session), 200);
+        return $this->json(new JsonResponse($token, null !== $session), null !== $session ? 200 : 401);
     }
 
     /**

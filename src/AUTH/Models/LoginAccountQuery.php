@@ -61,9 +61,13 @@ class LoginAccountQuery extends BaseLoginAccountQuery
      * @return bool
      */
     public static function existsIdentifierWithPassword($identifier, $password, LoginProvider $provider) {
+        $now = new \DateTime();
         return self::filterByIdentifierAndProvider($identifier, $provider)
-            ->filterByAccessToken($password)
-            ->count() == 1;
+            ->useLoginAccountPasswordQuery()
+                ->filterByValue($password)
+                ->filterByExpirationDate($now, Criteria::GREATER_EQUAL)
+            ->endUse()
+            ->count() === 1;
     }
 
     /**

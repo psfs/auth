@@ -7,6 +7,7 @@ use AUTH\Exception\InvalidCallbackParametersException;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
 use PSFS\base\config\Config;
+use PSFS\base\exception\ApiException;
 use PSFS\base\exception\GeneratorException;
 use PSFS\base\Router;
 
@@ -68,6 +69,9 @@ class GoogleService extends AUTHService {
      */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
     {
+        if(array_key_exists('error', $auth)) {
+            throw new ApiException($auth['error'], 400);
+        }
         $client = $this->getClient($this->base . Router::getInstance()->getRoute('auth-google-callback', false), $flow);
         $client->setAccessToken($auth);
         $googlePlus = new \Google_Service_Plus($client);
@@ -75,14 +79,14 @@ class GoogleService extends AUTHService {
         $user = new AuthUserDto();
         $user->id = $profile->getId();
         $user->name = $profile->getDisplayName();
-        $user->first_name = $profile->getName()->getGivenName();
-        $user->last_name = $profile->getName()->getFamilyName();
-        $user->photo = array_shift(explode('?', $profile->getImage()->getUrl()));
-        $user->access_token = $auth['access_token'];
+        $user->firstName = $profile->getName()->getGivenName();
+        $user->lastName = $profile->getName()->getFamilyName();
+        $user->photoUrl = array_shift(explode('?', $profile->getImage()->getUrl()));
+        $user->accessToken = $auth['access_token'];
         $user->expires = new \DateTime();
         $user->expires->modify($auth['expires_in'] . ' seconds');
         if(array_key_exists('refresh_token', $auth)) {
-            $user->refresh_token = $auth['refresh_token'];
+            $user->refreshToken = $auth['refresh_token'];
         }
         /** @var \Google_Service_Plus_PersonEmails $email */
         foreach($profile->getEmails() as $email) {

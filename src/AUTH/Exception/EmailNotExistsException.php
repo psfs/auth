@@ -5,4 +5,4 @@ namespace AUTH\Exception;
  * Class EmailNotExistsException
  * @package AUTH\Exception
  */
-class EmailNotExistsException extends \Exception {}
+final class EmailNotExistsException extends \Exception {}

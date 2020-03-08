@@ -5,4 +5,4 @@ namespace AUTH\Exception;
  * Class AuthRedirectNotDefinedException
  * @package AUTH\Exception
  */
-class AuthRedirectNotDefinedException extends \Exception {}
+final class AuthRedirectNotDefinedException extends \Exception {}

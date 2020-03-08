@@ -21,11 +21,6 @@ use PSFS\base\types\helpers\AdminHelper;
 */
 abstract class AUTHController extends AUTHBaseController {
 
-    /**
-     * @var \AUTH\Services\base\AUTHService
-     */
-    protected $srv;
-
     public function getMenu()
     {
         return AdminHelper::getAdminRoutes(Router::getInstance()->getRoutes());

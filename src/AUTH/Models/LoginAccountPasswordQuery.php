@@ -3,6 +3,7 @@
 namespace AUTH\Models;
 
 use AUTH\Models\Base\LoginAccountPasswordQuery as BaseLoginAccountPasswordQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'AUTH_ACCOUNT_PASSWORDS' table.
@@ -16,5 +17,35 @@ use AUTH\Models\Base\LoginAccountPasswordQuery as BaseLoginAccountPasswordQuery;
  */
 class LoginAccountPasswordQuery extends BaseLoginAccountPasswordQuery
 {
+    /**
+     * @param LoginAccount $account
+     * @param $password
+     * @return LoginAccountPassword
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public static function getSavedActivePassword(LoginAccount $account, $password) {
+        $now = new \DateTime();
+        return self::create()
+            ->filterByIdAccount($account->getPrimaryKey())
+            ->filterByValue($password)
+            ->filterByExpirationDate($now, Criteria::GREATER_EQUAL)
+            ->findOneOrCreate();
+    }
 
+    /**
+     * @param LoginAccountPassword $password
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public static function deactivateOldPasswords(LoginAccountPassword $password) {
+        $oldPasswords = self::create()
+            ->filterByIdAccount($password->getIdAccount())
+            ->filterByIdPassword($password->getPrimaryKey(), Criteria::NOT_EQUAL)
+            ->find();
+        $now = new \DateTime();
+        $now->modify('-1 week');
+        foreach($oldPasswords as $oldPassword) {
+            $oldPassword->setExpirationDate($now)
+                ->save();
+        }
+    }
 }

@@ -4,6 +4,7 @@ namespace AUTH\Services;
 use AUTH\Dto\AuthUserDto;
 use AUTH\Exception\EmailAlreadyExistsException;
 use AUTH\Exception\EmailNotExistsException;
+use AUTH\Exception\EmailNotVerifiedException;
 use AUTH\Exception\EmailProviderMissingParametersException;
 use AUTH\Exception\EmailResetFailedException;
 use AUTH\Exception\EmailWrongPasswordException;
@@ -13,7 +14,6 @@ use AUTH\Models\LoginProviderQuery;
 use AUTH\Models\Map\LoginProviderTableMap;
 use AUTH\Services\base\AUTHService;
 use PSFS\base\config\Config;
-use PSFS\base\exception\GeneratorException;
 use PSFS\base\Logger;
 use PSFS\base\Request;
 
@@ -123,10 +123,12 @@ class EmailService extends AUTHService
     /**
      * @param array $auth
      * @param int $flow
-     * @return AuthUserDto|null
+     * @return AuthUserDto
      * @throws EmailAlreadyExistsException
      * @throws EmailNotExistsException
-     * @throws GeneratorException
+     * @throws EmailNotVerifiedException
+     * @throws \PSFS\base\exception\GeneratorException
+     * @throws \Propel\Runtime\Exception\PropelException
      * @throws \ReflectionException
      */
     public function getUser(array $auth, $flow = self::FLOW_LOGIN)
@@ -135,20 +137,23 @@ class EmailService extends AUTHService
         $identifier = sha1($email);
         $access_token = self::encryptPassword($identifier, $auth['password'], $this->provider);
         $userExists = LoginAccountQuery::existsIdentifierForProvider($identifier, $this->provider, true);
+        $userExistsWithoutVerification = LoginAccountQuery::existsIdentifierForProvider($identifier, $this->provider, false);
         if(self::FLOW_REGISTER === $flow && $userExists) {
-            throw new EmailAlreadyExistsException(t('Email en uso'), 403);
-        } elseif ($flow === self::FLOW_LOGIN && !$userExists) {
-            throw new EmailNotExistsException(t('El email no existe'), 404);
+            throw new EmailAlreadyExistsException(t('Email already in use'), 403);
+        } elseif ($flow === self::FLOW_LOGIN && !$userExists && !$userExistsWithoutVerification) {
+            throw new EmailNotExistsException(t('The email does not exists'), 404);
+        } elseif ($flow === self::FLOW_LOGIN && !$userExists && $userExistsWithoutVerification) {
+            throw new EmailNotVerifiedException(t('User did not verified yet'), 412);
         } elseif($flow === self::FLOW_LOGIN) {
             $userExistsWithPassword = LoginAccountQuery::existsIdentifierWithPassword($identifier, $access_token, $this->provider);
             if(!$userExistsWithPassword) {
-                throw new EmailNotExistsException(t('Contraseña no válida'), 401);
+                throw new EmailNotExistsException(t('Password not valid'), 401);
             }
         }
         $user = new AuthUserDto();
         $user->fromArray($auth);
         $user->id = $identifier;
-        $user->access_token = $access_token;
+        $user->accessToken = $access_token;
         $user->raw = $auth;
         $user->hydrate($this->provider, self::FLOW_LOGIN === $flow, $access_token);
         return $user;

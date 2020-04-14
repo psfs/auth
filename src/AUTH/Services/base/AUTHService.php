@@ -12,6 +12,7 @@ use AUTH\Models\Map\LoginPathTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use PSFS\base\config\Config;
+use PSFS\base\exception\ApiException;
 use PSFS\base\Logger;
 use PSFS\base\Request;
 use PSFS\base\Router;
@@ -33,6 +34,10 @@ abstract class AUTHService extends Service {
 
     public static $client;
     /**
+     * @var string
+     */
+    protected $customerCode;
+    /**
      * @var \AUTH\Models\LoginProvider
      */
     protected $provider;
@@ -48,6 +53,13 @@ abstract class AUTHService extends Service {
      * @var string
      */
     public $base;
+
+    public function __construct($customerCode = null)
+    {
+        if(null !== $customerCode) {
+            $this->customerCode = $customerCode;
+        }
+    }
 
     /**
      * @return string
@@ -95,9 +107,14 @@ abstract class AUTHService extends Service {
     public function init()
     {
         parent::init();
-        $customer = Request::header(self::HEADER_AUTH_CUSTOMER);
+        if(null === $this->customerCode) {
+            $this->customerCode = Request::header(self::HEADER_AUTH_CUSTOMER);
+        }
+        if(null === $this->customerCode) {
+            throw new ApiException(t('Missing customerCode'), 400);
+        }
         $this->debug = Config::getParam('debug', false);
-        $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug, $customer);
+        $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug, $this->customerCode);
         if(null === $this->provider) {
             Logger::log($this->getProviderName() . ' not defined for ' . ($this->debug) ? ' debug mode' : ' production mode');
             $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, $customer);

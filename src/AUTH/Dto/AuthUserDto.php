@@ -1,7 +1,7 @@
 <?php
 namespace AUTH\Dto;
 
-use AUTH\Models\LoginAccountPasswordQuery;
+use AUTH\Models\LoginAccountPassword;
 use AUTH\Models\LoginAccountQuery;
 use AUTH\Models\LoginProvider;
 use AUTH\Models\LoginSessionQuery;
@@ -103,7 +103,6 @@ class AuthUserDto extends Dto {
                 $this->account->setEmail($this->email);
             }
             $this->account->setVerified($verified);
-            $this->account->save();
             if($this->account->isNew() && LoginProviderTableMap::COL_NAME_EMAIL === $provider->getName() && !empty($password)) {
                 $now = new \DateTime();
                 switch($provider->getExpiration()) {
@@ -123,21 +122,21 @@ class AuthUserDto extends Dto {
 
                 if($this->account->isNew()) {
                     $passwordHistory = new LoginAccountPassword();
-                    $passwordHistory->setIdAccount($this->account->getPrimaryKey())
+                    $passwordHistory->setAccountPasswords($this->account)
                         ->setValue($password)
                         ->setExpirationDate($now);
                     $passwordHistory->save();
                 }
             }
             $session = LoginSessionQuery::getLastSession($this->account);
-            $session->setIdAccount($this->account->getPrimaryKey());
+            $session->setAccountSession($this->account);
             if($session->isNew() || $session->getIP() !== AUTHService::getIpAddress()) {
                 $session->setDevice($_SERVER['HTTP_USER_AGENT']);
                 $session->setIP(AUTHService::getIpAddress());
                 $session->setToken(hash_hmac('sha256', $this->id . time(), $provider->getSecret()));
             }
-            $session->save();
             $this->sessionToken = $session->getToken();
+            $this->account->save();
         }
     }
 

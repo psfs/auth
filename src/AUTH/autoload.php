@@ -8,9 +8,6 @@
 if(!defined("BASE_DIR"))
 define("BASE_DIR", dirname( dirname(__DIR__) ) );
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'config.php';
-@include_once VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload.php';
-
 if(!function_exists("AUTH_Autoloader")) {
     // autoloader
     function AUTH_Autoloader( $class ) {
@@ -34,3 +31,6 @@ if(!function_exists("AUTH_Autoloader")) {
     // register the autoloader
     spl_autoload_register( "AUTH_Autoloader" );
 }
+
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'config.php';
+@include_once VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload.php';

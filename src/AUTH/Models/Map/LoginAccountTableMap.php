@@ -216,7 +216,7 @@ class LoginAccountTableMap extends TableMap
      * @return void
      * @throws PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('AUTH_ACCOUNTS');
@@ -245,12 +245,12 @@ class LoginAccountTableMap extends TableMap
         $this->addColumn('RESET_TOKEN', 'ResetToken', 'VARCHAR', false, 100, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    } // initialize(): void
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('AccountProvider', '\\AUTH\\Models\\LoginProvider', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -273,7 +273,7 @@ class LoginAccountTableMap extends TableMap
     1 => ':ID_ACCOUNT',
   ),
 ), null, null, 'LoginSessions', false);
-    } // buildRelations()
+    } // buildRelations(): void
 
     /**
      *
@@ -281,14 +281,14 @@ class LoginAccountTableMap extends TableMap
      *
      * @return array Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
         return array(
             'query_cache' => array('backend' => 'apc', 'lifetime' => '3600', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
             'aggregate_column_relation_aggregate_column' => array('foreign_table' => 'AUTH_PROVIDERS', 'update_method' => 'updateAccounts', 'aggregate_name' => 'Accounts', ),
         );
-    } // getBehaviors()
+    } // getBehaviors(): array
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.

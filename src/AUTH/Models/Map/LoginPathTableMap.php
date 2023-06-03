@@ -174,7 +174,7 @@ class LoginPathTableMap extends TableMap
      * @return void
      * @throws PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('AUTH_PATHS');
@@ -197,12 +197,12 @@ class LoginPathTableMap extends TableMap
   6 => 'LOGOUT_ERROR',
 ));
         $this->addColumn('PATH', 'Path', 'VARCHAR', true, 500, null);
-    } // initialize()
+    } // initialize(): void
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('ProviderPath', '\\AUTH\\Models\\LoginProvider', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -211,7 +211,7 @@ class LoginPathTableMap extends TableMap
     1 => ':ID_PROVIDER',
   ),
 ), null, null, null, false);
-    } // buildRelations()
+    } // buildRelations(): void
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.

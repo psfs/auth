@@ -234,7 +234,7 @@ class LoginProviderTableMap extends TableMap
      * @return void
      * @throws PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('AUTH_PROVIDERS');
@@ -272,12 +272,12 @@ class LoginProviderTableMap extends TableMap
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('ACCOUNTS', 'Accounts', 'INTEGER', false, null, null);
-    } // initialize()
+    } // initialize(): void
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('LoginPath', '\\AUTH\\Models\\LoginPath', RelationMap::ONE_TO_MANY, array (
   0 =>
@@ -293,7 +293,7 @@ class LoginProviderTableMap extends TableMap
     1 => ':ID_PROVIDER',
   ),
 ), null, null, 'LoginAccounts', false);
-    } // buildRelations()
+    } // buildRelations(): void
 
     /**
      *
@@ -301,14 +301,14 @@ class LoginProviderTableMap extends TableMap
      *
      * @return array Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
         return array(
             'query_cache' => array('backend' => 'apc', 'lifetime' => '3600', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
             'aggregate_column' => array('name' => 'ACCOUNTS', 'expression' => 'COUNT(ID_ACCOUNT)', 'condition' => '', 'foreign_table' => 'ACCOUNTS', 'foreign_schema' => '', ),
         );
-    } // getBehaviors()
+    } // getBehaviors(): array
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.

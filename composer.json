@@ -1,6 +1,6 @@
 {
     "name": "psfs/auth",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Integration with social network for auth workflows",
     "type": "library",
     "repositories": [
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "psfs/core": "2.0.0"
+        "psfs/core": "2.*"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.6",

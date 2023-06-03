@@ -10,13 +10,16 @@ build:
           file: 'psfs-coverage'
           format: 'clover'
   environment:
-    php: '7.1'
+    php:
+      version: '8.2'
+      ini:
+        xdebug.mode: coverage
 
 filter:
   excluded_paths:
     - src/bin/*
     - src/command/*
-    - src/test/*
+    - src/tests/*
     - src/public/*
     - src/templates/*
     - locale/*

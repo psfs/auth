@@ -6,7 +6,7 @@
 $serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
 $serviceContainer->checkVersion(2);
 $serviceContainer->setAdapterClass('AUTH', 'mysql');
-$manager = new \Propel\Runtime\Connection\ConnectionManagerSingle('AUTH');
+$manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
 $manager->setConfiguration(array(
     'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host', null, 'auth') . ';port=' . \PSFS\base\config\Config::getParam('db.port', null, 'auth') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name', null, 'auth') . '',
     'user' => \PSFS\base\config\Config::getParam('db.user', null, 'auth'),
@@ -18,10 +18,10 @@ $manager->setConfiguration(array(
     ),
 ));
 $manager->setName('AUTH');
-$serviceContainer->setConnectionManager($manager);
+$serviceContainer->setConnectionManager('AUTH', $manager);
 
 $serviceContainer->setAdapterClass('debugAUTH', 'mysql');
-$manager = new \Propel\Runtime\Connection\ConnectionManagerSingle('debugAUTH');
+$manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
 $manager->setConfiguration(array(
     'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host', null, 'auth') . ';port=' . \PSFS\base\config\Config::getParam('db.port', null, 'auth') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name', null, 'auth') . '',
     'user' => \PSFS\base\config\Config::getParam('db.user', null, 'auth'),
@@ -33,7 +33,7 @@ $manager->setConfiguration(array(
     ),
 ));
 $manager->setName('debugAUTH');
-$serviceContainer->setConnectionManager($manager);
+$serviceContainer->setConnectionManager('debugAUTH', $manager);
 
 $serviceContainer->setDefaultDatasource('AUTH');
 $serviceContainer->setLoggerConfiguration('defaultLogger', array(
@@ -42,5 +42,3 @@ $serviceContainer->setLoggerConfiguration('defaultLogger', array(
     'level' => 300,
     'bubble' => true,
 ));
-
-require_once 'loadDatabase.php';

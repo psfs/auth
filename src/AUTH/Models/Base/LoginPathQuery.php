@@ -50,13 +50,13 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginProviderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginPath findOne(ConnectionInterface $con = null) Return the first ChildLoginPath matching the query
+ * @method     ChildLoginPath|null findOne(ConnectionInterface $con = null) Return the first ChildLoginPath matching the query
  * @method     ChildLoginPath findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginPath matching the query, or a new ChildLoginPath object populated from the query conditions when no match is found
  *
- * @method     ChildLoginPath findOneByIdPath(int $ID_PATH) Return the first ChildLoginPath filtered by the ID_PATH column
- * @method     ChildLoginPath findOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginPath filtered by the ID_PROVIDER column
- * @method     ChildLoginPath findOneByType(int $TYPE) Return the first ChildLoginPath filtered by the TYPE column
- * @method     ChildLoginPath findOneByPath(string $PATH) Return the first ChildLoginPath filtered by the PATH column *
+ * @method     ChildLoginPath|null findOneByIdPath(int $ID_PATH) Return the first ChildLoginPath filtered by the ID_PATH column
+ * @method     ChildLoginPath|null findOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginPath filtered by the ID_PROVIDER column
+ * @method     ChildLoginPath|null findOneByType(int $TYPE) Return the first ChildLoginPath filtered by the TYPE column
+ * @method     ChildLoginPath|null findOneByPath(string $PATH) Return the first ChildLoginPath filtered by the PATH column *
 
  * @method     ChildLoginPath requirePk($key, ConnectionInterface $con = null) Return the ChildLoginPath by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginPath requireOne(ConnectionInterface $con = null) Return the first ChildLoginPath matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found

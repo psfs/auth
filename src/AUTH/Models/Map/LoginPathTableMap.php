@@ -24,7 +24,6 @@ use Propel\Runtime\Map\TableMapTrait;
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class LoginPathTableMap extends TableMap
 {
@@ -133,6 +132,47 @@ class LoginPathTableMap extends TableMap
         self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
+    /**
+     * Holds a list of column names and their normalized version.
+     *
+     * @var string[]
+     */
+    protected $normalizedColumnNameMap = [
+
+        'IdPath' => 'ID_PATH',
+        'LoginPath.IdPath' => 'ID_PATH',
+        'idPath' => 'ID_PATH',
+        'loginPath.idPath' => 'ID_PATH',
+        'LoginPathTableMap::COL_ID_PATH' => 'ID_PATH',
+        'COL_ID_PATH' => 'ID_PATH',
+        'ID_PATH' => 'ID_PATH',
+        'AUTH_PATHS.ID_PATH' => 'ID_PATH',
+        'IdSocial' => 'ID_PROVIDER',
+        'LoginPath.IdSocial' => 'ID_PROVIDER',
+        'idSocial' => 'ID_PROVIDER',
+        'loginPath.idSocial' => 'ID_PROVIDER',
+        'LoginPathTableMap::COL_ID_PROVIDER' => 'ID_PROVIDER',
+        'COL_ID_PROVIDER' => 'ID_PROVIDER',
+        'ID_PROVIDER' => 'ID_PROVIDER',
+        'AUTH_PATHS.ID_PROVIDER' => 'ID_PROVIDER',
+        'Type' => 'TYPE',
+        'LoginPath.Type' => 'TYPE',
+        'type' => 'TYPE',
+        'loginPath.type' => 'TYPE',
+        'LoginPathTableMap::COL_TYPE' => 'TYPE',
+        'COL_TYPE' => 'TYPE',
+        'TYPE' => 'TYPE',
+        'AUTH_PATHS.TYPE' => 'TYPE',
+        'Path' => 'PATH',
+        'LoginPath.Path' => 'PATH',
+        'path' => 'PATH',
+        'loginPath.path' => 'PATH',
+        'LoginPathTableMap::COL_PATH' => 'PATH',
+        'COL_PATH' => 'PATH',
+        'PATH' => 'PATH',
+        'AUTH_PATHS.PATH' => 'PATH',
+    ];
+
     /** The enumerated values for this table */
     protected static $enumValueSets = array(
                 LoginPathTableMap::COL_TYPE => array(
@@ -174,7 +214,7 @@ class LoginPathTableMap extends TableMap
      * @return void
      * @throws PropelException
      */
-    public function initialize(): void
+    public function initialize()
     {
         // attributes
         $this->setName('AUTH_PATHS');
@@ -197,12 +237,12 @@ class LoginPathTableMap extends TableMap
   6 => 'LOGOUT_ERROR',
 ));
         $this->addColumn('PATH', 'Path', 'VARCHAR', true, 500, null);
-    } // initialize(): void
+    } // initialize()
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations(): void
+    public function buildRelations()
     {
         $this->addRelation('ProviderPath', '\\AUTH\\Models\\LoginProvider', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -211,7 +251,7 @@ class LoginPathTableMap extends TableMap
     1 => ':ID_PROVIDER',
   ),
 ), null, null, null, false);
-    } // buildRelations(): void
+    } // buildRelations()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -363,6 +403,32 @@ class LoginPathTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.ID_PROVIDER');
             $criteria->addSelectColumn($alias . '.TYPE');
             $criteria->addSelectColumn($alias . '.PATH');
+        }
+    }
+
+    /**
+     * Remove all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be removed as they are only loaded on demand.
+     *
+     * @param Criteria $criteria object containing the columns to remove.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->removeSelectColumn(LoginPathTableMap::COL_ID_PATH);
+            $criteria->removeSelectColumn(LoginPathTableMap::COL_ID_PROVIDER);
+            $criteria->removeSelectColumn(LoginPathTableMap::COL_TYPE);
+            $criteria->removeSelectColumn(LoginPathTableMap::COL_PATH);
+        } else {
+            $criteria->removeSelectColumn($alias . '.ID_PATH');
+            $criteria->removeSelectColumn($alias . '.ID_PROVIDER');
+            $criteria->removeSelectColumn($alias . '.TYPE');
+            $criteria->removeSelectColumn($alias . '.PATH');
         }
     }
 

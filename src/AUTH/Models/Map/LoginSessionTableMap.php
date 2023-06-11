@@ -24,7 +24,6 @@ use Propel\Runtime\Map\TableMapTrait;
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class LoginSessionTableMap extends TableMap
 {
@@ -145,13 +144,86 @@ class LoginSessionTableMap extends TableMap
     );
 
     /**
+     * Holds a list of column names and their normalized version.
+     *
+     * @var string[]
+     */
+    protected $normalizedColumnNameMap = [
+
+        'IdAccount' => 'ID_ACCOUNT',
+        'LoginSession.IdAccount' => 'ID_ACCOUNT',
+        'idAccount' => 'ID_ACCOUNT',
+        'loginSession.idAccount' => 'ID_ACCOUNT',
+        'LoginSessionTableMap::COL_ID_ACCOUNT' => 'ID_ACCOUNT',
+        'COL_ID_ACCOUNT' => 'ID_ACCOUNT',
+        'ID_ACCOUNT' => 'ID_ACCOUNT',
+        'AUTH_SESSIONS.ID_ACCOUNT' => 'ID_ACCOUNT',
+        'Device' => 'DEVICE',
+        'LoginSession.Device' => 'DEVICE',
+        'device' => 'DEVICE',
+        'loginSession.device' => 'DEVICE',
+        'LoginSessionTableMap::COL_DEVICE' => 'DEVICE',
+        'COL_DEVICE' => 'DEVICE',
+        'DEVICE' => 'DEVICE',
+        'AUTH_SESSIONS.DEVICE' => 'DEVICE',
+        'IP' => 'IP',
+        'LoginSession.IP' => 'IP',
+        'iP' => 'IP',
+        'loginSession.iP' => 'IP',
+        'LoginSessionTableMap::COL_IP' => 'IP',
+        'COL_IP' => 'IP',
+        'IP' => 'IP',
+        'AUTH_SESSIONS.IP' => 'IP',
+        'Token' => 'TOKEN',
+        'LoginSession.Token' => 'TOKEN',
+        'token' => 'TOKEN',
+        'loginSession.token' => 'TOKEN',
+        'LoginSessionTableMap::COL_TOKEN' => 'TOKEN',
+        'COL_TOKEN' => 'TOKEN',
+        'TOKEN' => 'TOKEN',
+        'AUTH_SESSIONS.TOKEN' => 'TOKEN',
+        'Active' => 'ACTIVE',
+        'LoginSession.Active' => 'ACTIVE',
+        'active' => 'ACTIVE',
+        'loginSession.active' => 'ACTIVE',
+        'LoginSessionTableMap::COL_ACTIVE' => 'ACTIVE',
+        'COL_ACTIVE' => 'ACTIVE',
+        'ACTIVE' => 'ACTIVE',
+        'AUTH_SESSIONS.ACTIVE' => 'ACTIVE',
+        'Id' => 'ID',
+        'LoginSession.Id' => 'ID',
+        'id' => 'ID',
+        'loginSession.id' => 'ID',
+        'LoginSessionTableMap::COL_ID' => 'ID',
+        'COL_ID' => 'ID',
+        'id' => 'ID',
+        'AUTH_SESSIONS.id' => 'ID',
+        'CreatedAt' => 'CREATED_AT',
+        'LoginSession.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'loginSession.createdAt' => 'CREATED_AT',
+        'LoginSessionTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'AUTH_SESSIONS.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'LoginSession.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'loginSession.updatedAt' => 'UPDATED_AT',
+        'LoginSessionTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'AUTH_SESSIONS.updated_at' => 'UPDATED_AT',
+    ];
+
+    /**
      * Initialize the table attributes and columns
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
      * @throws PropelException
      */
-    public function initialize(): void
+    public function initialize()
     {
         // attributes
         $this->setName('AUTH_SESSIONS');
@@ -169,12 +241,12 @@ class LoginSessionTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize(): void
+    } // initialize()
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations(): void
+    public function buildRelations()
     {
         $this->addRelation('AccountSession', '\\AUTH\\Models\\LoginAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -183,7 +255,7 @@ class LoginSessionTableMap extends TableMap
     1 => ':ID_ACCOUNT',
   ),
 ), null, null, null, false);
-    } // buildRelations(): void
+    } // buildRelations()
 
     /**
      *
@@ -191,13 +263,13 @@ class LoginSessionTableMap extends TableMap
      *
      * @return array Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors(): array
+    public function getBehaviors()
     {
         return array(
             'auto_add_pk' => array('name' => 'id', 'autoIncrement' => 'true', 'type' => 'INTEGER', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
         );
-    } // getBehaviors(): array
+    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -357,6 +429,40 @@ class LoginSessionTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
+        }
+    }
+
+    /**
+     * Remove all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be removed as they are only loaded on demand.
+     *
+     * @param Criteria $criteria object containing the columns to remove.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_ID_ACCOUNT);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_DEVICE);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_IP);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_TOKEN);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_ACTIVE);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_ID);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(LoginSessionTableMap::COL_UPDATED_AT);
+        } else {
+            $criteria->removeSelectColumn($alias . '.ID_ACCOUNT');
+            $criteria->removeSelectColumn($alias . '.DEVICE');
+            $criteria->removeSelectColumn($alias . '.IP');
+            $criteria->removeSelectColumn($alias . '.TOKEN');
+            $criteria->removeSelectColumn($alias . '.ACTIVE');
+            $criteria->removeSelectColumn($alias . '.id');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
         }
     }
 

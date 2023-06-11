@@ -24,7 +24,6 @@ use Propel\Runtime\Map\TableMapTrait;
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class LoginProviderTableMap extends TableMap
 {
@@ -188,6 +187,127 @@ class LoginProviderTableMap extends TableMap
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
+    /**
+     * Holds a list of column names and their normalized version.
+     *
+     * @var string[]
+     */
+    protected $normalizedColumnNameMap = [
+
+        'IdProvider' => 'ID_PROVIDER',
+        'LoginProvider.IdProvider' => 'ID_PROVIDER',
+        'idProvider' => 'ID_PROVIDER',
+        'loginProvider.idProvider' => 'ID_PROVIDER',
+        'LoginProviderTableMap::COL_ID_PROVIDER' => 'ID_PROVIDER',
+        'COL_ID_PROVIDER' => 'ID_PROVIDER',
+        'ID_PROVIDER' => 'ID_PROVIDER',
+        'AUTH_PROVIDERS.ID_PROVIDER' => 'ID_PROVIDER',
+        'Name' => 'NAME',
+        'LoginProvider.Name' => 'NAME',
+        'name' => 'NAME',
+        'loginProvider.name' => 'NAME',
+        'LoginProviderTableMap::COL_NAME' => 'NAME',
+        'COL_NAME' => 'NAME',
+        'NAME' => 'NAME',
+        'AUTH_PROVIDERS.NAME' => 'NAME',
+        'Debug' => 'DEV',
+        'LoginProvider.Debug' => 'DEV',
+        'debug' => 'DEV',
+        'loginProvider.debug' => 'DEV',
+        'LoginProviderTableMap::COL_DEV' => 'DEV',
+        'COL_DEV' => 'DEV',
+        'DEV' => 'DEV',
+        'AUTH_PROVIDERS.DEV' => 'DEV',
+        'Client' => 'CLIENT',
+        'LoginProvider.Client' => 'CLIENT',
+        'client' => 'CLIENT',
+        'loginProvider.client' => 'CLIENT',
+        'LoginProviderTableMap::COL_CLIENT' => 'CLIENT',
+        'COL_CLIENT' => 'CLIENT',
+        'CLIENT' => 'CLIENT',
+        'AUTH_PROVIDERS.CLIENT' => 'CLIENT',
+        'Secret' => 'SECRET',
+        'LoginProvider.Secret' => 'SECRET',
+        'secret' => 'SECRET',
+        'loginProvider.secret' => 'SECRET',
+        'LoginProviderTableMap::COL_SECRET' => 'SECRET',
+        'COL_SECRET' => 'SECRET',
+        'SECRET' => 'SECRET',
+        'AUTH_PROVIDERS.SECRET' => 'SECRET',
+        'Parent' => 'PARENT_REF',
+        'LoginProvider.Parent' => 'PARENT_REF',
+        'parent' => 'PARENT_REF',
+        'loginProvider.parent' => 'PARENT_REF',
+        'LoginProviderTableMap::COL_PARENT_REF' => 'PARENT_REF',
+        'COL_PARENT_REF' => 'PARENT_REF',
+        'PARENT_REF' => 'PARENT_REF',
+        'AUTH_PROVIDERS.PARENT_REF' => 'PARENT_REF',
+        'Scopes' => 'SCOPES',
+        'LoginProvider.Scopes' => 'SCOPES',
+        'scopes' => 'SCOPES',
+        'loginProvider.scopes' => 'SCOPES',
+        'LoginProviderTableMap::COL_SCOPES' => 'SCOPES',
+        'COL_SCOPES' => 'SCOPES',
+        'SCOPES' => 'SCOPES',
+        'AUTH_PROVIDERS.SCOPES' => 'SCOPES',
+        'Active' => 'ACTIVE',
+        'LoginProvider.Active' => 'ACTIVE',
+        'active' => 'ACTIVE',
+        'loginProvider.active' => 'ACTIVE',
+        'LoginProviderTableMap::COL_ACTIVE' => 'ACTIVE',
+        'COL_ACTIVE' => 'ACTIVE',
+        'ACTIVE' => 'ACTIVE',
+        'AUTH_PROVIDERS.ACTIVE' => 'ACTIVE',
+        'CustomerCode' => 'CUSTOMER_CODE',
+        'LoginProvider.CustomerCode' => 'CUSTOMER_CODE',
+        'customerCode' => 'CUSTOMER_CODE',
+        'loginProvider.customerCode' => 'CUSTOMER_CODE',
+        'LoginProviderTableMap::COL_CUSTOMER_CODE' => 'CUSTOMER_CODE',
+        'COL_CUSTOMER_CODE' => 'CUSTOMER_CODE',
+        'CUSTOMER_CODE' => 'CUSTOMER_CODE',
+        'AUTH_PROVIDERS.CUSTOMER_CODE' => 'CUSTOMER_CODE',
+        'Expiration' => 'EXPIRATION',
+        'LoginProvider.Expiration' => 'EXPIRATION',
+        'expiration' => 'EXPIRATION',
+        'loginProvider.expiration' => 'EXPIRATION',
+        'LoginProviderTableMap::COL_EXPIRATION' => 'EXPIRATION',
+        'COL_EXPIRATION' => 'EXPIRATION',
+        'EXPIRATION' => 'EXPIRATION',
+        'AUTH_PROVIDERS.EXPIRATION' => 'EXPIRATION',
+        'ExpirationPeriod' => 'EXPIRATION_PERIOD',
+        'LoginProvider.ExpirationPeriod' => 'EXPIRATION_PERIOD',
+        'expirationPeriod' => 'EXPIRATION_PERIOD',
+        'loginProvider.expirationPeriod' => 'EXPIRATION_PERIOD',
+        'LoginProviderTableMap::COL_EXPIRATION_PERIOD' => 'EXPIRATION_PERIOD',
+        'COL_EXPIRATION_PERIOD' => 'EXPIRATION_PERIOD',
+        'EXPIRATION_PERIOD' => 'EXPIRATION_PERIOD',
+        'AUTH_PROVIDERS.EXPIRATION_PERIOD' => 'EXPIRATION_PERIOD',
+        'CreatedAt' => 'CREATED_AT',
+        'LoginProvider.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'loginProvider.createdAt' => 'CREATED_AT',
+        'LoginProviderTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'AUTH_PROVIDERS.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'LoginProvider.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'loginProvider.updatedAt' => 'UPDATED_AT',
+        'LoginProviderTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'AUTH_PROVIDERS.updated_at' => 'UPDATED_AT',
+        'Accounts' => 'ACCOUNTS',
+        'LoginProvider.Accounts' => 'ACCOUNTS',
+        'accounts' => 'ACCOUNTS',
+        'loginProvider.accounts' => 'ACCOUNTS',
+        'LoginProviderTableMap::COL_ACCOUNTS' => 'ACCOUNTS',
+        'COL_ACCOUNTS' => 'ACCOUNTS',
+        'ACCOUNTS' => 'ACCOUNTS',
+        'AUTH_PROVIDERS.ACCOUNTS' => 'ACCOUNTS',
+    ];
+
     /** The enumerated values for this table */
     protected static $enumValueSets = array(
                 LoginProviderTableMap::COL_NAME => array(
@@ -234,7 +354,7 @@ class LoginProviderTableMap extends TableMap
      * @return void
      * @throws PropelException
      */
-    public function initialize(): void
+    public function initialize()
     {
         // attributes
         $this->setName('AUTH_PROVIDERS');
@@ -272,12 +392,12 @@ class LoginProviderTableMap extends TableMap
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('ACCOUNTS', 'Accounts', 'INTEGER', false, null, null);
-    } // initialize(): void
+    } // initialize()
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations(): void
+    public function buildRelations()
     {
         $this->addRelation('LoginPath', '\\AUTH\\Models\\LoginPath', RelationMap::ONE_TO_MANY, array (
   0 =>
@@ -293,7 +413,7 @@ class LoginProviderTableMap extends TableMap
     1 => ':ID_PROVIDER',
   ),
 ), null, null, 'LoginAccounts', false);
-    } // buildRelations(): void
+    } // buildRelations()
 
     /**
      *
@@ -301,14 +421,14 @@ class LoginProviderTableMap extends TableMap
      *
      * @return array Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors(): array
+    public function getBehaviors()
     {
         return array(
             'query_cache' => array('backend' => 'apc', 'lifetime' => '3600', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
             'aggregate_column' => array('name' => 'ACCOUNTS', 'expression' => 'COUNT(ID_ACCOUNT)', 'condition' => '', 'foreign_table' => 'ACCOUNTS', 'foreign_schema' => '', ),
         );
-    } // getBehaviors(): array
+    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -480,6 +600,52 @@ class LoginProviderTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.ACCOUNTS');
+        }
+    }
+
+    /**
+     * Remove all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be removed as they are only loaded on demand.
+     *
+     * @param Criteria $criteria object containing the columns to remove.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_ID_PROVIDER);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_NAME);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_DEV);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_CLIENT);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_SECRET);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_PARENT_REF);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_SCOPES);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_ACTIVE);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_CUSTOMER_CODE);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_EXPIRATION);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_EXPIRATION_PERIOD);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_UPDATED_AT);
+            $criteria->removeSelectColumn(LoginProviderTableMap::COL_ACCOUNTS);
+        } else {
+            $criteria->removeSelectColumn($alias . '.ID_PROVIDER');
+            $criteria->removeSelectColumn($alias . '.NAME');
+            $criteria->removeSelectColumn($alias . '.DEV');
+            $criteria->removeSelectColumn($alias . '.CLIENT');
+            $criteria->removeSelectColumn($alias . '.SECRET');
+            $criteria->removeSelectColumn($alias . '.PARENT_REF');
+            $criteria->removeSelectColumn($alias . '.SCOPES');
+            $criteria->removeSelectColumn($alias . '.ACTIVE');
+            $criteria->removeSelectColumn($alias . '.CUSTOMER_CODE');
+            $criteria->removeSelectColumn($alias . '.EXPIRATION');
+            $criteria->removeSelectColumn($alias . '.EXPIRATION_PERIOD');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
+            $criteria->removeSelectColumn($alias . '.ACCOUNTS');
         }
     }
 

@@ -80,23 +80,23 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginPathQuery|\AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginProvider findOne(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query
+ * @method     ChildLoginProvider|null findOne(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query
  * @method     ChildLoginProvider findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query, or a new ChildLoginProvider object populated from the query conditions when no match is found
  *
- * @method     ChildLoginProvider findOneByIdProvider(int $ID_PROVIDER) Return the first ChildLoginProvider filtered by the ID_PROVIDER column
- * @method     ChildLoginProvider findOneByName(int $NAME) Return the first ChildLoginProvider filtered by the NAME column
- * @method     ChildLoginProvider findOneByDebug(boolean $DEV) Return the first ChildLoginProvider filtered by the DEV column
- * @method     ChildLoginProvider findOneByClient(string $CLIENT) Return the first ChildLoginProvider filtered by the CLIENT column
- * @method     ChildLoginProvider findOneBySecret(string $SECRET) Return the first ChildLoginProvider filtered by the SECRET column
- * @method     ChildLoginProvider findOneByParent(string $PARENT_REF) Return the first ChildLoginProvider filtered by the PARENT_REF column
- * @method     ChildLoginProvider findOneByScopes(string $SCOPES) Return the first ChildLoginProvider filtered by the SCOPES column
- * @method     ChildLoginProvider findOneByActive(boolean $ACTIVE) Return the first ChildLoginProvider filtered by the ACTIVE column
- * @method     ChildLoginProvider findOneByCustomerCode(string $CUSTOMER_CODE) Return the first ChildLoginProvider filtered by the CUSTOMER_CODE column
- * @method     ChildLoginProvider findOneByExpiration(int $EXPIRATION) Return the first ChildLoginProvider filtered by the EXPIRATION column
- * @method     ChildLoginProvider findOneByExpirationPeriod(int $EXPIRATION_PERIOD) Return the first ChildLoginProvider filtered by the EXPIRATION_PERIOD column
- * @method     ChildLoginProvider findOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column
- * @method     ChildLoginProvider findOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column
- * @method     ChildLoginProvider findOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column *
+ * @method     ChildLoginProvider|null findOneByIdProvider(int $ID_PROVIDER) Return the first ChildLoginProvider filtered by the ID_PROVIDER column
+ * @method     ChildLoginProvider|null findOneByName(int $NAME) Return the first ChildLoginProvider filtered by the NAME column
+ * @method     ChildLoginProvider|null findOneByDebug(boolean $DEV) Return the first ChildLoginProvider filtered by the DEV column
+ * @method     ChildLoginProvider|null findOneByClient(string $CLIENT) Return the first ChildLoginProvider filtered by the CLIENT column
+ * @method     ChildLoginProvider|null findOneBySecret(string $SECRET) Return the first ChildLoginProvider filtered by the SECRET column
+ * @method     ChildLoginProvider|null findOneByParent(string $PARENT_REF) Return the first ChildLoginProvider filtered by the PARENT_REF column
+ * @method     ChildLoginProvider|null findOneByScopes(string $SCOPES) Return the first ChildLoginProvider filtered by the SCOPES column
+ * @method     ChildLoginProvider|null findOneByActive(boolean $ACTIVE) Return the first ChildLoginProvider filtered by the ACTIVE column
+ * @method     ChildLoginProvider|null findOneByCustomerCode(string $CUSTOMER_CODE) Return the first ChildLoginProvider filtered by the CUSTOMER_CODE column
+ * @method     ChildLoginProvider|null findOneByExpiration(int $EXPIRATION) Return the first ChildLoginProvider filtered by the EXPIRATION column
+ * @method     ChildLoginProvider|null findOneByExpirationPeriod(int $EXPIRATION_PERIOD) Return the first ChildLoginProvider filtered by the EXPIRATION_PERIOD column
+ * @method     ChildLoginProvider|null findOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column
+ * @method     ChildLoginProvider|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column
+ * @method     ChildLoginProvider|null findOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column *
 
  * @method     ChildLoginProvider requirePk($key, ConnectionInterface $con = null) Return the ChildLoginProvider by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOne(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -1109,7 +1109,6 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         if ($key && !$this->cacheContains($key)) {
                 $this->cacheStore($key, $sql);
         }
-
 
         return $con->getDataFetcher($stmt);
     }

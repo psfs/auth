@@ -58,17 +58,17 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginSession findOne(ConnectionInterface $con = null) Return the first ChildLoginSession matching the query
+ * @method     ChildLoginSession|null findOne(ConnectionInterface $con = null) Return the first ChildLoginSession matching the query
  * @method     ChildLoginSession findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginSession matching the query, or a new ChildLoginSession object populated from the query conditions when no match is found
  *
- * @method     ChildLoginSession findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginSession filtered by the ID_ACCOUNT column
- * @method     ChildLoginSession findOneByDevice(string $DEVICE) Return the first ChildLoginSession filtered by the DEVICE column
- * @method     ChildLoginSession findOneByIP(string $IP) Return the first ChildLoginSession filtered by the IP column
- * @method     ChildLoginSession findOneByToken(string $TOKEN) Return the first ChildLoginSession filtered by the TOKEN column
- * @method     ChildLoginSession findOneByActive(boolean $ACTIVE) Return the first ChildLoginSession filtered by the ACTIVE column
- * @method     ChildLoginSession findOneById(int $id) Return the first ChildLoginSession filtered by the id column
- * @method     ChildLoginSession findOneByCreatedAt(string $created_at) Return the first ChildLoginSession filtered by the created_at column
- * @method     ChildLoginSession findOneByUpdatedAt(string $updated_at) Return the first ChildLoginSession filtered by the updated_at column *
+ * @method     ChildLoginSession|null findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginSession filtered by the ID_ACCOUNT column
+ * @method     ChildLoginSession|null findOneByDevice(string $DEVICE) Return the first ChildLoginSession filtered by the DEVICE column
+ * @method     ChildLoginSession|null findOneByIP(string $IP) Return the first ChildLoginSession filtered by the IP column
+ * @method     ChildLoginSession|null findOneByToken(string $TOKEN) Return the first ChildLoginSession filtered by the TOKEN column
+ * @method     ChildLoginSession|null findOneByActive(boolean $ACTIVE) Return the first ChildLoginSession filtered by the ACTIVE column
+ * @method     ChildLoginSession|null findOneById(int $id) Return the first ChildLoginSession filtered by the id column
+ * @method     ChildLoginSession|null findOneByCreatedAt(string $created_at) Return the first ChildLoginSession filtered by the created_at column
+ * @method     ChildLoginSession|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginSession filtered by the updated_at column *
 
  * @method     ChildLoginSession requirePk($key, ConnectionInterface $con = null) Return the ChildLoginSession by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginSession requireOne(ConnectionInterface $con = null) Return the first ChildLoginSession matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found

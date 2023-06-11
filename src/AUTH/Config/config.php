@@ -11,7 +11,7 @@ $manager->setConfiguration(array(
     'dsn' => 'mysql:host=' . \PSFS\base\config\Config::getParam('db.host', null, 'auth') . ';port=' . \PSFS\base\config\Config::getParam('db.port', null, 'auth') . ';dbname=' . \PSFS\base\config\Config::getParam('db.name', null, 'auth') . '',
     'user' => \PSFS\base\config\Config::getParam('db.user', null, 'auth'),
     'password' => \PSFS\base\config\Config::getParam('db.password', null, 'auth'),
-    'classname' => 'Propel\Runtime\Connection\ConnectionWrapper',
+    'classname' => '\\Propel\\Runtime\\Connection\\ConnectionWrapper',
     'model_paths' => array(
         0 => 'src',
         1 => 'vendor',
@@ -42,3 +42,5 @@ $serviceContainer->setLoggerConfiguration('defaultLogger', array(
     'level' => 300,
     'bubble' => true,
 ));
+
+#require_once 'loadDatabase.php';

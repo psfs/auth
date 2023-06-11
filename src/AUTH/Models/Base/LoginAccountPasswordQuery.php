@@ -54,15 +54,15 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginAccountPassword findOne(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query
+ * @method     ChildLoginAccountPassword|null findOne(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query
  * @method     ChildLoginAccountPassword findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query, or a new ChildLoginAccountPassword object populated from the query conditions when no match is found
  *
- * @method     ChildLoginAccountPassword findOneByIdPassword(int $ID_PASSWORD) Return the first ChildLoginAccountPassword filtered by the ID_PASSWORD column
- * @method     ChildLoginAccountPassword findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccountPassword filtered by the ID_ACCOUNT column
- * @method     ChildLoginAccountPassword findOneByValue(string $VALUE) Return the first ChildLoginAccountPassword filtered by the VALUE column
- * @method     ChildLoginAccountPassword findOneByExpirationDate(string $EXPIRATION_DATE) Return the first ChildLoginAccountPassword filtered by the EXPIRATION_DATE column
- * @method     ChildLoginAccountPassword findOneByCreatedAt(string $created_at) Return the first ChildLoginAccountPassword filtered by the created_at column
- * @method     ChildLoginAccountPassword findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccountPassword filtered by the updated_at column *
+ * @method     ChildLoginAccountPassword|null findOneByIdPassword(int $ID_PASSWORD) Return the first ChildLoginAccountPassword filtered by the ID_PASSWORD column
+ * @method     ChildLoginAccountPassword|null findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccountPassword filtered by the ID_ACCOUNT column
+ * @method     ChildLoginAccountPassword|null findOneByValue(string $VALUE) Return the first ChildLoginAccountPassword filtered by the VALUE column
+ * @method     ChildLoginAccountPassword|null findOneByExpirationDate(string $EXPIRATION_DATE) Return the first ChildLoginAccountPassword filtered by the EXPIRATION_DATE column
+ * @method     ChildLoginAccountPassword|null findOneByCreatedAt(string $created_at) Return the first ChildLoginAccountPassword filtered by the created_at column
+ * @method     ChildLoginAccountPassword|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccountPassword filtered by the updated_at column *
 
  * @method     ChildLoginAccountPassword requirePk($key, ConnectionInterface $con = null) Return the ChildLoginAccountPassword by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccountPassword requireOne(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found

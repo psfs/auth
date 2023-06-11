@@ -87,7 +87,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      * The value for the dev field.
      * Flag to define if the provider is for dev purposes
      * Note: this column has a database default value of: true
-     * @var        boolean
+     * @var        boolean|null
      */
     protected $dev;
 
@@ -108,14 +108,14 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * The value for the parent_ref field.
      *
-     * @var        string
+     * @var        string|null
      */
     protected $parent_ref;
 
     /**
      * The value for the scopes field.
      *
-     * @var        string
+     * @var        string|null
      */
     protected $scopes;
 
@@ -123,14 +123,14 @@ abstract class LoginProvider implements ActiveRecordInterface
      * The value for the active field.
      *
      * Note: this column has a database default value of: true
-     * @var        boolean
+     * @var        boolean|null
      */
     protected $active;
 
     /**
      * The value for the customer_code field.
      *
-     * @var        string
+     * @var        string|null
      */
     protected $customer_code;
 
@@ -145,28 +145,28 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * The value for the expiration_period field.
      *
-     * @var        int
+     * @var        int|null
      */
     protected $expiration_period;
 
     /**
      * The value for the created_at field.
      *
-     * @var        DateTime
+     * @var        DateTime|null
      */
     protected $created_at;
 
     /**
      * The value for the updated_at field.
      *
-     * @var        DateTime
+     * @var        DateTime|null
      */
     protected $updated_at;
 
     /**
      * The value for the accounts field.
      *
-     * @var        int
+     * @var        int|null
      */
     protected $accounts;
 
@@ -381,7 +381,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|LoginProvider The current object, for fluid interface
+     * @return $this The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -395,11 +395,11 @@ abstract class LoginProvider implements ActiveRecordInterface
      *
      * @param  string  $msg
      * @param  int     $priority One of the Propel::LOG_* logging levels
-     * @return boolean
+     * @return void
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
     {
-        return Propel::log(get_class($this) . ': ' . $msg, $priority);
+        Propel::log(get_class($this) . ': ' . $msg, $priority);
     }
 
     /**
@@ -474,7 +474,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [dev] column value.
      * Flag to define if the provider is for dev purposes
-     * @return boolean
+     * @return boolean|null
      */
     public function getDebug()
     {
@@ -484,7 +484,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [dev] column value.
      * Flag to define if the provider is for dev purposes
-     * @return boolean
+     * @return boolean|null
      */
     public function isDebug()
     {
@@ -514,7 +514,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [parent_ref] column value.
      *
-     * @return string
+     * @return string|null
      */
     public function getParent()
     {
@@ -524,7 +524,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [scopes] column value.
      *
-     * @return string
+     * @return string|null
      */
     public function getScopes()
     {
@@ -534,7 +534,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [active] column value.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function getActive()
     {
@@ -544,7 +544,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [active] column value.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function isActive()
     {
@@ -554,7 +554,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [customer_code] column value.
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerCode()
     {
@@ -583,7 +583,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [expiration_period] column value.
      *
-     * @return int
+     * @return int|null
      */
     public function getExpirationPeriod()
     {
@@ -594,14 +594,14 @@ abstract class LoginProvider implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
-     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
      *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCreatedAt($format = NULL)
+    public function getCreatedAt($format = null)
     {
         if ($format === null) {
             return $this->created_at;
@@ -614,14 +614,14 @@ abstract class LoginProvider implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
-     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
      *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getUpdatedAt($format = NULL)
+    public function getUpdatedAt($format = null)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -633,7 +633,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Get the [accounts] column value.
      *
-     * @return int
+     * @return int|null
      */
     public function getAccounts()
     {
@@ -643,7 +643,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [id_provider] column.
      *
-     * @param int $v new value
+     * @param int $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setIdProvider($v)
@@ -692,7 +692,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      * Flag to define if the provider is for dev purposes
-     * @param  boolean|integer|string $v The new value
+     * @param  boolean|integer|string|null $v The new value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setDebug($v)
@@ -716,7 +716,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [client] column.
      * Client id for the provider
-     * @param string $v new value
+     * @param string $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setClient($v)
@@ -736,7 +736,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [secret] column.
      * Secret for the client id
-     * @param string $v new value
+     * @param string $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setSecret($v)
@@ -756,7 +756,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [parent_ref] column.
      *
-     * @param string $v new value
+     * @param string|null $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setParent($v)
@@ -776,7 +776,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [scopes] column.
      *
-     * @param string $v new value
+     * @param string|null $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setScopes($v)
@@ -800,7 +800,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param  boolean|integer|string $v The new value
+     * @param  boolean|integer|string|null $v The new value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setActive($v)
@@ -824,7 +824,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [customer_code] column.
      *
-     * @param string $v new value
+     * @param string|null $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setCustomerCode($v)
@@ -869,7 +869,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [expiration_period] column.
      *
-     * @param int $v new value
+     * @param int|null $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setExpirationPeriod($v)
@@ -889,7 +889,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
@@ -909,7 +909,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
@@ -929,7 +929,7 @@ abstract class LoginProvider implements ActiveRecordInterface
     /**
      * Set the value of [accounts] column.
      *
-     * @param int $v new value
+     * @param int|null $v New value
      * @return $this|\AUTH\Models\LoginProvider The current object (for fluent API support)
      */
     public function setAccounts($v)
@@ -1546,11 +1546,11 @@ abstract class LoginProvider implements ActiveRecordInterface
             $keys[13] => $this->getAccounts(),
         );
         if ($result[$keys[11]] instanceof \DateTimeInterface) {
-            $result[$keys[11]] = $result[$keys[11]]->format('c');
+            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
-            $result[$keys[12]] = $result[$keys[12]]->format('c');
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1982,11 +1982,11 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('LoginPath' == $relationName) {
+        if ('LoginPath' === $relationName) {
             $this->initLoginPaths();
             return;
         }
-        if ('LoginAccount' == $relationName) {
+        if ('LoginAccount' === $relationName) {
             $this->initLoginAccounts();
             return;
         }
@@ -2055,10 +2055,19 @@ abstract class LoginProvider implements ActiveRecordInterface
     public function getLoginPaths(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         $partial = $this->collLoginPathsPartial && !$this->isNew();
-        if (null === $this->collLoginPaths || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collLoginPaths) {
+        if (null === $this->collLoginPaths || null !== $criteria || $partial) {
+            if ($this->isNew()) {
                 // return empty collection
-                $this->initLoginPaths();
+                if (null === $this->collLoginPaths) {
+                    $this->initLoginPaths();
+                } else {
+                    $collectionClassName = LoginPathTableMap::getTableMap()->getCollectionClassName();
+
+                    $collLoginPaths = new $collectionClassName;
+                    $collLoginPaths->setModel('\AUTH\Models\LoginPath');
+
+                    return $collLoginPaths;
+                }
             } else {
                 $collLoginPaths = ChildLoginPathQuery::create(null, $criteria)
                     ->filterByProviderPath($this)
@@ -2280,10 +2289,19 @@ abstract class LoginProvider implements ActiveRecordInterface
     public function getLoginAccounts(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         $partial = $this->collLoginAccountsPartial && !$this->isNew();
-        if (null === $this->collLoginAccounts || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collLoginAccounts) {
+        if (null === $this->collLoginAccounts || null !== $criteria || $partial) {
+            if ($this->isNew()) {
                 // return empty collection
-                $this->initLoginAccounts();
+                if (null === $this->collLoginAccounts) {
+                    $this->initLoginAccounts();
+                } else {
+                    $collectionClassName = LoginAccountTableMap::getTableMap()->getCollectionClassName();
+
+                    $collLoginAccounts = new $collectionClassName;
+                    $collLoginAccounts->setModel('\AUTH\Models\LoginAccount');
+
+                    return $collLoginAccounts;
+                }
             } else {
                 $collLoginAccounts = ChildLoginAccountQuery::create(null, $criteria)
                     ->filterByAccountProvider($this)
@@ -2556,10 +2574,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function preSave(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preSave')) {
-            return parent::preSave($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2568,10 +2583,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function postSave(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postSave')) {
-            parent::postSave($con);
-        }
-    }
+            }
 
     /**
      * Code to be run before inserting to database
@@ -2580,10 +2592,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function preInsert(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preInsert')) {
-            return parent::preInsert($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2592,10 +2601,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function postInsert(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postInsert')) {
-            parent::postInsert($con);
-        }
-    }
+            }
 
     /**
      * Code to be run before updating the object in database
@@ -2604,10 +2610,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function preUpdate(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preUpdate')) {
-            return parent::preUpdate($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2616,10 +2619,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function postUpdate(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postUpdate')) {
-            parent::postUpdate($con);
-        }
-    }
+            }
 
     /**
      * Code to be run before deleting the object in database
@@ -2628,10 +2628,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function preDelete(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preDelete')) {
-            return parent::preDelete($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2640,10 +2637,7 @@ abstract class LoginProvider implements ActiveRecordInterface
      */
     public function postDelete(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postDelete')) {
-            parent::postDelete($con);
-        }
-    }
+            }
 
 
     /**

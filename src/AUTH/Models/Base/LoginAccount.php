@@ -95,7 +95,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * The value for the email field.
      *
-     * @var        string
+     * @var        string|null
      */
     protected $email;
 
@@ -109,14 +109,14 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * The value for the refresh_token field.
      *
-     * @var        string
+     * @var        string|null
      */
     protected $refresh_token;
 
     /**
      * The value for the expires field.
      *
-     * @var        DateTime
+     * @var        DateTime|null
      */
     protected $expires;
 
@@ -124,7 +124,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * The value for the role field.
      *
      * Note: this column has a database default value of: 0
-     * @var        int
+     * @var        int|null
      */
     protected $role;
 
@@ -132,7 +132,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * The value for the active field.
      *
      * Note: this column has a database default value of: true
-     * @var        boolean
+     * @var        boolean|null
      */
     protected $active;
 
@@ -140,35 +140,35 @@ abstract class LoginAccount implements ActiveRecordInterface
      * The value for the verified field.
      *
      * Note: this column has a database default value of: false
-     * @var        boolean
+     * @var        boolean|null
      */
     protected $verified;
 
     /**
      * The value for the refresh_requested field.
      *
-     * @var        DateTime
+     * @var        DateTime|null
      */
     protected $refresh_requested;
 
     /**
      * The value for the reset_token field.
      *
-     * @var        string
+     * @var        string|null
      */
     protected $reset_token;
 
     /**
      * The value for the created_at field.
      *
-     * @var        DateTime
+     * @var        DateTime|null
      */
     protected $created_at;
 
     /**
      * The value for the updated_at field.
      *
-     * @var        DateTime
+     * @var        DateTime|null
      */
     protected $updated_at;
 
@@ -394,7 +394,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|LoginAccount The current object, for fluid interface
+     * @return $this The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -408,11 +408,11 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @param  string  $msg
      * @param  int     $priority One of the Propel::LOG_* logging levels
-     * @return boolean
+     * @return void
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
     {
-        return Propel::log(get_class($this) . ': ' . $msg, $priority);
+        Propel::log(get_class($this) . ': ' . $msg, $priority);
     }
 
     /**
@@ -488,7 +488,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [email] column value.
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail()
     {
@@ -508,7 +508,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [refresh_token] column value.
      *
-     * @return string
+     * @return string|null
      */
     public function getRefreshToken()
     {
@@ -519,14 +519,14 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [expires] column value.
      *
      *
-     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
      *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getExpireDate($format = NULL)
+    public function getExpireDate($format = null)
     {
         if ($format === null) {
             return $this->expires;
@@ -538,7 +538,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [role] column value.
      *
-     * @return string
+     * @return string|null
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function getAccountRole()
@@ -557,7 +557,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [active] column value.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function getActive()
     {
@@ -567,7 +567,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [active] column value.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function isActive()
     {
@@ -577,7 +577,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [verified] column value.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function getVerified()
     {
@@ -587,7 +587,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [verified] column value.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function isVerified()
     {
@@ -598,14 +598,14 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [refresh_requested] column value.
      *
      *
-     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
      *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getRefreshRequest($format = NULL)
+    public function getRefreshRequest($format = null)
     {
         if ($format === null) {
             return $this->refresh_requested;
@@ -617,7 +617,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Get the [reset_token] column value.
      *
-     * @return string
+     * @return string|null
      */
     public function getResetToken()
     {
@@ -628,14 +628,14 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [created_at] column value.
      *
      *
-     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
      *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCreatedAt($format = NULL)
+    public function getCreatedAt($format = null)
     {
         if ($format === null) {
             return $this->created_at;
@@ -648,14 +648,14 @@ abstract class LoginAccount implements ActiveRecordInterface
      * Get the [optionally formatted] temporal [updated_at] column value.
      *
      *
-     * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
      *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getUpdatedAt($format = NULL)
+    public function getUpdatedAt($format = null)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -667,7 +667,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [id_account] column.
      *
-     * @param int $v new value
+     * @param int $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setIdAccount($v)
@@ -687,7 +687,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [id_provider] column.
      *
-     * @param int $v new value
+     * @param int $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setIdSocial($v)
@@ -711,7 +711,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [identifier] column.
      *
-     * @param string $v new value
+     * @param string $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setId($v)
@@ -731,7 +731,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [email] column.
      *
-     * @param string $v new value
+     * @param string|null $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setEmail($v)
@@ -751,7 +751,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [access_token] column.
      *
-     * @param string $v new value
+     * @param string $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setAccessToken($v)
@@ -771,7 +771,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [refresh_token] column.
      *
-     * @param string $v new value
+     * @param string|null $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setRefreshToken($v)
@@ -791,7 +791,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Sets the value of [expires] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
@@ -811,7 +811,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [role] column.
      *
-     * @param  string $v new value
+     * @param  string|null $v new value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
@@ -840,7 +840,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param  boolean|integer|string $v The new value
+     * @param  boolean|integer|string|null $v The new value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setActive($v)
@@ -868,7 +868,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param  boolean|integer|string $v The new value
+     * @param  boolean|integer|string|null $v The new value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setVerified($v)
@@ -892,7 +892,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Sets the value of [refresh_requested] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
@@ -912,7 +912,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Set the value of [reset_token] column.
      *
-     * @param string $v new value
+     * @param string|null $v New value
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
     public function setResetToken($v)
@@ -932,7 +932,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
@@ -952,7 +952,7 @@ abstract class LoginAccount implements ActiveRecordInterface
     /**
      * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
      *
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     * @param  string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\AUTH\Models\LoginAccount The current object (for fluent API support)
      */
@@ -1593,19 +1593,19 @@ abstract class LoginAccount implements ActiveRecordInterface
             $keys[13] => $this->getUpdatedAt(),
         );
         if ($result[$keys[6]] instanceof \DateTimeInterface) {
-            $result[$keys[6]] = $result[$keys[6]]->format('c');
+            $result[$keys[6]] = $result[$keys[6]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
-            $result[$keys[10]] = $result[$keys[10]]->format('c');
+            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[12]] instanceof \DateTimeInterface) {
-            $result[$keys[12]] = $result[$keys[12]]->format('c');
+            $result[$keys[12]] = $result[$keys[12]]->format('Y-m-d H:i:s.u');
         }
 
         if ($result[$keys[13]] instanceof \DateTimeInterface) {
-            $result[$keys[13]] = $result[$keys[13]]->format('c');
+            $result[$keys[13]] = $result[$keys[13]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -2103,11 +2103,11 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('LoginAccountPassword' == $relationName) {
+        if ('LoginAccountPassword' === $relationName) {
             $this->initLoginAccountPasswords();
             return;
         }
-        if ('LoginSession' == $relationName) {
+        if ('LoginSession' === $relationName) {
             $this->initLoginSessions();
             return;
         }
@@ -2176,10 +2176,19 @@ abstract class LoginAccount implements ActiveRecordInterface
     public function getLoginAccountPasswords(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         $partial = $this->collLoginAccountPasswordsPartial && !$this->isNew();
-        if (null === $this->collLoginAccountPasswords || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collLoginAccountPasswords) {
+        if (null === $this->collLoginAccountPasswords || null !== $criteria || $partial) {
+            if ($this->isNew()) {
                 // return empty collection
-                $this->initLoginAccountPasswords();
+                if (null === $this->collLoginAccountPasswords) {
+                    $this->initLoginAccountPasswords();
+                } else {
+                    $collectionClassName = LoginAccountPasswordTableMap::getTableMap()->getCollectionClassName();
+
+                    $collLoginAccountPasswords = new $collectionClassName;
+                    $collLoginAccountPasswords->setModel('\AUTH\Models\LoginAccountPassword');
+
+                    return $collLoginAccountPasswords;
+                }
             } else {
                 $collLoginAccountPasswords = ChildLoginAccountPasswordQuery::create(null, $criteria)
                     ->filterByAccountPasswords($this)
@@ -2401,10 +2410,19 @@ abstract class LoginAccount implements ActiveRecordInterface
     public function getLoginSessions(Criteria $criteria = null, ConnectionInterface $con = null)
     {
         $partial = $this->collLoginSessionsPartial && !$this->isNew();
-        if (null === $this->collLoginSessions || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collLoginSessions) {
+        if (null === $this->collLoginSessions || null !== $criteria || $partial) {
+            if ($this->isNew()) {
                 // return empty collection
-                $this->initLoginSessions();
+                if (null === $this->collLoginSessions) {
+                    $this->initLoginSessions();
+                } else {
+                    $collectionClassName = LoginSessionTableMap::getTableMap()->getCollectionClassName();
+
+                    $collLoginSessions = new $collectionClassName;
+                    $collLoginSessions->setModel('\AUTH\Models\LoginSession');
+
+                    return $collLoginSessions;
+                }
             } else {
                 $collLoginSessions = ChildLoginSessionQuery::create(null, $criteria)
                     ->filterByAccountSession($this)
@@ -2672,10 +2690,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function preSave(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preSave')) {
-            return parent::preSave($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2684,10 +2699,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function postSave(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postSave')) {
-            parent::postSave($con);
-        }
-    }
+            }
 
     /**
      * Code to be run before inserting to database
@@ -2696,10 +2708,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function preInsert(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preInsert')) {
-            return parent::preInsert($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2708,10 +2717,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function postInsert(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postInsert')) {
-            parent::postInsert($con);
-        }
-    }
+            }
 
     /**
      * Code to be run before updating the object in database
@@ -2720,10 +2726,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function preUpdate(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preUpdate')) {
-            return parent::preUpdate($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2732,10 +2735,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function postUpdate(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postUpdate')) {
-            parent::postUpdate($con);
-        }
-    }
+            }
 
     /**
      * Code to be run before deleting the object in database
@@ -2744,10 +2744,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function preDelete(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::preDelete')) {
-            return parent::preDelete($con);
-        }
-        return true;
+                return true;
     }
 
     /**
@@ -2756,10 +2753,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      */
     public function postDelete(ConnectionInterface $con = null)
     {
-        if (is_callable('parent::postDelete')) {
-            parent::postDelete($con);
-        }
-    }
+            }
 
 
     /**

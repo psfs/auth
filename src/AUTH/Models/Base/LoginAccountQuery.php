@@ -90,23 +90,23 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginProviderQuery|\AUTH\Models\LoginAccountPasswordQuery|\AUTH\Models\LoginSessionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginAccount findOne(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query
+ * @method     ChildLoginAccount|null findOne(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query
  * @method     ChildLoginAccount findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query, or a new ChildLoginAccount object populated from the query conditions when no match is found
  *
- * @method     ChildLoginAccount findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccount filtered by the ID_ACCOUNT column
- * @method     ChildLoginAccount findOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginAccount filtered by the ID_PROVIDER column
- * @method     ChildLoginAccount findOneById(string $IDENTIFIER) Return the first ChildLoginAccount filtered by the IDENTIFIER column
- * @method     ChildLoginAccount findOneByEmail(string $EMAIL) Return the first ChildLoginAccount filtered by the EMAIL column
- * @method     ChildLoginAccount findOneByAccessToken(string $ACCESS_TOKEN) Return the first ChildLoginAccount filtered by the ACCESS_TOKEN column
- * @method     ChildLoginAccount findOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column
- * @method     ChildLoginAccount findOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column
- * @method     ChildLoginAccount findOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column
- * @method     ChildLoginAccount findOneByActive(boolean $ACTIVE) Return the first ChildLoginAccount filtered by the ACTIVE column
- * @method     ChildLoginAccount findOneByVerified(boolean $VERIFIED) Return the first ChildLoginAccount filtered by the VERIFIED column
- * @method     ChildLoginAccount findOneByRefreshRequest(string $REFRESH_REQUESTED) Return the first ChildLoginAccount filtered by the REFRESH_REQUESTED column
- * @method     ChildLoginAccount findOneByResetToken(string $RESET_TOKEN) Return the first ChildLoginAccount filtered by the RESET_TOKEN column
- * @method     ChildLoginAccount findOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column
- * @method     ChildLoginAccount findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column *
+ * @method     ChildLoginAccount|null findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccount filtered by the ID_ACCOUNT column
+ * @method     ChildLoginAccount|null findOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginAccount filtered by the ID_PROVIDER column
+ * @method     ChildLoginAccount|null findOneById(string $IDENTIFIER) Return the first ChildLoginAccount filtered by the IDENTIFIER column
+ * @method     ChildLoginAccount|null findOneByEmail(string $EMAIL) Return the first ChildLoginAccount filtered by the EMAIL column
+ * @method     ChildLoginAccount|null findOneByAccessToken(string $ACCESS_TOKEN) Return the first ChildLoginAccount filtered by the ACCESS_TOKEN column
+ * @method     ChildLoginAccount|null findOneByRefreshToken(string $REFRESH_TOKEN) Return the first ChildLoginAccount filtered by the REFRESH_TOKEN column
+ * @method     ChildLoginAccount|null findOneByExpireDate(string $EXPIRES) Return the first ChildLoginAccount filtered by the EXPIRES column
+ * @method     ChildLoginAccount|null findOneByAccountRole(int $ROLE) Return the first ChildLoginAccount filtered by the ROLE column
+ * @method     ChildLoginAccount|null findOneByActive(boolean $ACTIVE) Return the first ChildLoginAccount filtered by the ACTIVE column
+ * @method     ChildLoginAccount|null findOneByVerified(boolean $VERIFIED) Return the first ChildLoginAccount filtered by the VERIFIED column
+ * @method     ChildLoginAccount|null findOneByRefreshRequest(string $REFRESH_REQUESTED) Return the first ChildLoginAccount filtered by the REFRESH_REQUESTED column
+ * @method     ChildLoginAccount|null findOneByResetToken(string $RESET_TOKEN) Return the first ChildLoginAccount filtered by the RESET_TOKEN column
+ * @method     ChildLoginAccount|null findOneByCreatedAt(string $created_at) Return the first ChildLoginAccount filtered by the created_at column
+ * @method     ChildLoginAccount|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccount filtered by the updated_at column *
 
  * @method     ChildLoginAccount requirePk($key, ConnectionInterface $con = null) Return the ChildLoginAccount by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccount requireOne(ConnectionInterface $con = null) Return the first ChildLoginAccount matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -1266,7 +1266,6 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         if ($key && !$this->cacheContains($key)) {
                 $this->cacheStore($key, $sql);
         }
-
 
         return $con->getDataFetcher($stmt);
     }

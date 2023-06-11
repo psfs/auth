@@ -24,7 +24,6 @@ use Propel\Runtime\Map\TableMapTrait;
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class LoginAccountTableMap extends TableMap
 {
@@ -179,6 +178,127 @@ class LoginAccountTableMap extends TableMap
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
+    /**
+     * Holds a list of column names and their normalized version.
+     *
+     * @var string[]
+     */
+    protected $normalizedColumnNameMap = [
+
+        'IdAccount' => 'ID_ACCOUNT',
+        'LoginAccount.IdAccount' => 'ID_ACCOUNT',
+        'idAccount' => 'ID_ACCOUNT',
+        'loginAccount.idAccount' => 'ID_ACCOUNT',
+        'LoginAccountTableMap::COL_ID_ACCOUNT' => 'ID_ACCOUNT',
+        'COL_ID_ACCOUNT' => 'ID_ACCOUNT',
+        'ID_ACCOUNT' => 'ID_ACCOUNT',
+        'AUTH_ACCOUNTS.ID_ACCOUNT' => 'ID_ACCOUNT',
+        'IdSocial' => 'ID_PROVIDER',
+        'LoginAccount.IdSocial' => 'ID_PROVIDER',
+        'idSocial' => 'ID_PROVIDER',
+        'loginAccount.idSocial' => 'ID_PROVIDER',
+        'LoginAccountTableMap::COL_ID_PROVIDER' => 'ID_PROVIDER',
+        'COL_ID_PROVIDER' => 'ID_PROVIDER',
+        'ID_PROVIDER' => 'ID_PROVIDER',
+        'AUTH_ACCOUNTS.ID_PROVIDER' => 'ID_PROVIDER',
+        'Id' => 'IDENTIFIER',
+        'LoginAccount.Id' => 'IDENTIFIER',
+        'id' => 'IDENTIFIER',
+        'loginAccount.id' => 'IDENTIFIER',
+        'LoginAccountTableMap::COL_IDENTIFIER' => 'IDENTIFIER',
+        'COL_IDENTIFIER' => 'IDENTIFIER',
+        'IDENTIFIER' => 'IDENTIFIER',
+        'AUTH_ACCOUNTS.IDENTIFIER' => 'IDENTIFIER',
+        'Email' => 'EMAIL',
+        'LoginAccount.Email' => 'EMAIL',
+        'email' => 'EMAIL',
+        'loginAccount.email' => 'EMAIL',
+        'LoginAccountTableMap::COL_EMAIL' => 'EMAIL',
+        'COL_EMAIL' => 'EMAIL',
+        'EMAIL' => 'EMAIL',
+        'AUTH_ACCOUNTS.EMAIL' => 'EMAIL',
+        'AccessToken' => 'ACCESS_TOKEN',
+        'LoginAccount.AccessToken' => 'ACCESS_TOKEN',
+        'accessToken' => 'ACCESS_TOKEN',
+        'loginAccount.accessToken' => 'ACCESS_TOKEN',
+        'LoginAccountTableMap::COL_ACCESS_TOKEN' => 'ACCESS_TOKEN',
+        'COL_ACCESS_TOKEN' => 'ACCESS_TOKEN',
+        'ACCESS_TOKEN' => 'ACCESS_TOKEN',
+        'AUTH_ACCOUNTS.ACCESS_TOKEN' => 'ACCESS_TOKEN',
+        'RefreshToken' => 'REFRESH_TOKEN',
+        'LoginAccount.RefreshToken' => 'REFRESH_TOKEN',
+        'refreshToken' => 'REFRESH_TOKEN',
+        'loginAccount.refreshToken' => 'REFRESH_TOKEN',
+        'LoginAccountTableMap::COL_REFRESH_TOKEN' => 'REFRESH_TOKEN',
+        'COL_REFRESH_TOKEN' => 'REFRESH_TOKEN',
+        'REFRESH_TOKEN' => 'REFRESH_TOKEN',
+        'AUTH_ACCOUNTS.REFRESH_TOKEN' => 'REFRESH_TOKEN',
+        'ExpireDate' => 'EXPIRES',
+        'LoginAccount.ExpireDate' => 'EXPIRES',
+        'expireDate' => 'EXPIRES',
+        'loginAccount.expireDate' => 'EXPIRES',
+        'LoginAccountTableMap::COL_EXPIRES' => 'EXPIRES',
+        'COL_EXPIRES' => 'EXPIRES',
+        'EXPIRES' => 'EXPIRES',
+        'AUTH_ACCOUNTS.EXPIRES' => 'EXPIRES',
+        'AccountRole' => 'ROLE',
+        'LoginAccount.AccountRole' => 'ROLE',
+        'accountRole' => 'ROLE',
+        'loginAccount.accountRole' => 'ROLE',
+        'LoginAccountTableMap::COL_ROLE' => 'ROLE',
+        'COL_ROLE' => 'ROLE',
+        'ROLE' => 'ROLE',
+        'AUTH_ACCOUNTS.ROLE' => 'ROLE',
+        'Active' => 'ACTIVE',
+        'LoginAccount.Active' => 'ACTIVE',
+        'active' => 'ACTIVE',
+        'loginAccount.active' => 'ACTIVE',
+        'LoginAccountTableMap::COL_ACTIVE' => 'ACTIVE',
+        'COL_ACTIVE' => 'ACTIVE',
+        'ACTIVE' => 'ACTIVE',
+        'AUTH_ACCOUNTS.ACTIVE' => 'ACTIVE',
+        'Verified' => 'VERIFIED',
+        'LoginAccount.Verified' => 'VERIFIED',
+        'verified' => 'VERIFIED',
+        'loginAccount.verified' => 'VERIFIED',
+        'LoginAccountTableMap::COL_VERIFIED' => 'VERIFIED',
+        'COL_VERIFIED' => 'VERIFIED',
+        'VERIFIED' => 'VERIFIED',
+        'AUTH_ACCOUNTS.VERIFIED' => 'VERIFIED',
+        'RefreshRequest' => 'REFRESH_REQUESTED',
+        'LoginAccount.RefreshRequest' => 'REFRESH_REQUESTED',
+        'refreshRequest' => 'REFRESH_REQUESTED',
+        'loginAccount.refreshRequest' => 'REFRESH_REQUESTED',
+        'LoginAccountTableMap::COL_REFRESH_REQUESTED' => 'REFRESH_REQUESTED',
+        'COL_REFRESH_REQUESTED' => 'REFRESH_REQUESTED',
+        'REFRESH_REQUESTED' => 'REFRESH_REQUESTED',
+        'AUTH_ACCOUNTS.REFRESH_REQUESTED' => 'REFRESH_REQUESTED',
+        'ResetToken' => 'RESET_TOKEN',
+        'LoginAccount.ResetToken' => 'RESET_TOKEN',
+        'resetToken' => 'RESET_TOKEN',
+        'loginAccount.resetToken' => 'RESET_TOKEN',
+        'LoginAccountTableMap::COL_RESET_TOKEN' => 'RESET_TOKEN',
+        'COL_RESET_TOKEN' => 'RESET_TOKEN',
+        'RESET_TOKEN' => 'RESET_TOKEN',
+        'AUTH_ACCOUNTS.RESET_TOKEN' => 'RESET_TOKEN',
+        'CreatedAt' => 'CREATED_AT',
+        'LoginAccount.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'loginAccount.createdAt' => 'CREATED_AT',
+        'LoginAccountTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'AUTH_ACCOUNTS.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'LoginAccount.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'loginAccount.updatedAt' => 'UPDATED_AT',
+        'LoginAccountTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'AUTH_ACCOUNTS.updated_at' => 'UPDATED_AT',
+    ];
+
     /** The enumerated values for this table */
     protected static $enumValueSets = array(
                 LoginAccountTableMap::COL_ROLE => array(
@@ -216,7 +336,7 @@ class LoginAccountTableMap extends TableMap
      * @return void
      * @throws PropelException
      */
-    public function initialize(): void
+    public function initialize()
     {
         // attributes
         $this->setName('AUTH_ACCOUNTS');
@@ -245,12 +365,12 @@ class LoginAccountTableMap extends TableMap
         $this->addColumn('RESET_TOKEN', 'ResetToken', 'VARCHAR', false, 100, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize(): void
+    } // initialize()
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations(): void
+    public function buildRelations()
     {
         $this->addRelation('AccountProvider', '\\AUTH\\Models\\LoginProvider', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -273,7 +393,7 @@ class LoginAccountTableMap extends TableMap
     1 => ':ID_ACCOUNT',
   ),
 ), null, null, 'LoginSessions', false);
-    } // buildRelations(): void
+    } // buildRelations()
 
     /**
      *
@@ -281,14 +401,14 @@ class LoginAccountTableMap extends TableMap
      *
      * @return array Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors(): array
+    public function getBehaviors()
     {
         return array(
             'query_cache' => array('backend' => 'apc', 'lifetime' => '3600', ),
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
             'aggregate_column_relation_aggregate_column' => array('foreign_table' => 'AUTH_PROVIDERS', 'update_method' => 'updateAccounts', 'aggregate_name' => 'Accounts', ),
         );
-    } // getBehaviors(): array
+    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -460,6 +580,52 @@ class LoginAccountTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.RESET_TOKEN');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
+        }
+    }
+
+    /**
+     * Remove all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be removed as they are only loaded on demand.
+     *
+     * @param Criteria $criteria object containing the columns to remove.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_ID_ACCOUNT);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_ID_PROVIDER);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_IDENTIFIER);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_EMAIL);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_ACCESS_TOKEN);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_REFRESH_TOKEN);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_EXPIRES);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_ROLE);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_ACTIVE);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_VERIFIED);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_REFRESH_REQUESTED);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_RESET_TOKEN);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(LoginAccountTableMap::COL_UPDATED_AT);
+        } else {
+            $criteria->removeSelectColumn($alias . '.ID_ACCOUNT');
+            $criteria->removeSelectColumn($alias . '.ID_PROVIDER');
+            $criteria->removeSelectColumn($alias . '.IDENTIFIER');
+            $criteria->removeSelectColumn($alias . '.EMAIL');
+            $criteria->removeSelectColumn($alias . '.ACCESS_TOKEN');
+            $criteria->removeSelectColumn($alias . '.REFRESH_TOKEN');
+            $criteria->removeSelectColumn($alias . '.EXPIRES');
+            $criteria->removeSelectColumn($alias . '.ROLE');
+            $criteria->removeSelectColumn($alias . '.ACTIVE');
+            $criteria->removeSelectColumn($alias . '.VERIFIED');
+            $criteria->removeSelectColumn($alias . '.REFRESH_REQUESTED');
+            $criteria->removeSelectColumn($alias . '.RESET_TOKEN');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
         }
     }
 

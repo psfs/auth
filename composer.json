@@ -13,7 +13,8 @@
         "psfs/core": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.6",
+        "phpunit/phpunit": "10.2.x-dev",
+        "roave/security-advisories": "dev-master",
         "google/apiclient": "v2.15.0"
     },
     "suggest": {
@@ -26,5 +27,5 @@
             "email": "fran.lopez84@hotmail.es"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }

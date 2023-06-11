@@ -24,7 +24,6 @@ use Propel\Runtime\Map\TableMapTrait;
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class LoginAccountPasswordTableMap extends TableMap
 {
@@ -135,13 +134,70 @@ class LoginAccountPasswordTableMap extends TableMap
     );
 
     /**
+     * Holds a list of column names and their normalized version.
+     *
+     * @var string[]
+     */
+    protected $normalizedColumnNameMap = [
+
+        'IdPassword' => 'ID_PASSWORD',
+        'LoginAccountPassword.IdPassword' => 'ID_PASSWORD',
+        'idPassword' => 'ID_PASSWORD',
+        'loginAccountPassword.idPassword' => 'ID_PASSWORD',
+        'LoginAccountPasswordTableMap::COL_ID_PASSWORD' => 'ID_PASSWORD',
+        'COL_ID_PASSWORD' => 'ID_PASSWORD',
+        'ID_PASSWORD' => 'ID_PASSWORD',
+        'AUTH_ACCOUNT_PASSWORDS.ID_PASSWORD' => 'ID_PASSWORD',
+        'IdAccount' => 'ID_ACCOUNT',
+        'LoginAccountPassword.IdAccount' => 'ID_ACCOUNT',
+        'idAccount' => 'ID_ACCOUNT',
+        'loginAccountPassword.idAccount' => 'ID_ACCOUNT',
+        'LoginAccountPasswordTableMap::COL_ID_ACCOUNT' => 'ID_ACCOUNT',
+        'COL_ID_ACCOUNT' => 'ID_ACCOUNT',
+        'ID_ACCOUNT' => 'ID_ACCOUNT',
+        'AUTH_ACCOUNT_PASSWORDS.ID_ACCOUNT' => 'ID_ACCOUNT',
+        'Value' => 'VALUE',
+        'LoginAccountPassword.Value' => 'VALUE',
+        'value' => 'VALUE',
+        'loginAccountPassword.value' => 'VALUE',
+        'LoginAccountPasswordTableMap::COL_VALUE' => 'VALUE',
+        'COL_VALUE' => 'VALUE',
+        'VALUE' => 'VALUE',
+        'AUTH_ACCOUNT_PASSWORDS.VALUE' => 'VALUE',
+        'ExpirationDate' => 'EXPIRATION_DATE',
+        'LoginAccountPassword.ExpirationDate' => 'EXPIRATION_DATE',
+        'expirationDate' => 'EXPIRATION_DATE',
+        'loginAccountPassword.expirationDate' => 'EXPIRATION_DATE',
+        'LoginAccountPasswordTableMap::COL_EXPIRATION_DATE' => 'EXPIRATION_DATE',
+        'COL_EXPIRATION_DATE' => 'EXPIRATION_DATE',
+        'EXPIRATION_DATE' => 'EXPIRATION_DATE',
+        'AUTH_ACCOUNT_PASSWORDS.EXPIRATION_DATE' => 'EXPIRATION_DATE',
+        'CreatedAt' => 'CREATED_AT',
+        'LoginAccountPassword.CreatedAt' => 'CREATED_AT',
+        'createdAt' => 'CREATED_AT',
+        'loginAccountPassword.createdAt' => 'CREATED_AT',
+        'LoginAccountPasswordTableMap::COL_CREATED_AT' => 'CREATED_AT',
+        'COL_CREATED_AT' => 'CREATED_AT',
+        'created_at' => 'CREATED_AT',
+        'AUTH_ACCOUNT_PASSWORDS.created_at' => 'CREATED_AT',
+        'UpdatedAt' => 'UPDATED_AT',
+        'LoginAccountPassword.UpdatedAt' => 'UPDATED_AT',
+        'updatedAt' => 'UPDATED_AT',
+        'loginAccountPassword.updatedAt' => 'UPDATED_AT',
+        'LoginAccountPasswordTableMap::COL_UPDATED_AT' => 'UPDATED_AT',
+        'COL_UPDATED_AT' => 'UPDATED_AT',
+        'updated_at' => 'UPDATED_AT',
+        'AUTH_ACCOUNT_PASSWORDS.updated_at' => 'UPDATED_AT',
+    ];
+
+    /**
      * Initialize the table attributes and columns
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
      * @throws PropelException
      */
-    public function initialize(): void
+    public function initialize()
     {
         // attributes
         $this->setName('AUTH_ACCOUNT_PASSWORDS');
@@ -157,12 +213,12 @@ class LoginAccountPasswordTableMap extends TableMap
         $this->addColumn('EXPIRATION_DATE', 'ExpirationDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize(): void
+    } // initialize()
 
     /**
      * Build the RelationMap objects for this table relationships
      */
-    public function buildRelations(): void
+    public function buildRelations()
     {
         $this->addRelation('AccountPasswords', '\\AUTH\\Models\\LoginAccount', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -171,7 +227,7 @@ class LoginAccountPasswordTableMap extends TableMap
     1 => ':ID_ACCOUNT',
   ),
 ), null, null, null, false);
-    } // buildRelations(): void
+    } // buildRelations()
 
     /**
      *
@@ -179,12 +235,12 @@ class LoginAccountPasswordTableMap extends TableMap
      *
      * @return array Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors(): array
+    public function getBehaviors()
     {
         return array(
             'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
         );
-    } // getBehaviors(): array
+    } // getBehaviors()
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -340,6 +396,36 @@ class LoginAccountPasswordTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.EXPIRATION_DATE');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
+        }
+    }
+
+    /**
+     * Remove all the columns needed to create a new object.
+     *
+     * Note: any columns that were marked with lazyLoad="true" in the
+     * XML schema will not be removed as they are only loaded on demand.
+     *
+     * @param Criteria $criteria object containing the columns to remove.
+     * @param string   $alias    optional table alias
+     * @throws PropelException Any exceptions caught during processing will be
+     *                         rethrown wrapped into a PropelException.
+     */
+    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    {
+        if (null === $alias) {
+            $criteria->removeSelectColumn(LoginAccountPasswordTableMap::COL_ID_PASSWORD);
+            $criteria->removeSelectColumn(LoginAccountPasswordTableMap::COL_ID_ACCOUNT);
+            $criteria->removeSelectColumn(LoginAccountPasswordTableMap::COL_VALUE);
+            $criteria->removeSelectColumn(LoginAccountPasswordTableMap::COL_EXPIRATION_DATE);
+            $criteria->removeSelectColumn(LoginAccountPasswordTableMap::COL_CREATED_AT);
+            $criteria->removeSelectColumn(LoginAccountPasswordTableMap::COL_UPDATED_AT);
+        } else {
+            $criteria->removeSelectColumn($alias . '.ID_PASSWORD');
+            $criteria->removeSelectColumn($alias . '.ID_ACCOUNT');
+            $criteria->removeSelectColumn($alias . '.VALUE');
+            $criteria->removeSelectColumn($alias . '.EXPIRATION_DATE');
+            $criteria->removeSelectColumn($alias . '.created_at');
+            $criteria->removeSelectColumn($alias . '.updated_at');
         }
     }
 

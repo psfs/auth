@@ -11,12 +11,13 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'AUTH_PROVIDERS' table.
+ * Base class that represents a query for the `AUTH_PROVIDERS` table.
  *
  * Table with the login providers
  *
@@ -80,8 +81,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginPathQuery|\AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginProvider|null findOne(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query
- * @method     ChildLoginProvider findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query, or a new ChildLoginProvider object populated from the query conditions when no match is found
+ * @method     ChildLoginProvider|null findOne(?ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query
+ * @method     ChildLoginProvider findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query, or a new ChildLoginProvider object populated from the query conditions when no match is found
  *
  * @method     ChildLoginProvider|null findOneByIdProvider(int $ID_PROVIDER) Return the first ChildLoginProvider filtered by the ID_PROVIDER column
  * @method     ChildLoginProvider|null findOneByName(int $NAME) Return the first ChildLoginProvider filtered by the NAME column
@@ -96,10 +97,10 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider|null findOneByExpirationPeriod(int $EXPIRATION_PERIOD) Return the first ChildLoginProvider filtered by the EXPIRATION_PERIOD column
  * @method     ChildLoginProvider|null findOneByCreatedAt(string $created_at) Return the first ChildLoginProvider filtered by the created_at column
  * @method     ChildLoginProvider|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column
- * @method     ChildLoginProvider|null findOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column *
-
- * @method     ChildLoginProvider requirePk($key, ConnectionInterface $con = null) Return the ChildLoginProvider by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLoginProvider requireOne(ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginProvider|null findOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column
+ *
+ * @method     ChildLoginProvider requirePk($key, ?ConnectionInterface $con = null) Return the ChildLoginProvider by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginProvider requireOne(?ConnectionInterface $con = null) Return the first ChildLoginProvider matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLoginProvider requireOneByIdProvider(int $ID_PROVIDER) Return the first ChildLoginProvider filtered by the ID_PROVIDER column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByName(int $NAME) Return the first ChildLoginProvider filtered by the NAME column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -116,37 +117,54 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginProvider requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginProvider filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginProvider requireOneByAccounts(int $ACCOUNTS) Return the first ChildLoginProvider filtered by the ACCOUNTS column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildLoginProvider[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLoginProvider objects based on current ModelCriteria
- * @method     ChildLoginProvider[]|ObjectCollection findByIdProvider(int $ID_PROVIDER) Return ChildLoginProvider objects filtered by the ID_PROVIDER column
- * @method     ChildLoginProvider[]|ObjectCollection findByName(int $NAME) Return ChildLoginProvider objects filtered by the NAME column
- * @method     ChildLoginProvider[]|ObjectCollection findByDebug(boolean $DEV) Return ChildLoginProvider objects filtered by the DEV column
- * @method     ChildLoginProvider[]|ObjectCollection findByClient(string $CLIENT) Return ChildLoginProvider objects filtered by the CLIENT column
- * @method     ChildLoginProvider[]|ObjectCollection findBySecret(string $SECRET) Return ChildLoginProvider objects filtered by the SECRET column
- * @method     ChildLoginProvider[]|ObjectCollection findByParent(string $PARENT_REF) Return ChildLoginProvider objects filtered by the PARENT_REF column
- * @method     ChildLoginProvider[]|ObjectCollection findByScopes(string $SCOPES) Return ChildLoginProvider objects filtered by the SCOPES column
- * @method     ChildLoginProvider[]|ObjectCollection findByActive(boolean $ACTIVE) Return ChildLoginProvider objects filtered by the ACTIVE column
- * @method     ChildLoginProvider[]|ObjectCollection findByCustomerCode(string $CUSTOMER_CODE) Return ChildLoginProvider objects filtered by the CUSTOMER_CODE column
- * @method     ChildLoginProvider[]|ObjectCollection findByExpiration(int $EXPIRATION) Return ChildLoginProvider objects filtered by the EXPIRATION column
- * @method     ChildLoginProvider[]|ObjectCollection findByExpirationPeriod(int $EXPIRATION_PERIOD) Return ChildLoginProvider objects filtered by the EXPIRATION_PERIOD column
- * @method     ChildLoginProvider[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginProvider objects filtered by the created_at column
- * @method     ChildLoginProvider[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginProvider objects filtered by the updated_at column
- * @method     ChildLoginProvider[]|ObjectCollection findByAccounts(int $ACCOUNTS) Return ChildLoginProvider objects filtered by the ACCOUNTS column
- * @method     ChildLoginProvider[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildLoginProvider[]|Collection find(?ConnectionInterface $con = null) Return ChildLoginProvider objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> find(?ConnectionInterface $con = null) Return ChildLoginProvider objects based on current ModelCriteria
  *
+ * @method     ChildLoginProvider[]|Collection findByIdProvider(int|array<int> $ID_PROVIDER) Return ChildLoginProvider objects filtered by the ID_PROVIDER column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByIdProvider(int|array<int> $ID_PROVIDER) Return ChildLoginProvider objects filtered by the ID_PROVIDER column
+ * @method     ChildLoginProvider[]|Collection findByName(int|array<int> $NAME) Return ChildLoginProvider objects filtered by the NAME column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByName(int|array<int> $NAME) Return ChildLoginProvider objects filtered by the NAME column
+ * @method     ChildLoginProvider[]|Collection findByDebug(boolean|array<boolean> $DEV) Return ChildLoginProvider objects filtered by the DEV column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByDebug(boolean|array<boolean> $DEV) Return ChildLoginProvider objects filtered by the DEV column
+ * @method     ChildLoginProvider[]|Collection findByClient(string|array<string> $CLIENT) Return ChildLoginProvider objects filtered by the CLIENT column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByClient(string|array<string> $CLIENT) Return ChildLoginProvider objects filtered by the CLIENT column
+ * @method     ChildLoginProvider[]|Collection findBySecret(string|array<string> $SECRET) Return ChildLoginProvider objects filtered by the SECRET column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findBySecret(string|array<string> $SECRET) Return ChildLoginProvider objects filtered by the SECRET column
+ * @method     ChildLoginProvider[]|Collection findByParent(string|array<string> $PARENT_REF) Return ChildLoginProvider objects filtered by the PARENT_REF column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByParent(string|array<string> $PARENT_REF) Return ChildLoginProvider objects filtered by the PARENT_REF column
+ * @method     ChildLoginProvider[]|Collection findByScopes(string|array<string> $SCOPES) Return ChildLoginProvider objects filtered by the SCOPES column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByScopes(string|array<string> $SCOPES) Return ChildLoginProvider objects filtered by the SCOPES column
+ * @method     ChildLoginProvider[]|Collection findByActive(boolean|array<boolean> $ACTIVE) Return ChildLoginProvider objects filtered by the ACTIVE column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByActive(boolean|array<boolean> $ACTIVE) Return ChildLoginProvider objects filtered by the ACTIVE column
+ * @method     ChildLoginProvider[]|Collection findByCustomerCode(string|array<string> $CUSTOMER_CODE) Return ChildLoginProvider objects filtered by the CUSTOMER_CODE column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByCustomerCode(string|array<string> $CUSTOMER_CODE) Return ChildLoginProvider objects filtered by the CUSTOMER_CODE column
+ * @method     ChildLoginProvider[]|Collection findByExpiration(int|array<int> $EXPIRATION) Return ChildLoginProvider objects filtered by the EXPIRATION column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByExpiration(int|array<int> $EXPIRATION) Return ChildLoginProvider objects filtered by the EXPIRATION column
+ * @method     ChildLoginProvider[]|Collection findByExpirationPeriod(int|array<int> $EXPIRATION_PERIOD) Return ChildLoginProvider objects filtered by the EXPIRATION_PERIOD column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByExpirationPeriod(int|array<int> $EXPIRATION_PERIOD) Return ChildLoginProvider objects filtered by the EXPIRATION_PERIOD column
+ * @method     ChildLoginProvider[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildLoginProvider objects filtered by the created_at column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByCreatedAt(string|array<string> $created_at) Return ChildLoginProvider objects filtered by the created_at column
+ * @method     ChildLoginProvider[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginProvider objects filtered by the updated_at column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginProvider objects filtered by the updated_at column
+ * @method     ChildLoginProvider[]|Collection findByAccounts(int|array<int> $ACCOUNTS) Return ChildLoginProvider objects filtered by the ACCOUNTS column
+ * @psalm-method Collection&\Traversable<ChildLoginProvider> findByAccounts(int|array<int> $ACCOUNTS) Return ChildLoginProvider objects filtered by the ACCOUNTS column
+ *
+ * @method     ChildLoginProvider[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLoginProvider> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class LoginProviderQuery extends ModelCriteria
 {
 
     // query_cache behavior
     protected $queryKey = '';
-protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
+    protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
      * Initializes internal state of \AUTH\Models\Base\LoginProviderQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginProvider', $modelAlias = null)
     {
@@ -156,12 +174,12 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Returns a new ChildLoginProviderQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildLoginProviderQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildLoginProviderQuery) {
             return $criteria;
@@ -191,7 +209,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @return ChildLoginProvider|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -223,8 +241,8 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -256,8 +274,8 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildLoginProvider|array|mixed the result, formatted by the current formatter
      */
@@ -277,12 +295,12 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -299,27 +317,31 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $key, Criteria::EQUAL);
+        $this->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $keys, Criteria::IN);
+        $this->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -332,15 +354,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByIdProvider(array('min' => 12)); // WHERE ID_PROVIDER > 12
      * </code>
      *
-     * @param     mixed $idProvider The value to use as filter.
+     * @param mixed $idProvider The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIdProvider($idProvider = null, $comparison = null)
+    public function filterByIdProvider($idProvider = null, ?string $comparison = null)
     {
         if (is_array($idProvider)) {
             $useMinMax = false;
@@ -360,18 +382,20 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $idProvider, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $idProvider, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query on the NAME column
      *
-     * @param     mixed $name The value to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed $name The value to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByName($name = null, $comparison = null)
+    public function filterByName($name = null, ?string $comparison = null)
     {
         $valueSet = LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_NAME);
         if (is_scalar($name)) {
@@ -380,7 +404,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
             $name = array_search($name, $valueSet);
         } elseif (is_array($name)) {
-            $convertedValues = array();
+            $convertedValues = [];
             foreach ($name as $value) {
                 if (!in_array($value, $valueSet)) {
                     throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $value));
@@ -393,7 +417,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_NAME, $name, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_NAME, $name, $comparison);
+
+        return $this;
     }
 
     /**
@@ -405,22 +431,24 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByDebug('yes'); // WHERE DEV = true
      * </code>
      *
-     * @param     boolean|string $debug The value to use as filter.
+     * @param bool|string $debug The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByDebug($debug = null, $comparison = null)
+    public function filterByDebug($debug = null, ?string $comparison = null)
     {
         if (is_string($debug)) {
-            $debug = in_array(strtolower($debug), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $debug = in_array(strtolower($debug), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_DEV, $debug, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_DEV, $debug, $comparison);
+
+        return $this;
     }
 
     /**
@@ -430,14 +458,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * <code>
      * $query->filterByClient('fooValue');   // WHERE CLIENT = 'fooValue'
      * $query->filterByClient('%fooValue%', Criteria::LIKE); // WHERE CLIENT LIKE '%fooValue%'
+     * $query->filterByClient(['foo', 'bar']); // WHERE CLIENT IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $client The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $client The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByClient($client = null, $comparison = null)
+    public function filterByClient($client = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($client)) {
@@ -445,21 +474,25 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_CLIENT, $client, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_CLIENT, $client, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query on the SECRET column
      *
-     * @param     mixed $secret The value to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed $secret The value to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterBySecret($secret = null, $comparison = null)
+    public function filterBySecret($secret = null, ?string $comparison = null)
     {
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_SECRET, $secret, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_SECRET, $secret, $comparison);
+
+        return $this;
     }
 
     /**
@@ -469,14 +502,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * <code>
      * $query->filterByParent('fooValue');   // WHERE PARENT_REF = 'fooValue'
      * $query->filterByParent('%fooValue%', Criteria::LIKE); // WHERE PARENT_REF LIKE '%fooValue%'
+     * $query->filterByParent(['foo', 'bar']); // WHERE PARENT_REF IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $parent The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $parent The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByParent($parent = null, $comparison = null)
+    public function filterByParent($parent = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($parent)) {
@@ -484,7 +518,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_PARENT_REF, $parent, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_PARENT_REF, $parent, $comparison);
+
+        return $this;
     }
 
     /**
@@ -494,14 +530,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * <code>
      * $query->filterByScopes('fooValue');   // WHERE SCOPES = 'fooValue'
      * $query->filterByScopes('%fooValue%', Criteria::LIKE); // WHERE SCOPES LIKE '%fooValue%'
+     * $query->filterByScopes(['foo', 'bar']); // WHERE SCOPES IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $scopes The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $scopes The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByScopes($scopes = null, $comparison = null)
+    public function filterByScopes($scopes = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($scopes)) {
@@ -509,7 +546,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_SCOPES, $scopes, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_SCOPES, $scopes, $comparison);
+
+        return $this;
     }
 
     /**
@@ -521,22 +560,24 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByActive('yes'); // WHERE ACTIVE = true
      * </code>
      *
-     * @param     boolean|string $active The value to use as filter.
+     * @param bool|string $active The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByActive($active = null, $comparison = null)
+    public function filterByActive($active = null, ?string $comparison = null)
     {
         if (is_string($active)) {
-            $active = in_array(strtolower($active), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            $active = in_array(strtolower($active), array('false', 'off', '-', 'no', 'n', '0', ''), true) ? false : true;
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_ACTIVE, $active, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_ACTIVE, $active, $comparison);
+
+        return $this;
     }
 
     /**
@@ -546,14 +587,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * <code>
      * $query->filterByCustomerCode('fooValue');   // WHERE CUSTOMER_CODE = 'fooValue'
      * $query->filterByCustomerCode('%fooValue%', Criteria::LIKE); // WHERE CUSTOMER_CODE LIKE '%fooValue%'
+     * $query->filterByCustomerCode(['foo', 'bar']); // WHERE CUSTOMER_CODE IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $customerCode The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $customerCode The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCustomerCode($customerCode = null, $comparison = null)
+    public function filterByCustomerCode($customerCode = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($customerCode)) {
@@ -561,18 +603,20 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_CUSTOMER_CODE, $customerCode, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_CUSTOMER_CODE, $customerCode, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query on the EXPIRATION column
      *
-     * @param     mixed $expiration The value to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed $expiration The value to use as filter
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByExpiration($expiration = null, $comparison = null)
+    public function filterByExpiration($expiration = null, ?string $comparison = null)
     {
         $valueSet = LoginProviderTableMap::getValueSet(LoginProviderTableMap::COL_EXPIRATION);
         if (is_scalar($expiration)) {
@@ -581,7 +625,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
             $expiration = array_search($expiration, $valueSet);
         } elseif (is_array($expiration)) {
-            $convertedValues = array();
+            $convertedValues = [];
             foreach ($expiration as $value) {
                 if (!in_array($value, $valueSet)) {
                     throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $value));
@@ -594,7 +638,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION, $expiration, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION, $expiration, $comparison);
+
+        return $this;
     }
 
     /**
@@ -607,15 +653,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByExpirationPeriod(array('min' => 12)); // WHERE EXPIRATION_PERIOD > 12
      * </code>
      *
-     * @param     mixed $expirationPeriod The value to use as filter.
+     * @param mixed $expirationPeriod The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByExpirationPeriod($expirationPeriod = null, $comparison = null)
+    public function filterByExpirationPeriod($expirationPeriod = null, ?string $comparison = null)
     {
         if (is_array($expirationPeriod)) {
             $useMinMax = false;
@@ -635,7 +681,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION_PERIOD, $expirationPeriod, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_EXPIRATION_PERIOD, $expirationPeriod, $comparison);
+
+        return $this;
     }
 
     /**
@@ -648,17 +696,17 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -678,7 +726,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_CREATED_AT, $createdAt, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_CREATED_AT, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -691,17 +741,17 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -721,7 +771,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -734,15 +786,15 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * $query->filterByAccounts(array('min' => 12)); // WHERE ACCOUNTS > 12
      * </code>
      *
-     * @param     mixed $accounts The value to use as filter.
+     * @param mixed $accounts The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAccounts($accounts = null, $comparison = null)
+    public function filterByAccounts($accounts = null, ?string $comparison = null)
     {
         if (is_array($accounts)) {
             $useMinMax = false;
@@ -762,27 +814,33 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             }
         }
 
-        return $this->addUsingAlias(LoginProviderTableMap::COL_ACCOUNTS, $accounts, $comparison);
+        $this->addUsingAlias(LoginProviderTableMap::COL_ACCOUNTS, $accounts, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \AUTH\Models\LoginPath object
      *
      * @param \AUTH\Models\LoginPath|ObjectCollection $loginPath the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLoginPath($loginPath, $comparison = null)
+    public function filterByLoginPath($loginPath, ?string $comparison = null)
     {
         if ($loginPath instanceof \AUTH\Models\LoginPath) {
-            return $this
+            $this
                 ->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $loginPath->getIdSocial(), $comparison);
+
+            return $this;
         } elseif ($loginPath instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useLoginPathQuery()
                 ->filterByPrimaryKeys($loginPath->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByLoginPath() only accepts arguments of type \AUTH\Models\LoginPath or Collection');
         }
@@ -791,12 +849,12 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Adds a JOIN clause to the query using the LoginPath relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinLoginPath($relationAlias = null, $joinType = 'INNER JOIN')
+    public function joinLoginPath(?string $relationAlias = null, ?string $joinType = 'INNER JOIN')
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('LoginPath');
@@ -825,9 +883,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \AUTH\Models\LoginPathQuery A secondary query class using the current class as primary query
      */
@@ -839,23 +897,123 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Use the LoginPath relation LoginPath object
+     *
+     * @param callable(\AUTH\Models\LoginPathQuery):\AUTH\Models\LoginPathQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withLoginPathQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = 'INNER JOIN'
+    ) {
+        $relatedQuery = $this->useLoginPathQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to LoginPath table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \AUTH\Models\LoginPathQuery The inner query object of the EXISTS statement
+     */
+    public function useLoginPathExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \AUTH\Models\LoginPathQuery */
+        $q = $this->useExistsQuery('LoginPath', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to LoginPath table for a NOT EXISTS query.
+     *
+     * @see useLoginPathExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \AUTH\Models\LoginPathQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useLoginPathNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \AUTH\Models\LoginPathQuery */
+        $q = $this->useExistsQuery('LoginPath', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to LoginPath table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \AUTH\Models\LoginPathQuery The inner query object of the IN statement
+     */
+    public function useInLoginPathQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \AUTH\Models\LoginPathQuery */
+        $q = $this->useInQuery('LoginPath', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to LoginPath table for a NOT IN query.
+     *
+     * @see useLoginPathInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \AUTH\Models\LoginPathQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInLoginPathQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \AUTH\Models\LoginPathQuery */
+        $q = $this->useInQuery('LoginPath', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
      * Filter the query by a related \AUTH\Models\LoginAccount object
      *
      * @param \AUTH\Models\LoginAccount|ObjectCollection $loginAccount the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByLoginAccount($loginAccount, $comparison = null)
+    public function filterByLoginAccount($loginAccount, ?string $comparison = null)
     {
         if ($loginAccount instanceof \AUTH\Models\LoginAccount) {
-            return $this
+            $this
                 ->addUsingAlias(LoginProviderTableMap::COL_ID_PROVIDER, $loginAccount->getIdSocial(), $comparison);
+
+            return $this;
         } elseif ($loginAccount instanceof ObjectCollection) {
-            return $this
+            $this
                 ->useLoginAccountQuery()
                 ->filterByPrimaryKeys($loginAccount->getPrimaryKeys())
                 ->endUse();
+
+            return $this;
         } else {
             throw new PropelException('filterByLoginAccount() only accepts arguments of type \AUTH\Models\LoginAccount or Collection');
         }
@@ -864,12 +1022,12 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Adds a JOIN clause to the query using the LoginAccount relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinLoginAccount($relationAlias = null, $joinType = 'INNER JOIN')
+    public function joinLoginAccount(?string $relationAlias = null, ?string $joinType = 'INNER JOIN')
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('LoginAccount');
@@ -898,9 +1056,9 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \AUTH\Models\LoginAccountQuery A secondary query class using the current class as primary query
      */
@@ -912,11 +1070,107 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     }
 
     /**
+     * Use the LoginAccount relation LoginAccount object
+     *
+     * @param callable(\AUTH\Models\LoginAccountQuery):\AUTH\Models\LoginAccountQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withLoginAccountQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = 'INNER JOIN'
+    ) {
+        $relatedQuery = $this->useLoginAccountQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the relation to LoginAccount table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the EXISTS statement
+     */
+    public function useLoginAccountExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useExistsQuery('LoginAccount', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the relation to LoginAccount table for a NOT EXISTS query.
+     *
+     * @see useLoginAccountExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useLoginAccountNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useExistsQuery('LoginAccount', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the relation to LoginAccount table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the IN statement
+     */
+    public function useInLoginAccountQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useInQuery('LoginAccount', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the relation to LoginAccount table for a NOT IN query.
+     *
+     * @see useLoginAccountInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInLoginAccountQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useInQuery('LoginAccount', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
      * Exclude object from result
      *
-     * @param   ChildLoginProvider $loginProvider Object to remove from the list of results
+     * @param ChildLoginProvider $loginProvider Object to remove from the list of results
      *
-     * @return $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($loginProvider = null)
     {
@@ -933,7 +1187,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LoginProviderTableMap::DATABASE_NAME);
@@ -958,12 +1212,12 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LoginProviderTableMap::DATABASE_NAME);
@@ -1019,7 +1273,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         apc_store($key, $value, $lifetime);
     }
 
-    public function doSelect(ConnectionInterface $con = null)
+    public function doSelect(?ConnectionInterface $con = null): \Propel\Runtime\DataFetcher\DataFetcherInterface
     {
         // check that the columns of the main class are already added (if this is the primary ModelCriteria)
         if (!$this->hasSelectClause() && !$this->getPrimaryCriteria()) {
@@ -1035,7 +1289,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
             $params = $this->getParams();
             $sql = $this->cacheFetch($key);
         } else {
-            $params = array();
+            $params = [];
             $sql = $this->createSelectSql($params);
         }
 
@@ -1055,7 +1309,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
         return $con->getDataFetcher($stmt);
     }
 
-    public function doCount(ConnectionInterface $con = null)
+    public function doCount(?ConnectionInterface $con = null): \Propel\Runtime\DataFetcher\DataFetcherInterface
     {
         $dbMap = Propel::getServiceContainer()->getDatabaseMap($this->getDbName());
         $db = Propel::getServiceContainer()->getAdapter($this->getDbName());
@@ -1080,7 +1334,7 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
                 || count($this->selectQueries) > 0
             ;
 
-            $params = array();
+            $params = [];
             if ($needsComplexCount) {
                 if ($this->needsSelectAliases()) {
                     if ($this->getHaving()) {
@@ -1118,65 +1372,77 @@ protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityN
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(LoginProviderTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LoginProviderTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LoginProviderTableMap::COL_UPDATED_AT);
+        $this->addDescendingOrderByColumn(LoginProviderTableMap::COL_UPDATED_AT);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LoginProviderTableMap::COL_UPDATED_AT);
+        $this->addAscendingOrderByColumn(LoginProviderTableMap::COL_UPDATED_AT);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LoginProviderTableMap::COL_CREATED_AT);
+        $this->addDescendingOrderByColumn(LoginProviderTableMap::COL_CREATED_AT);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(LoginProviderTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LoginProviderTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildLoginProviderQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LoginProviderTableMap::COL_CREATED_AT);
+        $this->addAscendingOrderByColumn(LoginProviderTableMap::COL_CREATED_AT);
+
+        return $this;
     }
 
-} // LoginProviderQuery
+}

@@ -11,12 +11,13 @@ use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'AUTH_ACCOUNT_PASSWORDS' table.
+ * Base class that represents a query for the `AUTH_ACCOUNT_PASSWORDS` table.
  *
  * Table with an history for account passwords
  *
@@ -54,18 +55,18 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     \AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildLoginAccountPassword|null findOne(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query
- * @method     ChildLoginAccountPassword findOneOrCreate(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query, or a new ChildLoginAccountPassword object populated from the query conditions when no match is found
+ * @method     ChildLoginAccountPassword|null findOne(?ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query
+ * @method     ChildLoginAccountPassword findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query, or a new ChildLoginAccountPassword object populated from the query conditions when no match is found
  *
  * @method     ChildLoginAccountPassword|null findOneByIdPassword(int $ID_PASSWORD) Return the first ChildLoginAccountPassword filtered by the ID_PASSWORD column
  * @method     ChildLoginAccountPassword|null findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccountPassword filtered by the ID_ACCOUNT column
  * @method     ChildLoginAccountPassword|null findOneByValue(string $VALUE) Return the first ChildLoginAccountPassword filtered by the VALUE column
  * @method     ChildLoginAccountPassword|null findOneByExpirationDate(string $EXPIRATION_DATE) Return the first ChildLoginAccountPassword filtered by the EXPIRATION_DATE column
  * @method     ChildLoginAccountPassword|null findOneByCreatedAt(string $created_at) Return the first ChildLoginAccountPassword filtered by the created_at column
- * @method     ChildLoginAccountPassword|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccountPassword filtered by the updated_at column *
-
- * @method     ChildLoginAccountPassword requirePk($key, ConnectionInterface $con = null) Return the ChildLoginAccountPassword by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildLoginAccountPassword requireOne(ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccountPassword|null findOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccountPassword filtered by the updated_at column
+ *
+ * @method     ChildLoginAccountPassword requirePk($key, ?ConnectionInterface $con = null) Return the ChildLoginAccountPassword by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildLoginAccountPassword requireOne(?ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLoginAccountPassword requireOneByIdPassword(int $ID_PASSWORD) Return the first ChildLoginAccountPassword filtered by the ID_PASSWORD column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccountPassword requireOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccountPassword filtered by the ID_ACCOUNT column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -74,15 +75,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountPassword requireOneByCreatedAt(string $created_at) Return the first ChildLoginAccountPassword filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildLoginAccountPassword requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccountPassword filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildLoginAccountPassword[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildLoginAccountPassword objects based on current ModelCriteria
- * @method     ChildLoginAccountPassword[]|ObjectCollection findByIdPassword(int $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
- * @method     ChildLoginAccountPassword[]|ObjectCollection findByIdAccount(int $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
- * @method     ChildLoginAccountPassword[]|ObjectCollection findByValue(string $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
- * @method     ChildLoginAccountPassword[]|ObjectCollection findByExpirationDate(string $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
- * @method     ChildLoginAccountPassword[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
- * @method     ChildLoginAccountPassword[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
- * @method     ChildLoginAccountPassword[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildLoginAccountPassword[]|Collection find(?ConnectionInterface $con = null) Return ChildLoginAccountPassword objects based on current ModelCriteria
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> find(?ConnectionInterface $con = null) Return ChildLoginAccountPassword objects based on current ModelCriteria
  *
+ * @method     ChildLoginAccountPassword[]|Collection findByIdPassword(int|array<int> $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByIdPassword(int|array<int> $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
+ * @method     ChildLoginAccountPassword[]|Collection findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
+ * @method     ChildLoginAccountPassword[]|Collection findByValue(string|array<string> $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByValue(string|array<string> $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
+ * @method     ChildLoginAccountPassword[]|Collection findByExpirationDate(string|array<string> $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByExpirationDate(string|array<string> $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
+ * @method     ChildLoginAccountPassword[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByCreatedAt(string|array<string> $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
+ * @method     ChildLoginAccountPassword[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
+ * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
+ *
+ * @method     ChildLoginAccountPassword[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLoginAccountPassword> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class LoginAccountPasswordQuery extends ModelCriteria
 {
@@ -91,9 +101,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     /**
      * Initializes internal state of \AUTH\Models\Base\LoginAccountPasswordQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName The database name
+     * @param string $modelName The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginAccountPassword', $modelAlias = null)
     {
@@ -103,12 +113,12 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     /**
      * Returns a new ChildLoginAccountPasswordQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string $modelAlias The alias of a model in the query
+     * @param Criteria $criteria Optional Criteria to build the query from
      *
      * @return ChildLoginAccountPasswordQuery
      */
-    public static function create($modelAlias = null, Criteria $criteria = null)
+    public static function create(?string $modelAlias = null, ?Criteria $criteria = null): Criteria
     {
         if ($criteria instanceof ChildLoginAccountPasswordQuery) {
             return $criteria;
@@ -138,7 +148,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @return ChildLoginAccountPassword|array|mixed the result, formatted by the current formatter
      */
-    public function findPk($key, ConnectionInterface $con = null)
+    public function findPk($key, ?ConnectionInterface $con = null)
     {
         if ($key === null) {
             return null;
@@ -170,8 +180,8 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -203,8 +213,8 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildLoginAccountPassword|array|mixed the result, formatted by the current formatter
      */
@@ -224,12 +234,12 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     * @param array $keys Primary keys to use for the query
+     * @param ConnectionInterface $con an optional connection object
      *
-     * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
+     * @return Collection|array|mixed the list of results, formatted by the current formatter
      */
-    public function findPks($keys, ConnectionInterface $con = null)
+    public function findPks($keys, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
@@ -246,27 +256,31 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_PASSWORD, $key, Criteria::EQUAL);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_PASSWORD, $key, Criteria::EQUAL);
+
+        return $this;
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array|int $keys The list of primary key to use for the query
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_PASSWORD, $keys, Criteria::IN);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_PASSWORD, $keys, Criteria::IN);
+
+        return $this;
     }
 
     /**
@@ -279,15 +293,15 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * $query->filterByIdPassword(array('min' => 12)); // WHERE ID_PASSWORD > 12
      * </code>
      *
-     * @param     mixed $idPassword The value to use as filter.
+     * @param mixed $idPassword The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIdPassword($idPassword = null, $comparison = null)
+    public function filterByIdPassword($idPassword = null, ?string $comparison = null)
     {
         if (is_array($idPassword)) {
             $useMinMax = false;
@@ -307,7 +321,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_PASSWORD, $idPassword, $comparison);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_PASSWORD, $idPassword, $comparison);
+
+        return $this;
     }
 
     /**
@@ -322,15 +338,15 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @see       filterByAccountPasswords()
      *
-     * @param     mixed $idAccount The value to use as filter.
+     * @param mixed $idAccount The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByIdAccount($idAccount = null, $comparison = null)
+    public function filterByIdAccount($idAccount = null, ?string $comparison = null)
     {
         if (is_array($idAccount)) {
             $useMinMax = false;
@@ -350,7 +366,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_ACCOUNT, $idAccount, $comparison);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_ACCOUNT, $idAccount, $comparison);
+
+        return $this;
     }
 
     /**
@@ -360,14 +378,15 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * <code>
      * $query->filterByValue('fooValue');   // WHERE VALUE = 'fooValue'
      * $query->filterByValue('%fooValue%', Criteria::LIKE); // WHERE VALUE LIKE '%fooValue%'
+     * $query->filterByValue(['foo', 'bar']); // WHERE VALUE IN ('foo', 'bar')
      * </code>
      *
-     * @param     string $value The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|string[] $value The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByValue($value = null, $comparison = null)
+    public function filterByValue($value = null, ?string $comparison = null)
     {
         if (null === $comparison) {
             if (is_array($value)) {
@@ -375,7 +394,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_VALUE, $value, $comparison);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_VALUE, $value, $comparison);
+
+        return $this;
     }
 
     /**
@@ -388,17 +409,17 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * $query->filterByExpirationDate(array('max' => 'yesterday')); // WHERE EXPIRATION_DATE > '2011-03-13'
      * </code>
      *
-     * @param     mixed $expirationDate The value to use as filter.
+     * @param mixed $expirationDate The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByExpirationDate($expirationDate = null, $comparison = null)
+    public function filterByExpirationDate($expirationDate = null, ?string $comparison = null)
     {
         if (is_array($expirationDate)) {
             $useMinMax = false;
@@ -418,7 +439,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_EXPIRATION_DATE, $expirationDate, $comparison);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_EXPIRATION_DATE, $expirationDate, $comparison);
+
+        return $this;
     }
 
     /**
@@ -431,17 +454,17 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $createdAt The value to use as filter.
+     * @param mixed $createdAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
+    public function filterByCreatedAt($createdAt = null, ?string $comparison = null)
     {
         if (is_array($createdAt)) {
             $useMinMax = false;
@@ -461,7 +484,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_CREATED_AT, $createdAt, $comparison);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_CREATED_AT, $createdAt, $comparison);
+
+        return $this;
     }
 
     /**
@@ -474,17 +499,17 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $updatedAt The value to use as filter.
+     * @param mixed $updatedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+    public function filterByUpdatedAt($updatedAt = null, ?string $comparison = null)
     {
         if (is_array($updatedAt)) {
             $useMinMax = false;
@@ -504,20 +529,22 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+
+        return $this;
     }
 
     /**
      * Filter the query by a related \AUTH\Models\LoginAccount object
      *
      * @param \AUTH\Models\LoginAccount|ObjectCollection $loginAccount The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function filterByAccountPasswords($loginAccount, $comparison = null)
+    public function filterByAccountPasswords($loginAccount, ?string $comparison = null)
     {
         if ($loginAccount instanceof \AUTH\Models\LoginAccount) {
             return $this
@@ -527,8 +554,10 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
                 $comparison = Criteria::IN;
             }
 
-            return $this
+            $this
                 ->addUsingAlias(LoginAccountPasswordTableMap::COL_ID_ACCOUNT, $loginAccount->toKeyValue('PrimaryKey', 'IdAccount'), $comparison);
+
+            return $this;
         } else {
             throw new PropelException('filterByAccountPasswords() only accepts arguments of type \AUTH\Models\LoginAccount or Collection');
         }
@@ -537,12 +566,12 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the AccountPasswords relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string|null $relationAlias Optional alias for the relation
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
-    public function joinAccountPasswords($relationAlias = null, $joinType = 'INNER JOIN')
+    public function joinAccountPasswords(?string $relationAlias = null, ?string $joinType = 'INNER JOIN')
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('AccountPasswords');
@@ -571,9 +600,9 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \AUTH\Models\LoginAccountQuery A secondary query class using the current class as primary query
      */
@@ -585,11 +614,107 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     }
 
     /**
+     * Use the AccountPasswords relation LoginAccount object
+     *
+     * @param callable(\AUTH\Models\LoginAccountQuery):\AUTH\Models\LoginAccountQuery $callable A function working on the related query
+     *
+     * @param string|null $relationAlias optional alias for the relation
+     *
+     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this
+     */
+    public function withAccountPasswordsQuery(
+        callable $callable,
+        string $relationAlias = null,
+        ?string $joinType = 'INNER JOIN'
+    ) {
+        $relatedQuery = $this->useAccountPasswordsQuery(
+            $relationAlias,
+            $joinType
+        );
+        $callable($relatedQuery);
+        $relatedQuery->endUse();
+
+        return $this;
+    }
+
+    /**
+     * Use the AccountPasswords relation to the LoginAccount table for an EXISTS query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the EXISTS statement
+     */
+    public function useAccountPasswordsExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useExistsQuery('AccountPasswords', $modelAlias, $queryClass, $typeOfExists);
+        return $q;
+    }
+
+    /**
+     * Use the AccountPasswords relation to the LoginAccount table for a NOT EXISTS query.
+     *
+     * @see useAccountPasswordsExistsQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT EXISTS statement
+     */
+    public function useAccountPasswordsNotExistsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useExistsQuery('AccountPasswords', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $q;
+    }
+
+    /**
+     * Use the AccountPasswords relation to the LoginAccount table for an IN query.
+     *
+     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
+     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the IN statement
+     */
+    public function useInAccountPasswordsQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useInQuery('AccountPasswords', $modelAlias, $queryClass, $typeOfIn);
+        return $q;
+    }
+
+    /**
+     * Use the AccountPasswords relation to the LoginAccount table for a NOT IN query.
+     *
+     * @see useAccountPasswordsInQuery()
+     *
+     * @param string|null $modelAlias sets an alias for the nested query
+     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
+     *
+     * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT IN statement
+     */
+    public function useNotInAccountPasswordsQuery($modelAlias = null, $queryClass = null)
+    {
+        /** @var $q \AUTH\Models\LoginAccountQuery */
+        $q = $this->useInQuery('AccountPasswords', $modelAlias, $queryClass, 'NOT IN');
+        return $q;
+    }
+
+    /**
      * Exclude object from result
      *
-     * @param   ChildLoginAccountPassword $loginAccountPassword Object to remove from the list of results
+     * @param ChildLoginAccountPassword $loginAccountPassword Object to remove from the list of results
      *
-     * @return $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function prune($loginAccountPassword = null)
     {
@@ -606,7 +731,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public function doDeleteAll(ConnectionInterface $con = null)
+    public function doDeleteAll(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountPasswordTableMap::DATABASE_NAME);
@@ -631,12 +756,12 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * Performs a DELETE on the database based on the current ModelCriteria
      *
      * @param ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
+    public function delete(?ConnectionInterface $con = null): int
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountPasswordTableMap::DATABASE_NAME);
@@ -666,65 +791,77 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
     /**
      * Filter by the latest updated
      *
-     * @param      int $nbDays Maximum age of the latest update in days
+     * @param int $nbDays Maximum age of the latest update in days
      *
-     * @return     $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyUpdated($nbDays = 7)
     {
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by update date desc
      *
-     * @return     $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastUpdatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LoginAccountPasswordTableMap::COL_UPDATED_AT);
+        $this->addDescendingOrderByColumn(LoginAccountPasswordTableMap::COL_UPDATED_AT);
+
+        return $this;
     }
 
     /**
      * Order by update date asc
      *
-     * @return     $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstUpdatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LoginAccountPasswordTableMap::COL_UPDATED_AT);
+        $this->addAscendingOrderByColumn(LoginAccountPasswordTableMap::COL_UPDATED_AT);
+
+        return $this;
     }
 
     /**
      * Order by create date desc
      *
-     * @return     $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function lastCreatedFirst()
     {
-        return $this->addDescendingOrderByColumn(LoginAccountPasswordTableMap::COL_CREATED_AT);
+        $this->addDescendingOrderByColumn(LoginAccountPasswordTableMap::COL_CREATED_AT);
+
+        return $this;
     }
 
     /**
      * Filter by the latest created
      *
-     * @param      int $nbDays Maximum age of in days
+     * @param int $nbDays Maximum age of in days
      *
-     * @return     $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function recentlyCreated($nbDays = 7)
     {
-        return $this->addUsingAlias(LoginAccountPasswordTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+        $this->addUsingAlias(LoginAccountPasswordTableMap::COL_CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
+
+        return $this;
     }
 
     /**
      * Order by create date asc
      *
-     * @return     $this|ChildLoginAccountPasswordQuery The current query, for fluid interface
+     * @return $this The current query, for fluid interface
      */
     public function firstCreatedFirst()
     {
-        return $this->addAscendingOrderByColumn(LoginAccountPasswordTableMap::COL_CREATED_AT);
+        $this->addAscendingOrderByColumn(LoginAccountPasswordTableMap::COL_CREATED_AT);
+
+        return $this;
     }
 
-} // LoginAccountPasswordQuery
+}

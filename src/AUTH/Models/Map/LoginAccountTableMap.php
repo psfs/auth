@@ -33,158 +33,166 @@ class LoginAccountTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'AUTH.Models.Map.LoginAccountTableMap';
+    public const CLASS_NAME = 'AUTH.Models.Map.LoginAccountTableMap';
 
     /**
      * The default database name for this class
      */
-    const DATABASE_NAME = 'AUTH';
+    public const DATABASE_NAME = 'AUTH';
 
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'AUTH_ACCOUNTS';
+    public const TABLE_NAME = 'AUTH_ACCOUNTS';
+
+    /**
+     * The PHP name of this class (PascalCase)
+     */
+    public const TABLE_PHP_NAME = 'LoginAccount';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\AUTH\\Models\\LoginAccount';
+    public const OM_CLASS = '\\AUTH\\Models\\LoginAccount';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'AUTH.Models.LoginAccount';
+    public const CLASS_DEFAULT = 'AUTH.Models.LoginAccount';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 14;
+    public const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
      */
-    const NUM_LAZY_LOAD_COLUMNS = 0;
+    public const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 14;
+    public const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the ID_ACCOUNT field
      */
-    const COL_ID_ACCOUNT = 'AUTH_ACCOUNTS.ID_ACCOUNT';
+    public const COL_ID_ACCOUNT = 'AUTH_ACCOUNTS.ID_ACCOUNT';
 
     /**
      * the column name for the ID_PROVIDER field
      */
-    const COL_ID_PROVIDER = 'AUTH_ACCOUNTS.ID_PROVIDER';
+    public const COL_ID_PROVIDER = 'AUTH_ACCOUNTS.ID_PROVIDER';
 
     /**
      * the column name for the IDENTIFIER field
      */
-    const COL_IDENTIFIER = 'AUTH_ACCOUNTS.IDENTIFIER';
+    public const COL_IDENTIFIER = 'AUTH_ACCOUNTS.IDENTIFIER';
 
     /**
      * the column name for the EMAIL field
      */
-    const COL_EMAIL = 'AUTH_ACCOUNTS.EMAIL';
+    public const COL_EMAIL = 'AUTH_ACCOUNTS.EMAIL';
 
     /**
      * the column name for the ACCESS_TOKEN field
      */
-    const COL_ACCESS_TOKEN = 'AUTH_ACCOUNTS.ACCESS_TOKEN';
+    public const COL_ACCESS_TOKEN = 'AUTH_ACCOUNTS.ACCESS_TOKEN';
 
     /**
      * the column name for the REFRESH_TOKEN field
      */
-    const COL_REFRESH_TOKEN = 'AUTH_ACCOUNTS.REFRESH_TOKEN';
+    public const COL_REFRESH_TOKEN = 'AUTH_ACCOUNTS.REFRESH_TOKEN';
 
     /**
      * the column name for the EXPIRES field
      */
-    const COL_EXPIRES = 'AUTH_ACCOUNTS.EXPIRES';
+    public const COL_EXPIRES = 'AUTH_ACCOUNTS.EXPIRES';
 
     /**
      * the column name for the ROLE field
      */
-    const COL_ROLE = 'AUTH_ACCOUNTS.ROLE';
+    public const COL_ROLE = 'AUTH_ACCOUNTS.ROLE';
 
     /**
      * the column name for the ACTIVE field
      */
-    const COL_ACTIVE = 'AUTH_ACCOUNTS.ACTIVE';
+    public const COL_ACTIVE = 'AUTH_ACCOUNTS.ACTIVE';
 
     /**
      * the column name for the VERIFIED field
      */
-    const COL_VERIFIED = 'AUTH_ACCOUNTS.VERIFIED';
+    public const COL_VERIFIED = 'AUTH_ACCOUNTS.VERIFIED';
 
     /**
      * the column name for the REFRESH_REQUESTED field
      */
-    const COL_REFRESH_REQUESTED = 'AUTH_ACCOUNTS.REFRESH_REQUESTED';
+    public const COL_REFRESH_REQUESTED = 'AUTH_ACCOUNTS.REFRESH_REQUESTED';
 
     /**
      * the column name for the RESET_TOKEN field
      */
-    const COL_RESET_TOKEN = 'AUTH_ACCOUNTS.RESET_TOKEN';
+    public const COL_RESET_TOKEN = 'AUTH_ACCOUNTS.RESET_TOKEN';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'AUTH_ACCOUNTS.created_at';
+    public const COL_CREATED_AT = 'AUTH_ACCOUNTS.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'AUTH_ACCOUNTS.updated_at';
+    public const COL_UPDATED_AT = 'AUTH_ACCOUNTS.updated_at';
 
     /**
      * The default string format for model objects of the related table
      */
-    const DEFAULT_STRING_FORMAT = 'YAML';
+    public const DEFAULT_STRING_FORMAT = 'YAML';
 
     /** The enumerated values for the ROLE field */
-    const COL_ROLE_USER = 'USER';
-    const COL_ROLE_MANAGER = 'MANAGER';
-    const COL_ROLE_ADMIN = 'ADMIN';
+    public const COL_ROLE_USER = 'USER';
+    public const COL_ROLE_MANAGER = 'MANAGER';
+    public const COL_ROLE_ADMIN = 'ADMIN';
 
     /**
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('IdAccount', 'IdSocial', 'Id', 'Email', 'AccessToken', 'RefreshToken', 'ExpireDate', 'AccountRole', 'Active', 'Verified', 'RefreshRequest', 'ResetToken', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('idAccount', 'idSocial', 'id', 'email', 'accessToken', 'refreshToken', 'expireDate', 'accountRole', 'active', 'verified', 'refreshRequest', 'resetToken', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT, LoginAccountTableMap::COL_ID_PROVIDER, LoginAccountTableMap::COL_IDENTIFIER, LoginAccountTableMap::COL_EMAIL, LoginAccountTableMap::COL_ACCESS_TOKEN, LoginAccountTableMap::COL_REFRESH_TOKEN, LoginAccountTableMap::COL_EXPIRES, LoginAccountTableMap::COL_ROLE, LoginAccountTableMap::COL_ACTIVE, LoginAccountTableMap::COL_VERIFIED, LoginAccountTableMap::COL_REFRESH_REQUESTED, LoginAccountTableMap::COL_RESET_TOKEN, LoginAccountTableMap::COL_CREATED_AT, LoginAccountTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('ID_ACCOUNT', 'ID_PROVIDER', 'IDENTIFIER', 'EMAIL', 'ACCESS_TOKEN', 'REFRESH_TOKEN', 'EXPIRES', 'ROLE', 'ACTIVE', 'VERIFIED', 'REFRESH_REQUESTED', 'RESET_TOKEN', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldNames = [
+        self::TYPE_PHPNAME       => ['IdAccount', 'IdSocial', 'Id', 'Email', 'AccessToken', 'RefreshToken', 'ExpireDate', 'AccountRole', 'Active', 'Verified', 'RefreshRequest', 'ResetToken', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['idAccount', 'idSocial', 'id', 'email', 'accessToken', 'refreshToken', 'expireDate', 'accountRole', 'active', 'verified', 'refreshRequest', 'resetToken', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [LoginAccountTableMap::COL_ID_ACCOUNT, LoginAccountTableMap::COL_ID_PROVIDER, LoginAccountTableMap::COL_IDENTIFIER, LoginAccountTableMap::COL_EMAIL, LoginAccountTableMap::COL_ACCESS_TOKEN, LoginAccountTableMap::COL_REFRESH_TOKEN, LoginAccountTableMap::COL_EXPIRES, LoginAccountTableMap::COL_ROLE, LoginAccountTableMap::COL_ACTIVE, LoginAccountTableMap::COL_VERIFIED, LoginAccountTableMap::COL_REFRESH_REQUESTED, LoginAccountTableMap::COL_RESET_TOKEN, LoginAccountTableMap::COL_CREATED_AT, LoginAccountTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['ID_ACCOUNT', 'ID_PROVIDER', 'IDENTIFIER', 'EMAIL', 'ACCESS_TOKEN', 'REFRESH_TOKEN', 'EXPIRES', 'ROLE', 'ACTIVE', 'VERIFIED', 'REFRESH_REQUESTED', 'RESET_TOKEN', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
+     *
+     * @var array<string, mixed>
      */
-    protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('IdAccount' => 0, 'IdSocial' => 1, 'Id' => 2, 'Email' => 3, 'AccessToken' => 4, 'RefreshToken' => 5, 'ExpireDate' => 6, 'AccountRole' => 7, 'Active' => 8, 'Verified' => 9, 'RefreshRequest' => 10, 'ResetToken' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
-        self::TYPE_CAMELNAME     => array('idAccount' => 0, 'idSocial' => 1, 'id' => 2, 'email' => 3, 'accessToken' => 4, 'refreshToken' => 5, 'expireDate' => 6, 'accountRole' => 7, 'active' => 8, 'verified' => 9, 'refreshRequest' => 10, 'resetToken' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
-        self::TYPE_COLNAME       => array(LoginAccountTableMap::COL_ID_ACCOUNT => 0, LoginAccountTableMap::COL_ID_PROVIDER => 1, LoginAccountTableMap::COL_IDENTIFIER => 2, LoginAccountTableMap::COL_EMAIL => 3, LoginAccountTableMap::COL_ACCESS_TOKEN => 4, LoginAccountTableMap::COL_REFRESH_TOKEN => 5, LoginAccountTableMap::COL_EXPIRES => 6, LoginAccountTableMap::COL_ROLE => 7, LoginAccountTableMap::COL_ACTIVE => 8, LoginAccountTableMap::COL_VERIFIED => 9, LoginAccountTableMap::COL_REFRESH_REQUESTED => 10, LoginAccountTableMap::COL_RESET_TOKEN => 11, LoginAccountTableMap::COL_CREATED_AT => 12, LoginAccountTableMap::COL_UPDATED_AT => 13, ),
-        self::TYPE_FIELDNAME     => array('ID_ACCOUNT' => 0, 'ID_PROVIDER' => 1, 'IDENTIFIER' => 2, 'EMAIL' => 3, 'ACCESS_TOKEN' => 4, 'REFRESH_TOKEN' => 5, 'EXPIRES' => 6, 'ROLE' => 7, 'ACTIVE' => 8, 'VERIFIED' => 9, 'REFRESH_REQUESTED' => 10, 'RESET_TOKEN' => 11, 'created_at' => 12, 'updated_at' => 13, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
+    protected static $fieldKeys = [
+        self::TYPE_PHPNAME       => ['IdAccount' => 0, 'IdSocial' => 1, 'Id' => 2, 'Email' => 3, 'AccessToken' => 4, 'RefreshToken' => 5, 'ExpireDate' => 6, 'AccountRole' => 7, 'Active' => 8, 'Verified' => 9, 'RefreshRequest' => 10, 'ResetToken' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ],
+        self::TYPE_CAMELNAME     => ['idAccount' => 0, 'idSocial' => 1, 'id' => 2, 'email' => 3, 'accessToken' => 4, 'refreshToken' => 5, 'expireDate' => 6, 'accountRole' => 7, 'active' => 8, 'verified' => 9, 'refreshRequest' => 10, 'resetToken' => 11, 'createdAt' => 12, 'updatedAt' => 13, ],
+        self::TYPE_COLNAME       => [LoginAccountTableMap::COL_ID_ACCOUNT => 0, LoginAccountTableMap::COL_ID_PROVIDER => 1, LoginAccountTableMap::COL_IDENTIFIER => 2, LoginAccountTableMap::COL_EMAIL => 3, LoginAccountTableMap::COL_ACCESS_TOKEN => 4, LoginAccountTableMap::COL_REFRESH_TOKEN => 5, LoginAccountTableMap::COL_EXPIRES => 6, LoginAccountTableMap::COL_ROLE => 7, LoginAccountTableMap::COL_ACTIVE => 8, LoginAccountTableMap::COL_VERIFIED => 9, LoginAccountTableMap::COL_REFRESH_REQUESTED => 10, LoginAccountTableMap::COL_RESET_TOKEN => 11, LoginAccountTableMap::COL_CREATED_AT => 12, LoginAccountTableMap::COL_UPDATED_AT => 13, ],
+        self::TYPE_FIELDNAME     => ['ID_ACCOUNT' => 0, 'ID_PROVIDER' => 1, 'IDENTIFIER' => 2, 'EMAIL' => 3, 'ACCESS_TOKEN' => 4, 'REFRESH_TOKEN' => 5, 'EXPIRES' => 6, 'ROLE' => 7, 'ACTIVE' => 8, 'VERIFIED' => 9, 'REFRESH_REQUESTED' => 10, 'RESET_TOKEN' => 11, 'created_at' => 12, 'updated_at' => 13, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
+    ];
 
     /**
      * Holds a list of column names and their normalized version.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $normalizedColumnNameMap = [
-
         'IdAccount' => 'ID_ACCOUNT',
         'LoginAccount.IdAccount' => 'ID_ACCOUNT',
         'idAccount' => 'ID_ACCOUNT',
@@ -299,20 +307,24 @@ class LoginAccountTableMap extends TableMap
         'AUTH_ACCOUNTS.updated_at' => 'UPDATED_AT',
     ];
 
-    /** The enumerated values for this table */
-    protected static $enumValueSets = array(
-                LoginAccountTableMap::COL_ROLE => array(
+    /**
+     * The enumerated values for this table
+     *
+     * @var array<string, array<string>>
+     */
+    protected static $enumValueSets = [
+                LoginAccountTableMap::COL_ROLE => [
                             self::COL_ROLE_USER,
             self::COL_ROLE_MANAGER,
             self::COL_ROLE_ADMIN,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Gets the list of values for all ENUM and SET columns
      * @return array
      */
-    public static function getValueSets()
+    public static function getValueSets(): array
     {
       return static::$enumValueSets;
     }
@@ -322,7 +334,7 @@ class LoginAccountTableMap extends TableMap
      * @param string $colname
      * @return array list of possible values for the column
      */
-    public static function getValueSet($colname)
+    public static function getValueSet(string $colname): array
     {
         $valueSets = self::getValueSets();
 
@@ -334,9 +346,9 @@ class LoginAccountTableMap extends TableMap
      * Relations are not initialized by this method since they are lazy loaded
      *
      * @return void
-     * @throws PropelException
+     * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function initialize()
+    public function initialize(): void
     {
         // attributes
         $this->setName('AUTH_ACCOUNTS');
@@ -365,12 +377,14 @@ class LoginAccountTableMap extends TableMap
         $this->addColumn('RESET_TOKEN', 'ResetToken', 'VARCHAR', false, 100, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-    } // initialize()
+    }
 
     /**
      * Build the RelationMap objects for this table relationships
+     *
+     * @return void
      */
-    public function buildRelations()
+    public function buildRelations(): void
     {
         $this->addRelation('AccountProvider', '\\AUTH\\Models\\LoginProvider', RelationMap::MANY_TO_ONE, array (
   0 =>
@@ -393,22 +407,22 @@ class LoginAccountTableMap extends TableMap
     1 => ':ID_ACCOUNT',
   ),
 ), null, null, 'LoginSessions', false);
-    } // buildRelations()
+    }
 
     /**
      *
      * Gets the list of behaviors registered for this table
      *
-     * @return array Associative array (name => parameters) of behaviors
+     * @return array<string, array> Associative array (name => parameters) of behaviors
      */
-    public function getBehaviors()
+    public function getBehaviors(): array
     {
-        return array(
-            'query_cache' => array('backend' => 'apc', 'lifetime' => '3600', ),
-            'timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false', ),
-            'aggregate_column_relation_aggregate_column' => array('foreign_table' => 'AUTH_PROVIDERS', 'update_method' => 'updateAccounts', 'aggregate_name' => 'Accounts', ),
-        );
-    } // getBehaviors()
+        return [
+            'query_cache' => ['backend' => 'apc', 'lifetime' => '3600'],
+            'timestampable' => ['create_column' => 'created_at', 'update_column' => 'updated_at', 'disable_created_at' => 'false', 'disable_updated_at' => 'false'],
+            'aggregate_column_relation_aggregate_column' => ['foreign_table' => 'AUTH_PROVIDERS', 'update_method' => 'updateAccounts', 'aggregate_name' => 'Accounts'],
+        ];
+    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -416,14 +430,14 @@ class LoginAccountTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
-     * @return string The primary key hash of the row
+     * @return string|null The primary key hash of the row
      */
-    public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyHashFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): ?string
     {
         // If the PK cannot be derived from the row, return NULL.
         if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('IdAccount', TableMap::TYPE_PHPNAME, $indexType)] === null) {
@@ -438,14 +452,14 @@ class LoginAccountTableMap extends TableMap
      * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
      * a multi-column primary key, an array of the primary key columns will be returned.
      *
-     * @param array  $row       resultset row.
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Resultset row.
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM
      *
      * @return mixed The primary key of the row
      */
-    public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function getPrimaryKeyFromRow(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM)
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -462,10 +476,10 @@ class LoginAccountTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param bool $withPrefix Whether to return the path with the class name
      * @return string path.to.ClassName
      */
-    public static function getOMClass($withPrefix = true)
+    public static function getOMClass(bool $withPrefix = true): string
     {
         return $withPrefix ? LoginAccountTableMap::CLASS_DEFAULT : LoginAccountTableMap::OM_CLASS;
     }
@@ -473,17 +487,17 @@ class LoginAccountTableMap extends TableMap
     /**
      * Populates an object of the default type or an object that inherit from the default.
      *
-     * @param array  $row       row returned by DataFetcher->fetch().
-     * @param int    $offset    The 0-based offset for reading from the resultset row.
+     * @param array $row Row returned by DataFetcher->fetch().
+     * @param int $offset The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (LoginAccount object, last column rank)
+     * @return array (LoginAccount object, last column rank)
      */
-    public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
+    public static function populateObject(array $row, int $offset = 0, string $indexType = TableMap::TYPE_NUM): array
     {
         $key = LoginAccountTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
         if (null !== ($obj = LoginAccountTableMap::getInstanceFromPool($key))) {
@@ -499,7 +513,7 @@ class LoginAccountTableMap extends TableMap
             LoginAccountTableMap::addInstanceToPool($obj, $key);
         }
 
-        return array($obj, $col);
+        return [$obj, $col];
     }
 
     /**
@@ -507,13 +521,13 @@ class LoginAccountTableMap extends TableMap
      * objects that inherit from the default.
      *
      * @param DataFetcherInterface $dataFetcher
-     * @return array
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return array<object>
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function populateObjects(DataFetcherInterface $dataFetcher)
+    public static function populateObjects(DataFetcherInterface $dataFetcher): array
     {
-        $results = array();
+        $results = [];
 
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
@@ -543,12 +557,13 @@ class LoginAccountTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to add.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function addSelectColumns(Criteria $criteria, $alias = null)
+    public static function addSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->addSelectColumn(LoginAccountTableMap::COL_ID_ACCOUNT);
@@ -589,12 +604,13 @@ class LoginAccountTableMap extends TableMap
      * Note: any columns that were marked with lazyLoad="true" in the
      * XML schema will not be removed as they are only loaded on demand.
      *
-     * @param Criteria $criteria object containing the columns to remove.
-     * @param string   $alias    optional table alias
-     * @throws PropelException Any exceptions caught during processing will be
+     * @param Criteria $criteria Object containing the columns to remove.
+     * @param string|null $alias Optional table alias
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
+     * @return void
      */
-    public static function removeSelectColumns(Criteria $criteria, $alias = null)
+    public static function removeSelectColumns(Criteria $criteria, ?string $alias = null): void
     {
         if (null === $alias) {
             $criteria->removeSelectColumn(LoginAccountTableMap::COL_ID_ACCOUNT);
@@ -633,37 +649,26 @@ class LoginAccountTableMap extends TableMap
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
      * @return TableMap
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function getTableMap()
+    public static function getTableMap(): TableMap
     {
         return Propel::getServiceContainer()->getDatabaseMap(LoginAccountTableMap::DATABASE_NAME)->getTable(LoginAccountTableMap::TABLE_NAME);
     }
 
     /**
-     * Add a TableMap instance to the database for this tableMap class.
-     */
-    public static function buildTableMap()
-    {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(LoginAccountTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(LoginAccountTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new LoginAccountTableMap());
-        }
-    }
-
-    /**
      * Performs a DELETE on the database, given a LoginAccount or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or LoginAccount object or primary key or array of primary keys
+     * @param mixed $values Criteria or LoginAccount object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
-     * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
+     * @param ConnectionInterface $con the connection to use
+     * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
+     public static function doDelete($values, ?ConnectionInterface $con = null): int
      {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountTableMap::DATABASE_NAME);
@@ -699,7 +704,7 @@ class LoginAccountTableMap extends TableMap
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
-    public static function doDeleteAll(ConnectionInterface $con = null)
+    public static function doDeleteAll(?ConnectionInterface $con = null): int
     {
         return LoginAccountQuery::create()->doDeleteAll($con);
     }
@@ -707,13 +712,13 @@ class LoginAccountTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a LoginAccount or Criteria object.
      *
-     * @param mixed               $criteria Criteria or LoginAccount object containing data that is used to create the INSERT statement.
+     * @param mixed $criteria Criteria or LoginAccount object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
-     * @return mixed           The new primary key.
-     * @throws PropelException Any exceptions caught during processing will be
+     * @return mixed The new primary key.
+     * @throws \Propel\Runtime\Exception\PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-    public static function doInsert($criteria, ConnectionInterface $con = null)
+    public static function doInsert($criteria, ?ConnectionInterface $con = null)
     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(LoginAccountTableMap::DATABASE_NAME);
@@ -740,7 +745,4 @@ class LoginAccountTableMap extends TableMap
         });
     }
 
-} // LoginAccountTableMap
-// This is the static code needed to register the TableMap for this table with the main Propel class.
-//
-LoginAccountTableMap::buildTableMap();
+}

@@ -117,7 +117,7 @@ abstract class AUTHService extends Service {
         $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), $this->debug, $this->customerCode);
         if(null === $this->provider) {
             Logger::log($this->getProviderName() . ' not defined for ' . ($this->debug) ? ' debug mode' : ' production mode');
-            $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, $customer);
+            $this->provider = LoginProviderQuery::getProvider($this->getProviderName(), !$this->debug, $this->customerCode);
             if(null === $this->provider) {
                 throw new AuthProviderNotConfiguredException(t('No se ha configurado ningún proveedor de redes sociales todavía'), 503);
             }

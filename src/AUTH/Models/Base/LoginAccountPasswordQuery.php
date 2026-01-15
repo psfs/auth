@@ -19,8 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `AUTH_ACCOUNT_PASSWORDS` table.
  *
- * Table with an history for account passwords
- *
+ * Table with an history for account passwords *
  * @method     ChildLoginAccountPasswordQuery orderByIdPassword($order = Criteria::ASC) Order by the ID_PASSWORD column
  * @method     ChildLoginAccountPasswordQuery orderByIdAccount($order = Criteria::ASC) Order by the ID_ACCOUNT column
  * @method     ChildLoginAccountPasswordQuery orderByValue($order = Criteria::ASC) Order by the VALUE column
@@ -56,7 +55,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     \AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLoginAccountPassword|null findOne(?ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query
- * @method     ChildLoginAccountPassword findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLoginAccountPassword matching the query, or a new ChildLoginAccountPassword object populated from the query conditions when no match is found
+ * @method     ChildLoginAccountPassword findOneOrCreate(?ConnectionInterface $con = null) `Return the first ChildLoginAccountPassword matching the query, or a new ChildLoginAccountPassword object populated from the query conditions when no match is found`
  *
  * @method     ChildLoginAccountPassword|null findOneByIdPassword(int $ID_PASSWORD) Return the first ChildLoginAccountPassword filtered by the ID_PASSWORD column
  * @method     ChildLoginAccountPassword|null findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginAccountPassword filtered by the ID_ACCOUNT column
@@ -76,26 +75,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginAccountPassword requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginAccountPassword filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLoginAccountPassword[]|Collection find(?ConnectionInterface $con = null) Return ChildLoginAccountPassword objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> find(?ConnectionInterface $con = null) Return ChildLoginAccountPassword objects based on current ModelCriteria
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> find(?ConnectionInterface $con = null) Return ChildLoginAccountPassword objects based on current ModelCriteria
  *
- * @method     ChildLoginAccountPassword[]|Collection findByIdPassword(int|array<int> $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByIdPassword(int|array<int> $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
- * @method     ChildLoginAccountPassword[]|Collection findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
- * @method     ChildLoginAccountPassword[]|Collection findByValue(string|array<string> $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByValue(string|array<string> $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
- * @method     ChildLoginAccountPassword[]|Collection findByExpirationDate(string|array<string> $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByExpirationDate(string|array<string> $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
- * @method     ChildLoginAccountPassword[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByCreatedAt(string|array<string> $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
- * @method     ChildLoginAccountPassword[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
- * @psalm-method Collection&\Traversable<ChildLoginAccountPassword> findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
+ * @method     ChildLoginAccountPassword[]|Collection findByIdPassword(int|int[] $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> findByIdPassword(int|array<int> $ID_PASSWORD) Return ChildLoginAccountPassword objects filtered by the ID_PASSWORD column
+ * @method     ChildLoginAccountPassword[]|Collection findByIdAccount(int|int[] $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginAccountPassword objects filtered by the ID_ACCOUNT column
+ * @method     ChildLoginAccountPassword[]|Collection findByValue(string|string[] $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> findByValue(string|array<string> $VALUE) Return ChildLoginAccountPassword objects filtered by the VALUE column
+ * @method     ChildLoginAccountPassword[]|Collection findByExpirationDate(string|string[] $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> findByExpirationDate(string|array<string> $EXPIRATION_DATE) Return ChildLoginAccountPassword objects filtered by the EXPIRATION_DATE column
+ * @method     ChildLoginAccountPassword[]|Collection findByCreatedAt(string|string[] $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> findByCreatedAt(string|array<string> $created_at) Return ChildLoginAccountPassword objects filtered by the created_at column
+ * @method     ChildLoginAccountPassword[]|Collection findByUpdatedAt(string|string[] $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
+ * @psalm-method \Collection&\Traversable<ChildLoginAccountPassword> findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginAccountPassword objects filtered by the updated_at column
  *
  * @method     ChildLoginAccountPassword[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLoginAccountPassword> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class LoginAccountPasswordQuery extends ModelCriteria
-{
+abstract class LoginAccountPasswordQuery extends ModelCriteria{
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
@@ -105,7 +103,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginAccountPassword', $modelAlias = null)
+    public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginAccountPassword', ?string $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -606,7 +604,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery A secondary query class using the current class as primary query
      */
-    public function useAccountPasswordsQuery($relationAlias = null, $joinType = 'INNER JOIN')
+    public function useAccountPasswordsQuery(?string $relationAlias = null, string $joinType = 'INNER JOIN')
     {
         return $this
             ->joinAccountPasswords($relationAlias, $joinType)
@@ -626,7 +624,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      */
     public function withAccountPasswordsQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = 'INNER JOIN'
     ) {
         $relatedQuery = $this->useAccountPasswordsQuery(
@@ -650,7 +648,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the EXISTS statement
      */
-    public function useAccountPasswordsExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useAccountPasswordsExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useExistsQuery('AccountPasswords', $modelAlias, $queryClass, $typeOfExists);
@@ -667,7 +665,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT EXISTS statement
      */
-    public function useAccountPasswordsNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useAccountPasswordsNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useExistsQuery('AccountPasswords', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -685,7 +683,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the IN statement
      */
-    public function useInAccountPasswordsQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInAccountPasswordsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useInQuery('AccountPasswords', $modelAlias, $queryClass, $typeOfIn);
@@ -702,7 +700,7 @@ abstract class LoginAccountPasswordQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT IN statement
      */
-    public function useNotInAccountPasswordsQuery($modelAlias = null, $queryClass = null)
+    public function useNotInAccountPasswordsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useInQuery('AccountPasswords', $modelAlias, $queryClass, 'NOT IN');

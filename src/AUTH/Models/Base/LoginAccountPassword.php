@@ -389,7 +389,7 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime : string)
      */
-    public function getExpirationDate($format = null)
+    public function getExpirationDate(?string $format = null)
     {
         if ($format === null) {
             return $this->expiration_date;
@@ -411,7 +411,7 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getCreatedAt($format = null)
+    public function getCreatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->created_at;
@@ -433,7 +433,7 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getUpdatedAt($format = null)
+    public function getUpdatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -769,19 +769,18 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-                $time = time();
-                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                $mtime = microtime(true);
                 if (!$this->isColumnModified(LoginAccountPasswordTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt($highPrecision);
+                    $this->setCreatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
                 if (!$this->isColumnModified(LoginAccountPasswordTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt($highPrecision);
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(LoginAccountPasswordTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(null, 'DateTime'));
                 }
             }
             if ($ret) {
@@ -1355,7 +1354,7 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAccountPasswords(ChildLoginAccount $v = null)
+    public function setAccountPasswords(?ChildLoginAccount $v = null)
     {
         if ($v === null) {
             $this->setIdAccount(NULL);

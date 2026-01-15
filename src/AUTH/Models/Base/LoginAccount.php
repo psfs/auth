@@ -535,7 +535,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getExpireDate($format = null)
+    public function getExpireDate(?string $format = null)
     {
         if ($format === null) {
             return $this->expires;
@@ -616,7 +616,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getRefreshRequest($format = null)
+    public function getRefreshRequest(?string $format = null)
     {
         if ($format === null) {
             return $this->refresh_requested;
@@ -648,7 +648,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getCreatedAt($format = null)
+    public function getCreatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->created_at;
@@ -670,7 +670,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getUpdatedAt($format = null)
+    public function getUpdatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -1230,19 +1230,18 @@ abstract class LoginAccount implements ActiveRecordInterface
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-                $time = time();
-                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                $mtime = microtime(true);
                 if (!$this->isColumnModified(LoginAccountTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt($highPrecision);
+                    $this->setCreatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
                 if (!$this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt($highPrecision);
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(LoginAccountTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(null, 'DateTime'));
                 }
             }
             if ($ret) {
@@ -2078,7 +2077,7 @@ abstract class LoginAccount implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAccountProvider(ChildLoginProvider $v = null)
+    public function setAccountProvider(?ChildLoginProvider $v = null)
     {
         // aggregate_column_relation behavior
         if (null !== $this->aAccountProvider && $v !== $this->aAccountProvider) {

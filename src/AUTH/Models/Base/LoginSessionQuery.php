@@ -19,8 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `AUTH_SESSIONS` table.
  *
- * Table with the login session token
- *
+ * Table with the login session token *
  * @method     ChildLoginSessionQuery orderByIdAccount($order = Criteria::ASC) Order by the ID_ACCOUNT column
  * @method     ChildLoginSessionQuery orderByDevice($order = Criteria::ASC) Order by the DEVICE column
  * @method     ChildLoginSessionQuery orderByIP($order = Criteria::ASC) Order by the IP column
@@ -60,7 +59,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     \AUTH\Models\LoginAccountQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLoginSession|null findOne(?ConnectionInterface $con = null) Return the first ChildLoginSession matching the query
- * @method     ChildLoginSession findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLoginSession matching the query, or a new ChildLoginSession object populated from the query conditions when no match is found
+ * @method     ChildLoginSession findOneOrCreate(?ConnectionInterface $con = null) `Return the first ChildLoginSession matching the query, or a new ChildLoginSession object populated from the query conditions when no match is found`
  *
  * @method     ChildLoginSession|null findOneByIdAccount(int $ID_ACCOUNT) Return the first ChildLoginSession filtered by the ID_ACCOUNT column
  * @method     ChildLoginSession|null findOneByDevice(string $DEVICE) Return the first ChildLoginSession filtered by the DEVICE column
@@ -84,30 +83,29 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginSession requireOneByUpdatedAt(string $updated_at) Return the first ChildLoginSession filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLoginSession[]|Collection find(?ConnectionInterface $con = null) Return ChildLoginSession objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildLoginSession> find(?ConnectionInterface $con = null) Return ChildLoginSession objects based on current ModelCriteria
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> find(?ConnectionInterface $con = null) Return ChildLoginSession objects based on current ModelCriteria
  *
- * @method     ChildLoginSession[]|Collection findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginSession objects filtered by the ID_ACCOUNT column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginSession objects filtered by the ID_ACCOUNT column
- * @method     ChildLoginSession[]|Collection findByDevice(string|array<string> $DEVICE) Return ChildLoginSession objects filtered by the DEVICE column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByDevice(string|array<string> $DEVICE) Return ChildLoginSession objects filtered by the DEVICE column
- * @method     ChildLoginSession[]|Collection findByIP(string|array<string> $IP) Return ChildLoginSession objects filtered by the IP column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByIP(string|array<string> $IP) Return ChildLoginSession objects filtered by the IP column
- * @method     ChildLoginSession[]|Collection findByToken(string|array<string> $TOKEN) Return ChildLoginSession objects filtered by the TOKEN column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByToken(string|array<string> $TOKEN) Return ChildLoginSession objects filtered by the TOKEN column
- * @method     ChildLoginSession[]|Collection findByActive(boolean|array<boolean> $ACTIVE) Return ChildLoginSession objects filtered by the ACTIVE column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByActive(boolean|array<boolean> $ACTIVE) Return ChildLoginSession objects filtered by the ACTIVE column
- * @method     ChildLoginSession[]|Collection findById(int|array<int> $id) Return ChildLoginSession objects filtered by the id column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findById(int|array<int> $id) Return ChildLoginSession objects filtered by the id column
- * @method     ChildLoginSession[]|Collection findByCreatedAt(string|array<string> $created_at) Return ChildLoginSession objects filtered by the created_at column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByCreatedAt(string|array<string> $created_at) Return ChildLoginSession objects filtered by the created_at column
- * @method     ChildLoginSession[]|Collection findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginSession objects filtered by the updated_at column
- * @psalm-method Collection&\Traversable<ChildLoginSession> findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginSession objects filtered by the updated_at column
+ * @method     ChildLoginSession[]|Collection findByIdAccount(int|int[] $ID_ACCOUNT) Return ChildLoginSession objects filtered by the ID_ACCOUNT column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByIdAccount(int|array<int> $ID_ACCOUNT) Return ChildLoginSession objects filtered by the ID_ACCOUNT column
+ * @method     ChildLoginSession[]|Collection findByDevice(string|string[] $DEVICE) Return ChildLoginSession objects filtered by the DEVICE column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByDevice(string|array<string> $DEVICE) Return ChildLoginSession objects filtered by the DEVICE column
+ * @method     ChildLoginSession[]|Collection findByIP(string|string[] $IP) Return ChildLoginSession objects filtered by the IP column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByIP(string|array<string> $IP) Return ChildLoginSession objects filtered by the IP column
+ * @method     ChildLoginSession[]|Collection findByToken(string|string[] $TOKEN) Return ChildLoginSession objects filtered by the TOKEN column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByToken(string|array<string> $TOKEN) Return ChildLoginSession objects filtered by the TOKEN column
+ * @method     ChildLoginSession[]|Collection findByActive(boolean|boolean[] $ACTIVE) Return ChildLoginSession objects filtered by the ACTIVE column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByActive(boolean|array<boolean> $ACTIVE) Return ChildLoginSession objects filtered by the ACTIVE column
+ * @method     ChildLoginSession[]|Collection findById(int|int[] $id) Return ChildLoginSession objects filtered by the id column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findById(int|array<int> $id) Return ChildLoginSession objects filtered by the id column
+ * @method     ChildLoginSession[]|Collection findByCreatedAt(string|string[] $created_at) Return ChildLoginSession objects filtered by the created_at column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByCreatedAt(string|array<string> $created_at) Return ChildLoginSession objects filtered by the created_at column
+ * @method     ChildLoginSession[]|Collection findByUpdatedAt(string|string[] $updated_at) Return ChildLoginSession objects filtered by the updated_at column
+ * @psalm-method \Collection&\Traversable<ChildLoginSession> findByUpdatedAt(string|array<string> $updated_at) Return ChildLoginSession objects filtered by the updated_at column
  *
  * @method     ChildLoginSession[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLoginSession> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class LoginSessionQuery extends ModelCriteria
-{
+abstract class LoginSessionQuery extends ModelCriteria{
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
@@ -117,7 +115,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginSession', $modelAlias = null)
+    public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginSession', ?string $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -646,7 +644,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery A secondary query class using the current class as primary query
      */
-    public function useAccountSessionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAccountSessionQuery(?string $relationAlias = null, string $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinAccountSession($relationAlias, $joinType)
@@ -666,7 +664,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      */
     public function withAccountSessionQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = Criteria::INNER_JOIN
     ) {
         $relatedQuery = $this->useAccountSessionQuery(
@@ -690,7 +688,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the EXISTS statement
      */
-    public function useAccountSessionExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useAccountSessionExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useExistsQuery('AccountSession', $modelAlias, $queryClass, $typeOfExists);
@@ -707,7 +705,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT EXISTS statement
      */
-    public function useAccountSessionNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useAccountSessionNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useExistsQuery('AccountSession', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -725,7 +723,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the IN statement
      */
-    public function useInAccountSessionQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInAccountSessionQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useInQuery('AccountSession', $modelAlias, $queryClass, $typeOfIn);
@@ -742,7 +740,7 @@ abstract class LoginSessionQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginAccountQuery The inner query object of the NOT IN statement
      */
-    public function useNotInAccountSessionQuery($modelAlias = null, $queryClass = null)
+    public function useNotInAccountSessionQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \AUTH\Models\LoginAccountQuery */
         $q = $this->useInQuery('AccountSession', $modelAlias, $queryClass, 'NOT IN');

@@ -1197,7 +1197,7 @@ abstract class LoginPath implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setProviderPath(ChildLoginProvider $v = null)
+    public function setProviderPath(?ChildLoginProvider $v = null)
     {
         if ($v === null) {
             $this->setIdSocial(NULL);

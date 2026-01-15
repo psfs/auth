@@ -1,31 +1,29 @@
 {
-    "name": "psfs/auth",
-    "version": "2.0.0",
-    "description": "Integration with social network for auth workflows",
-    "type": "library",
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/psfs/core.git"
-        }
-    ],
-    "require": {
-        "psfs/core": "dev-master"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "10.2.x-dev",
-        "roave/security-advisories": "dev-master",
-        "google/apiclient": "v2.15.0"
-    },
-    "suggest": {
-        "google/apiclient": "Use almost ^2.15 version"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Fran López",
-            "email": "fran.lopez84@hotmail.es"
-        }
-    ],
-    "minimum-stability": "dev"
+  "name": "psfs/auth",
+  "description": "Integration with social network for auth workflows",
+  "type": "library",
+  "require": {
+    "psfs/core": "dev-master"
+  },
+  "suggest": {
+    "google/apiclient": "Use almost ^2.15 version"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Fran López",
+      "email": "fran.lopez@stratecode.coms"
+    }
+  ],
+  "config": {
+    "optimize-autoloader": true,
+    "discard-changes": true,
+    "apcu-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+      "AUTH\\": "src/AUTH"
+    }
+  },
+  "minimum-stability": "dev"
 }

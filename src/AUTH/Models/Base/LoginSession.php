@@ -457,7 +457,7 @@ abstract class LoginSession implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getCreatedAt($format = null)
+    public function getCreatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->created_at;
@@ -479,7 +479,7 @@ abstract class LoginSession implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getUpdatedAt($format = null)
+    public function getUpdatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->updated_at;
@@ -870,19 +870,18 @@ abstract class LoginSession implements ActiveRecordInterface
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-                $time = time();
-                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                $mtime = microtime(true);
                 if (!$this->isColumnModified(LoginSessionTableMap::COL_CREATED_AT)) {
-                    $this->setCreatedAt($highPrecision);
+                    $this->setCreatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
                 if (!$this->isColumnModified(LoginSessionTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt($highPrecision);
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(LoginSessionTableMap::COL_UPDATED_AT)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(null, 'DateTime'));
                 }
             }
             if ($ret) {
@@ -1494,7 +1493,7 @@ abstract class LoginSession implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setAccountSession(ChildLoginAccount $v = null)
+    public function setAccountSession(?ChildLoginAccount $v = null)
     {
         if ($v === null) {
             $this->setIdAccount(NULL);

@@ -19,8 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the `AUTH_PATHS` table.
  *
- * Customer provider paths to redirect
- *
+ * Customer provider paths to redirect *
  * @method     ChildLoginPathQuery orderByIdPath($order = Criteria::ASC) Order by the ID_PATH column
  * @method     ChildLoginPathQuery orderByIdSocial($order = Criteria::ASC) Order by the ID_PROVIDER column
  * @method     ChildLoginPathQuery orderByType($order = Criteria::ASC) Order by the TYPE column
@@ -52,7 +51,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     \AUTH\Models\LoginProviderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildLoginPath|null findOne(?ConnectionInterface $con = null) Return the first ChildLoginPath matching the query
- * @method     ChildLoginPath findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildLoginPath matching the query, or a new ChildLoginPath object populated from the query conditions when no match is found
+ * @method     ChildLoginPath findOneOrCreate(?ConnectionInterface $con = null) `Return the first ChildLoginPath matching the query, or a new ChildLoginPath object populated from the query conditions when no match is found`
  *
  * @method     ChildLoginPath|null findOneByIdPath(int $ID_PATH) Return the first ChildLoginPath filtered by the ID_PATH column
  * @method     ChildLoginPath|null findOneByIdSocial(int $ID_PROVIDER) Return the first ChildLoginPath filtered by the ID_PROVIDER column
@@ -68,22 +67,21 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildLoginPath requireOneByPath(string $PATH) Return the first ChildLoginPath filtered by the PATH column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildLoginPath[]|Collection find(?ConnectionInterface $con = null) Return ChildLoginPath objects based on current ModelCriteria
- * @psalm-method Collection&\Traversable<ChildLoginPath> find(?ConnectionInterface $con = null) Return ChildLoginPath objects based on current ModelCriteria
+ * @psalm-method \Collection&\Traversable<ChildLoginPath> find(?ConnectionInterface $con = null) Return ChildLoginPath objects based on current ModelCriteria
  *
- * @method     ChildLoginPath[]|Collection findByIdPath(int|array<int> $ID_PATH) Return ChildLoginPath objects filtered by the ID_PATH column
- * @psalm-method Collection&\Traversable<ChildLoginPath> findByIdPath(int|array<int> $ID_PATH) Return ChildLoginPath objects filtered by the ID_PATH column
- * @method     ChildLoginPath[]|Collection findByIdSocial(int|array<int> $ID_PROVIDER) Return ChildLoginPath objects filtered by the ID_PROVIDER column
- * @psalm-method Collection&\Traversable<ChildLoginPath> findByIdSocial(int|array<int> $ID_PROVIDER) Return ChildLoginPath objects filtered by the ID_PROVIDER column
- * @method     ChildLoginPath[]|Collection findByType(int|array<int> $TYPE) Return ChildLoginPath objects filtered by the TYPE column
- * @psalm-method Collection&\Traversable<ChildLoginPath> findByType(int|array<int> $TYPE) Return ChildLoginPath objects filtered by the TYPE column
- * @method     ChildLoginPath[]|Collection findByPath(string|array<string> $PATH) Return ChildLoginPath objects filtered by the PATH column
- * @psalm-method Collection&\Traversable<ChildLoginPath> findByPath(string|array<string> $PATH) Return ChildLoginPath objects filtered by the PATH column
+ * @method     ChildLoginPath[]|Collection findByIdPath(int|int[] $ID_PATH) Return ChildLoginPath objects filtered by the ID_PATH column
+ * @psalm-method \Collection&\Traversable<ChildLoginPath> findByIdPath(int|array<int> $ID_PATH) Return ChildLoginPath objects filtered by the ID_PATH column
+ * @method     ChildLoginPath[]|Collection findByIdSocial(int|int[] $ID_PROVIDER) Return ChildLoginPath objects filtered by the ID_PROVIDER column
+ * @psalm-method \Collection&\Traversable<ChildLoginPath> findByIdSocial(int|array<int> $ID_PROVIDER) Return ChildLoginPath objects filtered by the ID_PROVIDER column
+ * @method     ChildLoginPath[]|Collection findByType(int|int[] $TYPE) Return ChildLoginPath objects filtered by the TYPE column
+ * @psalm-method \Collection&\Traversable<ChildLoginPath> findByType(int|array<int> $TYPE) Return ChildLoginPath objects filtered by the TYPE column
+ * @method     ChildLoginPath[]|Collection findByPath(string|string[] $PATH) Return ChildLoginPath objects filtered by the PATH column
+ * @psalm-method \Collection&\Traversable<ChildLoginPath> findByPath(string|array<string> $PATH) Return ChildLoginPath objects filtered by the PATH column
  *
  * @method     ChildLoginPath[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildLoginPath> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
-abstract class LoginPathQuery extends ModelCriteria
-{
+abstract class LoginPathQuery extends ModelCriteria{
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
@@ -93,7 +91,7 @@ abstract class LoginPathQuery extends ModelCriteria
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginPath', $modelAlias = null)
+    public function __construct($dbName = 'AUTH', $modelName = '\\AUTH\\Models\\LoginPath', ?string $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -494,7 +492,7 @@ abstract class LoginPathQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginProviderQuery A secondary query class using the current class as primary query
      */
-    public function useProviderPathQuery($relationAlias = null, $joinType = 'INNER JOIN')
+    public function useProviderPathQuery(?string $relationAlias = null, string $joinType = 'INNER JOIN')
     {
         return $this
             ->joinProviderPath($relationAlias, $joinType)
@@ -514,7 +512,7 @@ abstract class LoginPathQuery extends ModelCriteria
      */
     public function withProviderPathQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = 'INNER JOIN'
     ) {
         $relatedQuery = $this->useProviderPathQuery(
@@ -538,7 +536,7 @@ abstract class LoginPathQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginProviderQuery The inner query object of the EXISTS statement
      */
-    public function useProviderPathExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useProviderPathExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \AUTH\Models\LoginProviderQuery */
         $q = $this->useExistsQuery('ProviderPath', $modelAlias, $queryClass, $typeOfExists);
@@ -555,7 +553,7 @@ abstract class LoginPathQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginProviderQuery The inner query object of the NOT EXISTS statement
      */
-    public function useProviderPathNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useProviderPathNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \AUTH\Models\LoginProviderQuery */
         $q = $this->useExistsQuery('ProviderPath', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -573,7 +571,7 @@ abstract class LoginPathQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginProviderQuery The inner query object of the IN statement
      */
-    public function useInProviderPathQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInProviderPathQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \AUTH\Models\LoginProviderQuery */
         $q = $this->useInQuery('ProviderPath', $modelAlias, $queryClass, $typeOfIn);
@@ -590,7 +588,7 @@ abstract class LoginPathQuery extends ModelCriteria
      *
      * @return \AUTH\Models\LoginProviderQuery The inner query object of the NOT IN statement
      */
-    public function useNotInProviderPathQuery($modelAlias = null, $queryClass = null)
+    public function useNotInProviderPathQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \AUTH\Models\LoginProviderQuery */
         $q = $this->useInQuery('ProviderPath', $modelAlias, $queryClass, 'NOT IN');

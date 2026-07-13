@@ -113,10 +113,10 @@ class EmailService extends AUTHService
      * @return string
      */
     public static function encryptPassword($identifier, $password, LoginProvider $provider) {
-        $iv = self::strtohex($identifier);
-        $key = self::strtohex($provider->getSecret());
         $method = Config::getParam('auth.email.method', 'aes-128-cbc');
-        return bin2hex(@openssl_encrypt($password, $method, $key, OPENSSL_RAW_DATA, $iv));
+        $iv = substr(self::strtohex($identifier), 0, openssl_cipher_iv_length($method));
+        $key = self::strtohex($provider->getSecret());
+        return bin2hex(openssl_encrypt($password, $method, $key, OPENSSL_RAW_DATA, $iv));
     }
 
 

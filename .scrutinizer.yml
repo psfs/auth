@@ -5,7 +5,7 @@ build:
   tests:
     override:
       -
-        command: 'vendor/bin/phpunit --coverage-clover=psfs-coverage'
+        command: 'vendor/bin/phpunit --configuration=src/AUTH/phpunit.xml.dist --coverage-clover=psfs-coverage'
         coverage:
           file: 'psfs-coverage'
           format: 'clover'

@@ -5,6 +5,9 @@
   "require": {
     "psfs/core": "dev-master"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5@stable"
+  },
   "suggest": {
     "google/apiclient": "Use almost ^2.15 version"
   },

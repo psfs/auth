@@ -864,7 +864,7 @@ abstract class LoginAccount implements ActiveRecordInterface
             if (is_string($v)) {
                 $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
             } else {
-                $v = (boolean) $v;
+                $v = (bool) $v;
             }
         }
 
@@ -892,7 +892,7 @@ abstract class LoginAccount implements ActiveRecordInterface
             if (is_string($v)) {
                 $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
             } else {
-                $v = (boolean) $v;
+                $v = (bool) $v;
             }
         }
 
@@ -1060,10 +1060,10 @@ abstract class LoginAccount implements ActiveRecordInterface
             $this->role = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginAccountTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->active = (null !== $col) ? (boolean) $col : null;
+            $this->active = (null !== $col) ? (bool) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : LoginAccountTableMap::translateFieldName('Verified', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->verified = (null !== $col) ? (boolean) $col : null;
+            $this->verified = (null !== $col) ? (bool) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : LoginAccountTableMap::translateFieldName('RefreshRequest', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {

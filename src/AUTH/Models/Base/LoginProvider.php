@@ -712,7 +712,7 @@ abstract class LoginProvider implements ActiveRecordInterface
             if (is_string($v)) {
                 $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
             } else {
-                $v = (boolean) $v;
+                $v = (bool) $v;
             }
         }
 
@@ -820,7 +820,7 @@ abstract class LoginProvider implements ActiveRecordInterface
             if (is_string($v)) {
                 $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
             } else {
-                $v = (boolean) $v;
+                $v = (bool) $v;
             }
         }
 
@@ -1012,7 +1012,7 @@ abstract class LoginProvider implements ActiveRecordInterface
             $this->name = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : LoginProviderTableMap::translateFieldName('Debug', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->dev = (null !== $col) ? (boolean) $col : null;
+            $this->dev = (null !== $col) ? (bool) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : LoginProviderTableMap::translateFieldName('Client', TableMap::TYPE_PHPNAME, $indexType)];
             $this->client = (null !== $col) ? (string) $col : null;
@@ -1027,7 +1027,7 @@ abstract class LoginProvider implements ActiveRecordInterface
             $this->scopes = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : LoginProviderTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->active = (null !== $col) ? (boolean) $col : null;
+            $this->active = (null !== $col) ? (bool) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : LoginProviderTableMap::translateFieldName('CustomerCode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customer_code = (null !== $col) ? (string) $col : null;

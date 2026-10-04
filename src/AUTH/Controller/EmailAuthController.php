@@ -28,7 +28,7 @@ class EmailAuthController extends AUTHController {
     {
         try {
             $user = $this->srv->authenticate($query, $flow);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Logger::log($e->getMessage(), LOG_ERR);
             throw $e;
         }
@@ -55,7 +55,7 @@ class EmailAuthController extends AUTHController {
         try {
             $user = $this->authenticate($this->getRequest()->getData(), $flow);
             Security::getInstance()->updateUser(serialize($user));
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             $success = false;
             $user = $e->getMessage();
         }
@@ -73,7 +73,7 @@ class EmailAuthController extends AUTHController {
         $code = 200;
         try {
             $reset = $this->srv->resetPassword($data);
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             $reset = false;
             $code = $e->getCode();
         }

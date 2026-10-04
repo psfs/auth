@@ -11,7 +11,7 @@ build:
           format: 'clover'
   environment:
     php:
-      version: '8.2'
+      version: '8.3'
       ini:
         xdebug.mode: coverage
 

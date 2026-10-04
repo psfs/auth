@@ -180,7 +180,7 @@ abstract class LoginPathQuery extends ModelCriteria{
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute SELECT statement [%s]', $sql), 0, $e);
         }

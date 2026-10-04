@@ -69,7 +69,7 @@ class EmailService extends AUTHService
                 if(!preg_match($pattern, $password)) {
                     throw new EmailWrongPasswordException(t('Contraseña no segura, prueba a incluir caracteres y números'), 400);
                 }
-            } catch(\Exception $e) {
+            } catch(\Throwable $e) {
                 if($e instanceof EmailWrongPasswordException) {
                     throw $e;
                 }
@@ -185,7 +185,7 @@ class EmailService extends AUTHService
                     } else {
                         throw new EmailResetFailedException(t('No se ha encontrado el usuario para resetear la contraseña'), self::EMAIL_ERROR_RESET_INVALID_TOKEN);
                     }
-                } catch(\Exception $e) {
+                } catch(\Throwable $e) {
                     Logger::log($e->getMessage(), LOG_ERR, $data);
                     if($e instanceof EmailWrongPasswordException) {
                         throw new EmailResetFailedException($e->getMessage(), self::EMAIL_ERROR_RESET_PASS_NOT_VALID);

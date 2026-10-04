@@ -70,7 +70,7 @@ class GoogleAuthApi extends LoginProviderAuthBase {
         $success = true;
         try {
             $response = $this->srv->verifyIdToken($idToken);
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             $response = null;
             $message = $e->getMessage();
             $success = false;

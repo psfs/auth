@@ -48,7 +48,7 @@ abstract class LoginProviderAuthBase extends CustomApi {
             $user = $this->srv->authenticate($query, $flow);
             Security::getInstance()->updateUser(serialize($user));
             $route = $this->srv->getPath(LoginPathTableMap::COL_TYPE_LOGIN_OK);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Logger::log($e->getMessage(), LOG_ERR);
             $route = $this->srv->getPath(LoginPathTableMap::COL_TYPE_LOGIN_ERROR);
             Security::getInstance()->setFlash('callback_message', $e->getMessage());

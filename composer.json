@@ -3,6 +3,7 @@
   "description": "Integration with social network for auth workflows",
   "type": "library",
   "require": {
+    "php": "^8.3",
     "psfs/core": "dev-master"
   },
   "require-dev": {

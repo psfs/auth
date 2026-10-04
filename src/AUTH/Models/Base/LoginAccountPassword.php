@@ -331,19 +331,19 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
      *
      * @return array<string>
      */
-    public function __sleep(): array
+    public function __serialize(): array
     {
         $this->clearAllReferences();
 
         $cls = new \ReflectionClass($this);
-        $propertyNames = [];
+        $properties = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
 
         foreach($serializableProperties as $property) {
-            $propertyNames[] = $property->getName();
+            $properties[$property->getName()] = $property->getValue($this);
         }
 
-        return $propertyNames;
+        return $properties;
     }
 
     /**
@@ -638,7 +638,7 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
 
             return $startcol + 6; // 6 = LoginAccountPasswordTableMap::NUM_HYDRATE_COLUMNS.
 
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\AUTH\\Models\\LoginAccountPassword'), 0, $e);
         }
     }
@@ -922,14 +922,14 @@ abstract class LoginAccountPassword implements ActiveRecordInterface
                 }
             }
             $stmt->execute();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
 
         try {
             $pk = $con->lastInsertId();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             throw new PropelException('Unable to get autoincrement id.', 0, $e);
         }
         $this->setIdPassword($pk);

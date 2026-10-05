@@ -6,11 +6,10 @@ build:
     docker: true
     variables:
       PHP_VERSION: "8.3"
-      DEBUG: ""
+      DEBUG: "-xdebug"
   commands:
     - checkout-code ~/build
     - cd ~/build && docker-compose up -d php redis
-    - cd ~/build && docker-compose exec -T php sh prepare-test-runtime.sh
     - cd ~/build && docker-compose exec -T php composer install -o --no-interaction --no-progress --prefer-dist
     - command: cd ~/build && docker-compose exec -T php sh scrutinizer-tests.sh
       idle_timeout: 1200

@@ -4,7 +4,7 @@ checks:
 build:
   tests:
     override:
-      - docker compose exec -T php sh scrutinizer-tests.sh
+      - docker-compose exec -T php sh scrutinizer-tests.sh
   environment:
     docker: true
     variables:
@@ -12,9 +12,9 @@ build:
       DEBUG: ""
   dependencies:
     override:
-      - docker compose up -d php redis
-      - docker compose exec -T php sh prepare-test-runtime.sh
-      - docker compose exec -T php composer install -o --no-interaction --no-progress --prefer-dist
+      - docker-compose up -d php redis
+      - docker-compose exec -T php sh prepare-test-runtime.sh
+      - docker-compose exec -T php composer install -o --no-interaction --no-progress --prefer-dist
   project_setup:
     override:
       - true

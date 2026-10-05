@@ -2,19 +2,17 @@ checks:
   php: true
 
 build:
+  tests:
+    override:
+      - sh scrutinizer-tests.sh
   environment:
     php:
       version: "8.3.33"
       compile_options: "--without-pear"
       pecl_extensions: []
-  nodes:
-    services-tests:
-      commands:
-        - checkout-code ~/build
-        - cd ~/build && sh prepare-test-runtime.sh
-        - cd ~/build && composer install -o --no-interaction --no-progress --prefer-dist
-        - command: cd ~/build && sh scrutinizer-tests.sh
-          idle_timeout: 1200
+  dependencies:
+    before:
+      - sh prepare-test-runtime.sh
 
 filter:
   excluded_paths:

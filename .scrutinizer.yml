@@ -11,6 +11,7 @@ build:
     - checkout-code ~/build
     - cd ~/build && docker-compose up -d php redis
     - cd ~/build && docker-compose ps
+    - cd ~/build && docker-compose logs --tail=50 php redis
     - cd ~/build && docker-compose exec -T -e XDEBUG_MODE=off php php -v
     - cd ~/build && docker-compose exec -T -e XDEBUG_MODE=off php composer install -o --no-interaction --no-progress --prefer-dist
     - command: cd ~/build && docker-compose exec -T -e XDEBUG_MODE=coverage php sh scrutinizer-tests.sh

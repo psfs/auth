@@ -4,17 +4,13 @@ checks:
 build:
   tests:
     override:
-      -
-        command: 'vendor/bin/phpunit --configuration=src/AUTH/phpunit.xml.dist --coverage-clover=psfs-coverage'
-        coverage:
-          file: 'psfs-coverage'
-          format: 'clover'
+      - sh scrutinizer-tests.sh
   environment:
     php:
       version: "8.3.33"
   dependencies:
     before:
-      - sh install-xdebug-for-scrutinizer.sh
+      - sh prepare-test-runtime.sh
 
 filter:
   excluded_paths:

@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  php:
+    image: stratecode/php:${PHP_VERSION:-8.3}${DEBUG:-}
+    working_dir: /app
+    command: sleep 86400
+    environment:
+      XDEBUG_MODE: coverage
+      PHP_TIMEZONE: Europe/Madrid
+      PHP_OPCACHE: '0'
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7.4
+    command: ["redis-server", "--appendonly", "no"]

@@ -9,13 +9,17 @@ build:
       DEBUG: "-xdebug"
   commands:
     - checkout-code ~/build
-    - cd ~/build && docker-compose up -d php redis
-    - cd ~/build && docker-compose ps
-    - cd ~/build && docker-compose logs --tail=50 php redis
-    - cd ~/build && docker-compose exec -T -e XDEBUG_MODE=off php php -v
-    - cd ~/build && docker-compose exec -T -e XDEBUG_MODE=off php composer install -o --no-interaction --no-progress --prefer-dist
-    - command: cd ~/build && docker-compose exec -T -e XDEBUG_MODE=coverage php sh scrutinizer-tests.sh
+    - cd ~/build && docker-compose -f docker-compose.scrutinizer.yml up -d php redis
+    - cd ~/build && docker cp ./. $(docker-compose -f docker-compose.scrutinizer.yml ps -q php):/app
+    - cd ~/build && docker cp docker/php.ini $(docker-compose -f docker-compose.scrutinizer.yml ps -q php):/usr/local/etc/php/php.ini
+    - cd ~/build && docker-compose -f docker-compose.scrutinizer.yml ps && docker-compose -f docker-compose.scrutinizer.yml logs --tail=20 php redis
+    - cd ~/build && docker-compose -f docker-compose.scrutinizer.yml exec -T -e XDEBUG_MODE=off php php -v
+    - cd ~/build && docker-compose -f docker-compose.scrutinizer.yml exec -T -e XDEBUG_MODE=off php composer install -o --no-interaction --no-progress --prefer-dist
+    - command: cd ~/build && docker-compose -f docker-compose.scrutinizer.yml exec -T -e XDEBUG_MODE=coverage php sh scrutinizer-tests.sh && docker cp $(docker-compose -f docker-compose.scrutinizer.yml ps -q php):/app/psfs-coverage ./psfs-coverage
       idle_timeout: 1200
+      coverage:
+        file: psfs-coverage
+        format: clover
 
 filter:
   excluded_paths:

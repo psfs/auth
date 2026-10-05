@@ -4,15 +4,20 @@ checks:
 build:
   tests:
     override:
-      - sh scrutinizer-tests.sh
+      - docker compose exec -T php sh scrutinizer-tests.sh
   environment:
-    php:
-      version: "8.3.33"
-      compile_options: "--without-pear"
-      pecl_extensions: []
+    docker: true
+    variables:
+      PHP_VERSION: "8.3"
+      DEBUG: ""
   dependencies:
-    before:
-      - sh prepare-test-runtime.sh
+    override:
+      - docker compose up -d php redis
+      - docker compose exec -T php sh prepare-test-runtime.sh
+      - docker compose exec -T php composer install -o --no-interaction --no-progress --prefer-dist
+  project_setup:
+    override:
+      - true
 
 filter:
   excluded_paths:

@@ -11,9 +11,10 @@ build:
           format: 'clover'
   environment:
     php:
-      version: '8.3'
-      ini:
-        xdebug.mode: coverage
+      version: "8.3.33"
+  dependencies:
+    before:
+      - sh install-xdebug-for-scrutinizer.sh
 
 filter:
   excluded_paths:
